@@ -1,4 +1,3 @@
-const { Module } = require("webpack");
 const path = require('path');
 
 module.exports = {
