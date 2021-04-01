@@ -1,33 +1,33 @@
-import {createSiteMenuTemplate} from './view/site-menu.js';
-import {createSiteInfoTemplate} from './view/site-info.js';
-import {createSiteFilterTemplate} from './view/site-filter.js';
-import {createSiteSortTemplate} from './view/site-sort.js';
-import {createSiteListTemplate} from './view/site-list.js';
-import {createSiteEventTemplate} from './view/site-event.js';
+import {createMenuTemplate} from './view/menu.js';
+import {createInfoTemplate} from './view/info.js';
+import {createFilterTemplate} from './view/filter.js';
+import {createSortTemplate} from './view/sort.js';
+import {createListTemplate} from './view/list.js';
+import {createEventTemplate} from './view/event.js';
+import {createEditTemplate} from './view/edit.js';
 
-const EVENT_COUNT = 3;
+const DESTINATION_POINTS = 3;
 
 const render = function(container, template, place) {
   container.insertAdjacentHTML(place, template);
 };
 
-const siteHeaderElement = document.querySelector('.page-header');
-const siteTripElement = siteHeaderElement.querySelector('.trip-main');
-const siteNavigationElement = siteTripElement.querySelector('.trip-controls__navigation');
-const siteFilterElement = siteTripElement.querySelector('.trip-controls__filters');
+const headerElement = document.querySelector('.page-header');
+const tripElement = headerElement.querySelector('.trip-main');
+const navigationElement = tripElement.querySelector('.trip-controls__navigation');
+const filterElement = tripElement.querySelector('.trip-controls__filters');
+const mainElement = document.querySelector('.page-body__page-main');
+const eventElement = mainElement.querySelector('.trip-events');
 
-render(siteTripElement, createSiteInfoTemplate(), 'afterbegin');
-render(siteNavigationElement, createSiteMenuTemplate(), 'beforeend');
-render(siteFilterElement, createSiteFilterTemplate(), 'beforeend');
+render(tripElement, createInfoTemplate(), 'afterbegin');
+render(navigationElement, createMenuTemplate(), 'beforeend');
+render(filterElement, createFilterTemplate(), 'beforeend');
+render(eventElement, createSortTemplate(), 'beforeend');
+render(eventElement, createListTemplate(), 'beforeend');
+render(eventElement, createEditTemplate(), 'afterbegin');
 
-const siteMainElement = document.querySelector('.page-body__page-main');
-const siteEventElement = siteMainElement.querySelector('.trip-events');
+const listElement = eventElement.querySelector('.trip-events__list');
 
-render(siteEventElement, createSiteSortTemplate(), 'beforeend');
-render(siteEventElement, createSiteListTemplate(), 'beforeend');
-
-const siteListElement = siteEventElement.querySelector('.trip-events__list');
-
-for (let i = 0; i < EVENT_COUNT; i ++) {
-  render(siteListElement, createSiteEventTemplate(), 'beforeend');
+for (let i = 0; i < DESTINATION_POINTS; i ++) {
+  render(listElement, createEventTemplate(), 'beforeend');
 }

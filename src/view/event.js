@@ -1,4 +1,4 @@
-export const createSiteEventTemplate = function () {
+export const createEventTemplate = function () {
   return `<li class="trip-events__item">
             <div class="event">
               <time class="event__date" datetime="2019-03-18">MAR 18</time>
