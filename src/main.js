@@ -8,7 +8,7 @@ import {createEditTemplate} from './view/edit.js';
 
 const DESTINATION_POINTS = 3;
 
-const render = function(container, template, place) {
+const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
