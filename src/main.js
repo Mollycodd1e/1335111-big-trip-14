@@ -3,12 +3,15 @@ import {createInfoTemplate} from './view/info.js';
 import {createFilterTemplate} from './view/filter.js';
 import {createSortTemplate} from './view/sort.js';
 import {createListTemplate} from './view/list.js';
-import {createEventTemplate} from './view/event.js';
+import {createWaypointTemplate} from './view/waypoint.js';
 import {createEditTemplate} from './view/edit.js';
+import {generateWaypoint} from './mock/waipoint.js';
+
+console.log (generateWaypoint());
 
 const DESTINATION_POINTS = 3;
 
-const render = function(container, template, place) {
+const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
@@ -29,5 +32,5 @@ render(eventElement, createEditTemplate(), 'afterbegin');
 const listElement = eventElement.querySelector('.trip-events__list');
 
 for (let i = 0; i < DESTINATION_POINTS; i ++) {
-  render(listElement, createEventTemplate(), 'beforeend');
+  render(listElement, createWaypointTemplate(), 'beforeend');
 }
