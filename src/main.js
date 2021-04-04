@@ -7,11 +7,13 @@ import {createWaypointTemplate} from './view/waypoint.js';
 import {createEditTemplate} from './view/edit.js';
 import {generateWaypoint} from './mock/waipoint.js';
 
-console.log (generateWaypoint());
+//const DESTINATION_POINTS = 3;
 
-const DESTINATION_POINTS = 3;
+const DESTINATION_POINTS_MOCKS = 15;
 
-const render = (container, template, place) => {
+const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
+
+export const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
@@ -31,6 +33,6 @@ render(eventElement, createEditTemplate(), 'afterbegin');
 
 const listElement = eventElement.querySelector('.trip-events__list');
 
-for (let i = 0; i < DESTINATION_POINTS; i ++) {
-  render(listElement, createWaypointTemplate(), 'beforeend');
+for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
+  render(listElement, createWaypointTemplate(waypoints[i]), 'beforeend');
 }
