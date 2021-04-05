@@ -34,7 +34,7 @@ export const createWaypointTemplate = (waypoint) => {
             <div class="event">
               <time class="event__date" datetime="${dateYMD}">${dateFormat}</time>
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${waypointType}.png" alt="Event type icon">
               </div>
               <h3 class="event__title">${waypointType} ${town}</h3>
               <div class="event__schedule">
@@ -50,11 +50,6 @@ export const createWaypointTemplate = (waypoint) => {
               </p>
               <h4 class="visually-hidden">Offers:</h4>
               <ul class="event__selected-offers">
-                <li class="event__offer">
-                  <span class="event__offer-title">Order Uber</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">20</span>
-                </li>
               </ul>
               <button class="${archiveClassName}" type="button">
                 <span class="visually-hidden">Add to favorite</span>

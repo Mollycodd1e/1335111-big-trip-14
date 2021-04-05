@@ -36,7 +36,7 @@ const generateWaypointType = () => {
     'Drive',
     'Flight',
     'Check-in',
-    'Sightseeng',
+    'Sightseeing',
     'Restaurant',
   ];
 
@@ -125,9 +125,9 @@ const generateOffer = () => {
     },
   ];
 
-  const offersCount = generateNumber(1, 5);
+  const offersCount = generateNumber(0, 5);
 
-  let offerArray = [];
+  const offerArray = [];
 
   for (let i = 0; i < offersCount; i++) {
     const randomOffer = generateNumber(0, 5);
