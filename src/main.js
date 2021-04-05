@@ -36,3 +36,17 @@ const listElement = eventElement.querySelector('.trip-events__list');
 for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
   render(listElement, createWaypointTemplate(waypoints[i]), 'beforeend');
 }
+
+//const offerList = document.querySelector('.event__selected-offers');
+//
+//const createOfferElement = (x) => {
+//  return `<li class="event__offer">
+//          <span class="event__offer-title">${x.title}</span>
+//          &plus;&euro;&nbsp;
+//          <span class="event__offer-price">${x.price}</span>
+//          </li>`
+//}
+//
+//for (let i = 0; i < offer.length - 1; i++) {
+//  render(offerList, createOfferElement(offer[i]), 'beforeend');
+//};
