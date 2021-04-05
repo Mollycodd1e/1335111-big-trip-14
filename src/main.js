@@ -7,12 +7,14 @@ import {createWaypointTemplate} from './view/waypoint.js';
 import {createEditTemplate} from './view/edit.js';
 import {generateWaypoint} from './mock/waipoint.js';
 import {createOfferTemplate} from './view/offer.js';
+import {generateFilter} from './mock/filter.js';
 
 //const DESTINATION_POINTS = 3;
 
 const DESTINATION_POINTS_MOCKS = 15;
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
+const filter = generateFilter(waypoints);
 
 export const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -27,7 +29,7 @@ const eventElement = mainElement.querySelector('.trip-events');
 
 render(tripElement, createInfoTemplate(), 'afterbegin');
 render(navigationElement, createMenuTemplate(), 'beforeend');
-render(filterElement, createFilterTemplate(), 'beforeend');
+render(filterElement, createFilterTemplate(filter), 'beforeend');
 render(eventElement, createSortTemplate(), 'beforeend');
 render(eventElement, createListTemplate(), 'beforeend');
 render(eventElement, createEditTemplate(), 'afterbegin');

@@ -129,9 +129,19 @@ const generateOffer = () => {
 
   const offerArray = [];
 
+  const filterByTitle = (arr, title) => {
+    return arr.filter((item) => {
+      return (item.title == title);
+    });
+  };
+
   for (let i = 0; i < offersCount; i++) {
     const randomOffer = generateNumber(0, 5);
-    offerArray.push(offers[randomOffer]);
+    const checkArray = filterByTitle(offerArray, offers[randomOffer].title);
+
+    if (checkArray.length < 1) {
+      offerArray.push(offers[randomOffer]);
+    }
   }
 
   return offerArray;

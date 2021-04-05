@@ -1,49 +1,33 @@
 const createEditTypeTemplate = (currentType) => {
-  const types = [ 'taxi',
-                  'bus',
-                  'train',
-                  'ship',
-                  'transport',
-                  'drive',
-                  'flight',
-                  'check-in',
-                  'sightseeing',
-                  'restaurant',];
+  const types = [
+    'taxi',
+    'bus',
+    'train',
+    'ship',
+    'transport',
+    'drive',
+    'flight',
+    'check-in',
+    'sightseeing',
+    'restaurant',
+  ];
 
-  return types.map((type) => `<div class="event__type-item">
+  return  types.map((type) => `<div class="event__type-item">
                             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
                             <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
                             </div>`).join('');
 };
 
-const createEditCheckedTypeTemplate = (currentType) => {
-  const types = [ 'taxi',
-                  'bus',
-                  'train',
-                  'ship',
-                  'transport',
-                  'drive',
-                  'flight',
-                  'check-in',
-                  'sightseeing',
-                  'restaurant',];
-
-  return
-            `<img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon"></img>`
-
-          `<img class="event__type-icon" width="17" height="17" src="img/icons/fligth.png" alt="Event type icon"></img>`
-
-};
+const typesTemplate = createEditTypeTemplate();
 
 export const createEditTemplate = (waypoint = {}) => {
   const {waypointType = '',
-        description = '',
-        data = '',
-        town = '',
-        upperTime = '',
-        lowerTime = '',
-        price = '',
-        isFavorite} = waypoint;
+    description = '',
+    town = '',
+    upperTime = '',
+    lowerTime = '',
+    price = '',
+  } = waypoint;
 
   return `<form class="event event--edit" action="#" method="post">
             <header class="event__header">
@@ -59,7 +43,7 @@ export const createEditTemplate = (waypoint = {}) => {
                     <legend class="visually-hidden">Event type</legend>
 
 
-                    ${createEditTypeTemplate()}
+                    ${typesTemplate}
                   </fieldset>
                 </div>
               </div>
