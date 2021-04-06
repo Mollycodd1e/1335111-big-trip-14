@@ -10,8 +10,8 @@ const isFuture = (data) => {
 
 const waypointsMap = {
   everything: (waypoints) => waypoints.filter(waypoints).length,
-  past: (waypoints) => waypoints.filter(() => isPast(waypoint.data)).length,
-  future: (waypoints) => waypoints.filter(() => isFuture(waypoint.data)).length,
+  past: (waypoints) => waypoints.filter(() => isPast(waypoints.data)).length,
+  future: (waypoints) => waypoints.filter(() => isFuture(waypoints.data)).length,
 };
 
 export const generateFilter = () => {
