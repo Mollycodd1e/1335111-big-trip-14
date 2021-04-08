@@ -21,7 +21,7 @@ const createEditTypeTemplate = (currentType) => {
 const typesTemplate = createEditTypeTemplate();
 
 export const createEditTemplate = (waypoint = {}) => {
-  const {waypointType = '',
+  const {waypointType = 'flight',
     description = '',
     town = '',
     upperTime = '',
