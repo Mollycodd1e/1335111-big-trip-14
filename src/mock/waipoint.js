@@ -91,8 +91,9 @@ const generateLowerTime = () => {
 };
 
 const generateUpperTime = () => {
-  const timeGap = generateNumber(1, 5);
-  const timeUpper = dayjs().add(timeGap, 'hours');
+  const hoursGap = generateNumber(1, 5);
+  const minutesGap = generateNumber(1, 59);
+  const timeUpper = dayjs().add(hoursGap, 'hours').add(minutesGap, 'minutes');
 
   return (timeUpper);
 };

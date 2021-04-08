@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 
 const isPast = (data) => {
-  return data = dayjs().isAfter(data, 'D');
+  return dayjs().isAfter(data, 'D');
 };
 
 const isFuture = (data) => {
-  return data = dayjs().isBefore(data, 'D');
+  return dayjs().isBefore(data, 'D');
 };
 
 const waypointsMap = {

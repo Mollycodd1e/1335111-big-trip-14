@@ -13,12 +13,41 @@ export const createWaypointTemplate = (waypoint) => {
   const difference = (x, y) => {
     let result;
     if (y.diff(x, 'hours') < 1) {
-      result = (y.diff(x, 'minutes')) + 'M';
-    } else if ((y.diff(x, 'hours') >= 1) && (y.diff(x, 'hours') < 24)) {
-      result = Math.floor((y.diff(x, 'minutes'))/60) + 'H' + ' ' + (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) + 'M';
+      if ((y.diff(x, 'minutes')) >= 10) {
+        result = (y.diff(x, 'minutes')) + 'M';
+      } else {
+        result = '0' + (y.diff(x, 'minutes')) + 'M';
+      }
+    } else if ((y.diff(x, 'hours') >= 1) && (y.diff(x, 'hours') < 10)) {
+      if ((((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) >= 10) {
+        result = '0' + Math.floor((y.diff(x, 'minutes'))/60) + 'H' + ' ' + (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) + 'M';
+      } else {
+        result = '0' + Math.floor((y.diff(x, 'minutes'))/60) + 'H' + ' ' + '0' + (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) + 'M';
+      }
+    } else if ((y.diff(x, 'hours') >= 10) && (y.diff(x, 'hours') < 24)) {
+      if ((((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) >= 10) {
+        result = Math.floor((y.diff(x, 'minutes'))/60) + 'H' + ' ' + (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) + 'M';
+      } else {
+        result = Math.floor((y.diff(x, 'minutes'))/60) + 'H' + ' '  + '0' + (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) + 'M';
+      }
     } else {
-      result = ((Math.floor(y.diff(x, 'hours')/24))) + 'D' + ' ' + (Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) + 'H' + ' ' +
-      ((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60)) + 'M';
+      if (((Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) >= 10) && (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) >= 10) {
+        result = ((Math.floor(y.diff(x, 'hours')/24))) + 'D' + ' ' + (Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) + 'H' + ' ' +
+        ((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60)) + 'M';
+      } else if (((Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) >= 10) && (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) < 10) {
+        result = ((Math.floor(y.diff(x, 'hours')/24))) + 'D' + ' ' + (Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) + 'H' + ' ' + '0' +
+        ((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60)) + 'M';
+      } else if (((Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) < 10) && (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) < 10) {
+        result = ((Math.floor(y.diff(x, 'hours')/24))) + 'D' + ' ' + '0' + (Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) + 'H' + ' ' + '0' +
+        ((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60)) + 'M';
+      } else if (((Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) < 10) && (((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60))) >= 10) {
+        result = ((Math.floor(y.diff(x, 'hours')/24))) + 'D' + ' ' + '0' + (Math.floor((y.diff(x, 'hours'))) - (Math.floor((y.diff(x, 'hours'))/24) * 24)) + 'H' + ' ' +
+        ((y.diff(x, 'minutes')) - (Math.floor((y.diff(x, 'minutes'))/60) * 60)) + 'M';
+      }
+
+      if (((Math.floor(y.diff(x, 'hours')/24))) < 10) {
+        result = '0' + result;
+      }
     }
 
     return result;
