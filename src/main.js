@@ -9,8 +9,6 @@ import {generateWaypoint} from './mock/waipoint.js';
 import {createOfferTemplate} from './view/offer.js';
 import {generateFilter} from './mock/filter.js';
 
-//const DESTINATION_POINTS = 3;
-
 const DESTINATION_POINTS_MOCKS = 15;
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
