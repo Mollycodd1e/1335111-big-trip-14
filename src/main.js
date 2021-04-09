@@ -25,7 +25,7 @@ const filterElement = tripElement.querySelector('.trip-controls__filters');
 const mainElement = document.querySelector('.page-body__page-main');
 const eventElement = mainElement.querySelector('.trip-events');
 
-render(tripElement, createInfoTemplate(), 'afterbegin');
+render(tripElement, createInfoTemplate(waypoints), 'afterbegin');
 render(navigationElement, createMenuTemplate(), 'beforeend');
 render(filterElement, createFilterTemplate(filter), 'beforeend');
 render(eventElement, createSortTemplate(), 'beforeend');
