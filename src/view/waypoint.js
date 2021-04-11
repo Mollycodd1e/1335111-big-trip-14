@@ -29,8 +29,8 @@ export const createWaypointTemplate = (waypoint) => {
       dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
   }
 
-  const difference = (x, y) => {
-    const num = y.diff(x, 'minutes');
+  const difference = (ariveTime, departureTime) => {
+    const num = departureTime.diff(ariveTime, 'minutes');
     return ConvertMinutes(num);
   };
 

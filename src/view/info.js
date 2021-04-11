@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import {createElement} from '../utils.js';
 
-export const createInfoTemplate = (waypoint) => {
+const createInfoTemplate = (waypoint) => {
 
   const sortByTown = () => {
     const arrayOfTown = [];
@@ -57,3 +58,26 @@ export const createInfoTemplate = (waypoint) => {
             </p>
           </section>`;
 };
+
+export default class Info {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createInfoTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
