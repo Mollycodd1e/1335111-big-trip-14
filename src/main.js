@@ -9,7 +9,7 @@ import {generateWaypoint} from './mock/waipoint.js';
 import {createOfferTemplate} from './view/offer.js';
 import {generateFilter} from './mock/filter.js';
 import {DESTINATION_POINTS_MOCKS} from './const.js';
-import {render} from './utils.js'
+import {render} from './utils.js';
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
 

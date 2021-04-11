@@ -11,7 +11,7 @@ const typesTemplate = createEditTypeTemplate();
 
 const createOptionTemplate = () => {
   return TOWNS.map((town) => `<option value="${town}"></option>`).join('');
-}
+};
 
 const listOfTown = createOptionTemplate();
 
