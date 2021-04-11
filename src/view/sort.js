@@ -1,13 +1,8 @@
-const createSortItemTemplate = (isChecked) => {
-  const sorts = [
-    'day',
-    'event',
-    'time',
-    'price',
-    'offer',
-  ];
+import {NAMES_OF_SORTS} from '../const.js';
 
-  return  sorts.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
+const createSortItemTemplate = (isChecked) => {
+
+  return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
                               <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}" ${isChecked ? 'checked' : ''}>
                               <label class="trip-sort__btn" for="sort-${sort}">${sort}</label>
                               </div>`).join('');

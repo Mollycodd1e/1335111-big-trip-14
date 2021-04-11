@@ -1,24 +1,19 @@
-const createEditTypeTemplate = (currentType) => {
-  const types = [
-    'taxi',
-    'bus',
-    'train',
-    'ship',
-    'transport',
-    'drive',
-    'flight',
-    'check-in',
-    'sightseeing',
-    'restaurant',
-  ];
+import {TYPES, TOWNS} from '../const.js';
 
-  return  types.map((type) => `<div class="event__type-item">
+const createEditTypeTemplate = (currentType) => {
+  return  TYPES.map((type) => `<div class="event__type-item">
                             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
                             <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
                             </div>`).join('');
 };
 
 const typesTemplate = createEditTypeTemplate();
+
+const createOptionTemplate = () => {
+  return TOWNS.map((town) => `<option value="${town}"></option>`).join('');
+}
+
+const listOfTown = createOptionTemplate();
 
 export const createEditTemplate = (waypoint = {}) => {
   const {waypointType = 'flight',
@@ -54,9 +49,7 @@ export const createEditTemplate = (waypoint = {}) => {
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${town}" list="destination-list-1">
                 <datalist id="destination-list-1">
-                  <option value="Amsterdam"></option>
-                  <option value="Geneva"></option>
-                  <option value="Chamonix"></option>
+                  ${listOfTown}
                 </datalist>
               </div>
 

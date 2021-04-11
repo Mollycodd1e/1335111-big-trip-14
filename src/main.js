@@ -8,15 +8,12 @@ import {createEditTemplate} from './view/edit.js';
 import {generateWaypoint} from './mock/waipoint.js';
 import {createOfferTemplate} from './view/offer.js';
 import {generateFilter} from './mock/filter.js';
-
-const DESTINATION_POINTS_MOCKS = 15;
+import {DESTINATION_POINTS_MOCKS} from './const.js';
+import {render} from './utils.js'
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
-const filter = generateFilter(waypoints);
 
-export const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+const filter = generateFilter();
 
 const headerElement = document.querySelector('.page-header');
 const tripElement = headerElement.querySelector('.trip-main');
