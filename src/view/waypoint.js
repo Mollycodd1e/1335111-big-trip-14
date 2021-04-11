@@ -13,29 +13,25 @@ export const createWaypointTemplate = (waypoint) => {
   const startEvent = dayjs(lowerTime).format('YYYY-MM-DDTHH:mm');
   const endEvent = dayjs(upperTime).format('YYYY-MM-DDTHH:mm');
 
-  const difference = (ariveTime, departureTime) => {
-    let result;
-    const compare = (departureTime.diff(ariveTime));
+  function ConvertMinutes(num) {
+    const hours = Math.floor(num / 60);
+    const days = Math.floor(hours / 24);
+    const rhours = hours - days * 24;
+    const minutes = Math.floor(num % 60);
 
-    if ((dayjs.duration((compare)).minutes() < 60) && (dayjs.duration((compare)).minutes() >= 10)) {
-      result = dayjs.duration((compare)).minutes() + 'M';
-    } else {
-      result = '0' + dayjs.duration((compare)).minutes() + 'M';
-    }
+    const dateObj = {
+      D: days < 10 ? '0' + days : days,
+      H: rhours < 10 ? '0' + rhours : rhours,
+      M: minutes < 10 ? '0' + minutes : minutes,
+    };
 
-    if (((dayjs.duration((compare)).hours()) >= 10) && ((dayjs.duration((compare)).minutes()) < 24)) {
-      result = dayjs.duration(compare).hours() + 'H' + ' ' + result;
-    } else {
-      result = '0' + dayjs.duration(compare).hours() + 'H' + ' ' + result;
-    }
+    return Object.keys(dateObj).map((item) =>
+      dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
+  }
 
-    if (((dayjs.duration((compare)).hours()) >= 24) && ((dayjs.duration((compare)).days()) < 10) && ((dayjs.duration((compare)).days()) > 0)) {
-      result = '0' + dayjs.duration(compare).days() + 'D' + ' ' + result;
-    } else if ((dayjs.duration((compare)).days()) > 10) {
-      result = dayjs.duration(compare).days() + 'D' + ' ' + result;
-    }
-
-    return result;
+  const difference = (x, y) => {
+    const num = y.diff(x, 'minutes');
+    return ConvertMinutes(num);
   };
 
   const diff = difference(lowerTime, upperTime);
