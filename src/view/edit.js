@@ -1,3 +1,4 @@
+import {createElement} from '../utils.js';
 import {TYPES, TOWNS} from '../const.js';
 
 const createEditTypeTemplate = (currentType) => {
@@ -15,12 +16,12 @@ const createOptionTemplate = () => {
 
 const listOfTown = createOptionTemplate();
 
-export const createEditTemplate = (waypoint = {}) => {
+const createEditTemplate = (waypoint = {}) => {
   const {waypointType = 'flight',
     description = '',
     town = '',
     upperTime = '',
-    lowerTime = '',
+    lowerTime ,
     price = '',
   } = waypoint;
 
@@ -134,3 +135,26 @@ export const createEditTemplate = (waypoint = {}) => {
             </section>
           </form>`;
 };
+
+export default class Edit {
+  constructor(waypointForm) {
+    this._waypointForm = waypointForm;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditTemplate(this._waypointForm);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

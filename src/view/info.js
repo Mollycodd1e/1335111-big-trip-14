@@ -60,13 +60,13 @@ const createInfoTemplate = (waypoint) => {
 };
 
 export default class Info {
-  constructor(waypoint) {
-    this._waypoint = waypoint;
+  constructor(waypointInfo) {
+    this._waypointInfo = waypointInfo;
     this._element = null;
   }
 
   getTemplate() {
-    return createInfoTemplate(this._waypoint);
+    return createInfoTemplate(this._waypointInfo);
   }
 
   getElement() {
