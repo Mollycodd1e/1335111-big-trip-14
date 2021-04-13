@@ -47,7 +47,7 @@ const renderWaypoint = (element, waypoint) => {
       replaceFormToWaypoint();
       document.removeEventListener('keydown', onEscKeyPress);
     }
-  }
+  };
 
   waypointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceWaypointToForm();
