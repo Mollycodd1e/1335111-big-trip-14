@@ -6,6 +6,7 @@ import EditView from './view/edit.js';
 import OfferView from './view/offer.js';
 import ListView from './view/list.js';
 import WaypointView from './view/waypoint.js';
+import NoWaypointView from './view/nowaypoint.js';
 import {generateWaypoint} from './mock/waipoint.js';
 import {generateFilter} from './mock/filter.js';
 import {render, renderPosition} from './utils.js';
@@ -40,13 +41,28 @@ const renderWaypoint = (element, waypoint) => {
     element.replaceChild(waypointComponent.getElement(),editComponent.getElement());
   };
 
+  const onEscKeyPress = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToWaypoint();
+      document.removeEventListener('keydown', onEscKeyPress);
+    }
+  }
+
   waypointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceWaypointToForm();
+    document.addEventListener('keydown', onEscKeyPress);
   });
 
   editComponent.getElement().addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToWaypoint();
+    document.removeEventListener('keydown', onEscKeyPress);
+  });
+
+  editComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToWaypoint();
+    document.removeEventListener('keydown', onEscKeyPress);
   });
 
   render(element, waypointComponent.getElement(), renderPosition.BEFOREEND);
@@ -54,8 +70,12 @@ const renderWaypoint = (element, waypoint) => {
 
 const listElement = eventElement.querySelector('.trip-events__list');
 
-for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
-  renderWaypoint(listElement, waypoints[i]);
+if (DESTINATION_POINTS_MOCKS > 0) {
+  for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
+    renderWaypoint(listElement, waypoints[i]);
+  }
+} else {
+  render(eventElement, new NoWaypointView().getElement(), renderPosition.BEFOREEND);
 }
 
 const offerList = eventElement.querySelectorAll('.event__selected-offers');
