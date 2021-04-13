@@ -1,9 +1,7 @@
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import {createElement} from '../utils.js';
 
-dayjs.extend(duration);
-
-export const createWaypointTemplate = (waypoint) => {
+const createWaypointTemplate = (waypoint) => {
   const {waypointType, data, town, upperTime, lowerTime, price, isFavorite} = waypoint;
 
   const lowerTimeFormat = dayjs(lowerTime).format('HH:mm');
@@ -29,8 +27,8 @@ export const createWaypointTemplate = (waypoint) => {
       dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
   }
 
-  const difference = (x, y) => {
-    const num = y.diff(x, 'minutes');
+  const difference = (ariveTime, departureTime) => {
+    const num = departureTime.diff(ariveTime, 'minutes');
     return ConvertMinutes(num);
   };
 
@@ -73,3 +71,26 @@ export const createWaypointTemplate = (waypoint) => {
             </div>
           </li>`;
 };
+
+export default class Waypoint {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createWaypointTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

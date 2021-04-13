@@ -1,19 +1,18 @@
-import {createMenuTemplate} from './view/menu.js';
-import {createInfoTemplate} from './view/info.js';
-import {createFilterTemplate} from './view/filter.js';
-import {createSortTemplate} from './view/sort.js';
-import {createListTemplate} from './view/list.js';
-import {createWaypointTemplate} from './view/waypoint.js';
-import {createEditTemplate} from './view/edit.js';
+import MenuView from './view/menu.js';
+import InfoView from './view/info.js';
+import FilterView from './view/filter.js';
+import SortView from './view/sort.js';
+import EditView from './view/edit.js';
+import OfferView from './view/offer.js';
+import ListView from './view/list.js';
+import WaypointView from './view/waypoint.js';
 import {generateWaypoint} from './mock/waipoint.js';
-import {createOfferTemplate} from './view/offer.js';
 import {generateFilter} from './mock/filter.js';
+import {render, renderPosition} from './utils.js';
 import {DESTINATION_POINTS_MOCKS} from './const.js';
-import {render} from './utils.js';
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
-
-const filter = generateFilter();
+const filter = generateFilter(waypoints);
 
 const headerElement = document.querySelector('.page-header');
 const tripElement = headerElement.querySelector('.trip-main');
@@ -22,17 +21,41 @@ const filterElement = tripElement.querySelector('.trip-controls__filters');
 const mainElement = document.querySelector('.page-body__page-main');
 const eventElement = mainElement.querySelector('.trip-events');
 
-render(tripElement, createInfoTemplate(waypoints), 'afterbegin');
-render(navigationElement, createMenuTemplate(), 'beforeend');
-render(filterElement, createFilterTemplate(filter), 'beforeend');
-render(eventElement, createSortTemplate(), 'beforeend');
-render(eventElement, createListTemplate(), 'beforeend');
-render(eventElement, createEditTemplate(), 'afterbegin');
+render(tripElement, new InfoView(waypoints).getElement(), renderPosition.AFTERBEGIN);
+render(navigationElement, new MenuView().getElement(), renderPosition.BEFOREEND);
+render(filterElement, new FilterView(filter).getElement(), renderPosition.BEFOREEND);
+render(eventElement, new SortView().getElement(), renderPosition.BEFOREEND);
+render(eventElement, new ListView().getElement(), renderPosition.BEFOREEND);
+
+const renderWaypoint = (element, waypoint) => {
+
+  const waypointComponent = new WaypointView(waypoint);
+  const editComponent = new EditView(waypoint);
+
+  const replaceWaypointToForm = () => {
+    element.replaceChild(editComponent.getElement(),waypointComponent.getElement());
+  };
+
+  const replaceFormToWaypoint = () => {
+    element.replaceChild(waypointComponent.getElement(),editComponent.getElement());
+  };
+
+  waypointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceWaypointToForm();
+  });
+
+  editComponent.getElement().addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToWaypoint();
+  });
+
+  render(element, waypointComponent.getElement(), renderPosition.BEFOREEND);
+};
 
 const listElement = eventElement.querySelector('.trip-events__list');
 
 for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
-  render(listElement, createWaypointTemplate(waypoints[i]), 'beforeend');
+  renderWaypoint(listElement, waypoints[i]);
 }
 
 const offerList = eventElement.querySelectorAll('.event__selected-offers');
@@ -41,6 +64,6 @@ for (let i = 0; i < offerList.length; i++) {
   const orderOfferList = offerList[i];
   const orderOffer = waypoints[i].offer;
   for (let j = 0; j < orderOffer.length; j++) {
-    render(orderOfferList, createOfferTemplate(orderOffer[j]), 'beforeend');
+    render(orderOfferList, new OfferView(orderOffer[j]).getElement(), renderPosition.BEFOREEND);
   }
 }
