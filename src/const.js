@@ -46,26 +46,32 @@ export const DESCRIPTION = [
 
 export const OFFERS = [
   {
+    name: 'uber',
     title: 'Order Uber',
     price: 20,
   },
   {
+    name: 'luggage',
     title: 'Add luggage',
     price: 50,
   },
   {
+    name: 'comfort',
     title: 'Switch to comfort',
     price: 80,
   },
   {
+    name: 'meal',
     title: 'Add meal',
     price: 15,
   },
   {
+    name: 'seats',
     title: 'Choose seats',
     price: 5,
   },
   {
+    name: 'train',
     title: 'Travel by train',
     price: 40,
   },
