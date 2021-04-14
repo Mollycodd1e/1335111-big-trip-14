@@ -7,7 +7,7 @@ export const generateNumber = (a = 0, b = 3) => {
 
 export const filterByTitle = (array, title) => {
   return array.filter((item) => {
-    return (item.title == title);
+    return (item.title === title);
   });
 };
 

@@ -17,6 +17,69 @@ const createOptionTemplate = () => {
 const listOfTown = createOptionTemplate();
 
 const createEditTemplate = (waypoint = {}) => {
+
+  const editOffer = () => {
+    const {offer,
+    } = waypoint;
+
+    const ADD_OFFERS = [
+      {
+        name: 'uber',
+        title: 'Order Uber',
+        price: 20,
+      },
+      {
+        name: 'luggage',
+        title: 'Add luggage',
+        price: 50,
+      },
+      {
+        name: 'comfort',
+        title: 'Switch to comfort',
+        price: 80,
+      },
+      {
+        name: 'meal',
+        title: 'Add meal',
+        price: 15,
+      },
+      {
+        name: 'seats',
+        title: 'Choose seats',
+        price: 5,
+      },
+      {
+        name: 'train',
+        title: 'Travel by train',
+        price: 40,
+      },
+    ];
+    for (let i = 0; i < offer.length; i++) {
+      for (let j = 0; j < ADD_OFFERS.length; j++) {
+        if (offer[i].name === ADD_OFFERS[j].name) {
+          ADD_OFFERS[j]['isChecked'] = 'true';
+        }
+      }
+    }
+
+    return ADD_OFFERS;
+  }
+
+  const checkedOptions = editOffer();
+
+  const addOption = () => {
+    return checkedOptions.map((option) => `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.name}-1" type="checkbox" name="event-offer-${option.name}" ${option.isChecked ? 'checked' : ''}>
+      <label class="event__offer-label" for="event-offer-${option.name}-1">
+      <span class="event__offer-title">${option.title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${option.price}</span>
+      </label>
+      </div>`).join('');
+  }
+
+  const addCheckedOptions = addOption();
+
   const {waypointType = 'flight',
     description = '',
     town = '',
@@ -81,50 +144,7 @@ const createEditTemplate = (waypoint = {}) => {
                 <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                 <div class="event__available-offers">
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-                    <label class="event__offer-label" for="event-offer-luggage-1">
-                      <span class="event__offer-title">Add luggage</span>
-                      &plus;&euro;&nbsp;
-                      <span class="event__offer-price">50</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-                    <label class="event__offer-label" for="event-offer-comfort-1">
-                      <span class="event__offer-title">Switch to comfort</span>
-                      &plus;&euro;&nbsp;
-                      <span class="event__offer-price">80</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-                    <label class="event__offer-label" for="event-offer-meal-1">
-                      <span class="event__offer-title">Add meal</span>
-                      &plus;&euro;&nbsp;
-                      <span class="event__offer-price">15</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-                    <label class="event__offer-label" for="event-offer-seats-1">
-                      <span class="event__offer-title">Choose seats</span>
-                      &plus;&euro;&nbsp;
-                      <span class="event__offer-price">5</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-                    <label class="event__offer-label" for="event-offer-train-1">
-                      <span class="event__offer-title">Travel by train</span>
-                      &plus;&euro;&nbsp;
-                      <span class="event__offer-price">40</span>
-                    </label>
-                  </div>
+                  ${addCheckedOptions}
                 </div>
               </section>
 
