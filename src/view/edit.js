@@ -63,7 +63,7 @@ const createEditTemplate = (waypoint = {}) => {
     }
 
     return ADD_OFFERS;
-  }
+  };
 
   const checkedOptions = editOffer();
 
@@ -76,7 +76,7 @@ const createEditTemplate = (waypoint = {}) => {
       <span class="event__offer-price">${option.price}</span>
       </label>
       </div>`).join('');
-  }
+  };
 
   const addCheckedOptions = addOption();
 
