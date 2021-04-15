@@ -54,6 +54,7 @@ const createEditTemplate = (waypoint = {}) => {
         price: 40,
       },
     ];
+
     for (let i = 0; i < offer.length; i++) {
       for (let j = 0; j < ADD_OFFERS.length; j++) {
         if (offer[i].name === ADD_OFFERS[j].name) {
