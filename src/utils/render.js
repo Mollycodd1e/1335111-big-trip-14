@@ -21,16 +21,20 @@ export const render = (container, element, place) => {
   }
 };
 
-export const replace = (firstItem, secondItem) => {
-  if (firstItem instanceof Abstract) {
-    firstItem = firstItem.getElement();
+export const replace = (firstElement, secondElement) => {
+  if (firstElement instanceof Abstract) {
+    firstElement = firstElement.getElement();
   }
 
-  if (secondItem instanceof Abstract) {
-    secondItem = secondItem.getElement();
+  if (secondElement instanceof Abstract) {
+    secondElement = secondElement.getElement();
   }
 
-  secondItem.parentElement.replaceChild(firstItem, secondItem);
+  if (secondElement.parentElement === null || firstElement === null || secondElement === null) {
+    throw new Error('Cannot replace unexisting elements');
+  }
+
+  secondElement.parentElement.replaceChild(firstElement, secondElement);
 };
 
 export const createElement = (template) => {
