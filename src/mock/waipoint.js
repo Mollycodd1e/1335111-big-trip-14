@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {WAYPOINT_TYPE, TOWNS, DESCRIPTION, OFFERS} from '../const.js';
-import {generateNumber, filterByTitle} from '../utils.js';
+import {generateNumber, filterByTitle} from '../utils/common.js';
 
 const generateDate = () => {
   const maxDaysGap = 5;

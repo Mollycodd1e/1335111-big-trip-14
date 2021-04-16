@@ -1,15 +1,4 @@
-export const generateNumber = (a = 0, b = 3) => {
-  const lower = Math.ceil(a);
-  const upper = Math.floor(b);
-
-  return Math.floor(Math.random() * (upper - lower  + 1)) + lower;
-};
-
-export const filterByTitle = (array, title) => {
-  return array.filter((item) => {
-    return (item.title === title);
-  });
-};
+import Abstract from '../view/abstract.js';
 
 export const renderPosition = {
   AFTERBEGIN: 'afterbegin',
@@ -17,6 +6,11 @@ export const renderPosition = {
 };
 
 export const render = (container, element, place) => {
+
+  if (element instanceof Abstract) {
+    element = element.getElement();
+  }
+
   switch (place) {
     case renderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -25,6 +19,18 @@ export const render = (container, element, place) => {
       container.append(element);
       break;
   }
+};
+
+export const replace = (firstItem, secondItem) => {
+  if (firstItem instanceof Abstract) {
+    firstItem = firstItem.getElement();
+  }
+
+  if (secondItem instanceof Abstract) {
+    secondItem = secondItem.getElement();
+  }
+
+  secondItem.parentElement.replaceChild(firstItem, secondItem);
 };
 
 export const createElement = (template) => {

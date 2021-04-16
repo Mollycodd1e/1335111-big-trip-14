@@ -9,7 +9,7 @@ import WaypointView from './view/waypoint.js';
 import NoWaypointView from './view/nowaypoint.js';
 import {generateWaypoint} from './mock/waipoint.js';
 import {generateFilter} from './mock/filter.js';
-import {render, renderPosition} from './utils.js';
+import {render, renderPosition, replace} from './utils/render.js';
 import {DESTINATION_POINTS_MOCKS} from './const.js';
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
@@ -22,11 +22,11 @@ const filterElement = tripElement.querySelector('.trip-controls__filters');
 const mainElement = document.querySelector('.page-body__page-main');
 const eventElement = mainElement.querySelector('.trip-events');
 
-render(tripElement, new InfoView(waypoints).getElement(), renderPosition.AFTERBEGIN);
-render(navigationElement, new MenuView().getElement(), renderPosition.BEFOREEND);
-render(filterElement, new FilterView(filter).getElement(), renderPosition.BEFOREEND);
-render(eventElement, new SortView().getElement(), renderPosition.BEFOREEND);
-render(eventElement, new ListView().getElement(), renderPosition.BEFOREEND);
+render(tripElement, new InfoView(waypoints), renderPosition.AFTERBEGIN);
+render(navigationElement, new MenuView(), renderPosition.BEFOREEND);
+render(filterElement, new FilterView(filter), renderPosition.BEFOREEND);
+render(eventElement, new SortView(), renderPosition.BEFOREEND);
+render(eventElement, new ListView(), renderPosition.BEFOREEND);
 
 const renderWaypoint = (element, waypoint) => {
 
@@ -34,11 +34,11 @@ const renderWaypoint = (element, waypoint) => {
   const editComponent = new EditView(waypoint);
 
   const replaceWaypointToForm = () => {
-    element.replaceChild(editComponent.getElement(),waypointComponent.getElement());
+    replace(editComponent,waypointComponent);
   };
 
   const replaceFormToWaypoint = () => {
-    element.replaceChild(waypointComponent.getElement(),editComponent.getElement());
+    replace(waypointComponent,editComponent);
   };
 
   const onEscKeyPress = (evt) => {
@@ -49,23 +49,22 @@ const renderWaypoint = (element, waypoint) => {
     }
   };
 
-  waypointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  waypointComponent.setWaypointClickHandler(() => {
     replaceWaypointToForm();
     document.addEventListener('keydown', onEscKeyPress);
   });
 
-  editComponent.getElement().addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  editComponent.setEditSubmitHandler(() => {
     replaceFormToWaypoint();
     document.removeEventListener('keydown', onEscKeyPress);
   });
 
-  editComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  editComponent.setEditClickHandler(() => {
     replaceFormToWaypoint();
     document.removeEventListener('keydown', onEscKeyPress);
   });
 
-  render(element, waypointComponent.getElement(), renderPosition.BEFOREEND);
+  render(element, waypointComponent, renderPosition.BEFOREEND);
 };
 
 const listElement = eventElement.querySelector('.trip-events__list');
@@ -75,7 +74,7 @@ if (DESTINATION_POINTS_MOCKS > 0) {
     renderWaypoint(listElement, waypoints[i]);
   }
 } else {
-  render(eventElement, new NoWaypointView().getElement(), renderPosition.BEFOREEND);
+  render(eventElement, new NoWaypointView(), renderPosition.BEFOREEND);
 }
 
 const offerList = eventElement.querySelectorAll('.event__selected-offers');
@@ -84,6 +83,6 @@ for (let i = 0; i < offerList.length; i++) {
   const orderOfferList = offerList[i];
   const orderOffer = waypoints[i].offer;
   for (let j = 0; j < orderOffer.length; j++) {
-    render(orderOfferList, new OfferView(orderOffer[j]).getElement(), renderPosition.BEFOREEND);
+    render(orderOfferList, new OfferView(orderOffer[j]), renderPosition.BEFOREEND);
   }
 }

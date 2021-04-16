@@ -1,5 +1,5 @@
-import {createElement} from '../utils.js';
 import {TYPES, TOWNS} from '../const.js';
+import AbstractView from '../view/abstract.js';
 
 const createEditTypeTemplate = (currentType) => {
   return  TYPES.map((type) => `<div class="event__type-item">
@@ -157,25 +157,36 @@ const createEditTemplate = (waypoint = {}) => {
           </form>`;
 };
 
-export default class Edit {
+export default class Edit extends AbstractView {
   constructor(waypointForm) {
+    super();
     this._waypointForm = waypointForm;
-    this._element = null;
+
+    this._editSubmitHandler = this._editSubmitHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createEditTemplate(this._waypointForm);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.editSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditSubmitHandler(callback) {
+    this._callback.editSubmit = callback;
+    this.getElement().addEventListener('submit', this._editSubmitHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }
