@@ -6,11 +6,6 @@ const createListTemplate = () => {
 };
 
 export default class List extends AbstractView {
-  constructor() {
-    super();
-    this._element = null;
-  }
-
   getTemplate() {
     return createListTemplate();
   }

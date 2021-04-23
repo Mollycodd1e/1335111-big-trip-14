@@ -82,7 +82,7 @@ const offerList = eventElement.querySelectorAll('.event__selected-offers');
 for (let i = 0; i < offerList.length; i++) {
   const orderOfferList = offerList[i];
   const orderOffer = waypoints[i].offer;
-  for (let j = 0; j < orderOffer.length; j++) {
-    render(orderOfferList, new OfferView(orderOffer[j]), renderPosition.BEFOREEND);
-  }
+  orderOffer.forEach((element) => {
+    render(orderOfferList, new OfferView(element), renderPosition.BEFOREEND);
+  });
 }
