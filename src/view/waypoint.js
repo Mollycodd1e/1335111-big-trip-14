@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from '../view/abstract.js';
 
 const createWaypointTemplate = (waypoint) => {
   const {waypointType, data, town, upperTime, lowerTime, price, isFavorite} = waypoint;
@@ -27,12 +27,12 @@ const createWaypointTemplate = (waypoint) => {
       dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
   }
 
-  const difference = (ariveTime, departureTime) => {
+  const timeDifference = (ariveTime, departureTime) => {
     const num = departureTime.diff(ariveTime, 'minutes');
     return ConvertMinutes(num);
   };
 
-  const diff = difference(lowerTime, upperTime);
+  const diff = timeDifference(lowerTime, upperTime);
 
   const favoriteClassName = isFavorite
     ? 'event__favorite-btn event__favorite-btn--active'
@@ -72,25 +72,25 @@ const createWaypointTemplate = (waypoint) => {
           </li>`;
 };
 
-export default class Waypoint {
+export default class Waypoint extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
-    this._element = null;
+
+    this._waypointClickHandler = this._waypointClickHandler.bind(this);
   }
 
   getTemplate() {
     return createWaypointTemplate(this._waypoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _waypointClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.waypointClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setWaypointClickHandler(callback) {
+    this._callback.waypointClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._waypointClickHandler);
   }
 }
