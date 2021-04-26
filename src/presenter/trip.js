@@ -31,42 +31,41 @@ export default class Trip {
   }
 
   _renderWaypoint(element, waypoint) {
-      this._waypointComponent = new WaypointView(waypoint);
-      this._editComponent = new EditView(waypoint);
+    this._waypointComponent = new WaypointView(waypoint);
+    this._editComponent = new EditView(waypoint);
+    const replaceWaypointToForm = () => {
+      replace(this._editComponent,this._waypointComponent);
+    };
 
-      const replaceWaypointToForm = () => {
-        replace(this._editComponent,this._waypointComponent);
-      };
+    const replaceFormToWaypoint = () => {
+      replace(this._waypointComponent,this._editComponent);
+    };
 
-      const replaceFormToWaypoint = () => {
-        replace(this._waypointComponent,this._editComponent);
-      };
-
-      const onEscKeyPress = (evt) => {
-        if (evt.key === 'Escape' || evt.key === 'Esc') {
-          evt.preventDefault();
-          replaceFormToWaypoint();
-          document.removeEventListener('keydown', onEscKeyPress);
-        }
-      };
-
-      this._waypointComponent.setWaypointClickHandler(() => {
-        replaceWaypointToForm();
-        document.addEventListener('keydown', onEscKeyPress);
-      });
-
-      this._editComponent.setEditSubmitHandler(() => {
+    const onEscKeyPress = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
         replaceFormToWaypoint();
         document.removeEventListener('keydown', onEscKeyPress);
-      });
+      }
+    };
 
-      this._editComponent.setEditClickHandler(() => {
-        replaceFormToWaypoint();
-        document.removeEventListener('keydown', onEscKeyPress);
-      });
+    this._waypointComponent.setWaypointClickHandler(() => {
+      replaceWaypointToForm();
+      document.addEventListener('keydown', onEscKeyPress);
+    });
 
-      render(element, this._waypointComponent, renderPosition.BEFOREEND);
-  };
+    this._editComponent.setEditSubmitHandler(() => {
+      replaceFormToWaypoint();
+      document.removeEventListener('keydown', onEscKeyPress);
+    });
+
+    this._editComponent.setEditClickHandler(() => {
+      replaceFormToWaypoint();
+      document.removeEventListener('keydown', onEscKeyPress);
+    });
+
+    render(element, this._waypointComponent, renderPosition.BEFOREEND);
+  }
 
   _renderWaypoints() {
     const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);

@@ -9,7 +9,7 @@ import OfferView from './view/offer.js';
 //import NoWaypointView from './view/nowaypoint.js';
 import {generateWaypoint} from './mock/waipoint.js';
 import {generateFilter} from './mock/filter.js';
-import {render, renderPosition, replace} from './utils/render.js';
+import {render, renderPosition} from './utils/render.js';
 import {DESTINATION_POINTS_MOCKS} from './const.js';
 import TripPresenter from './presenter/trip.js';
 
@@ -71,7 +71,7 @@ tripPresenter.init();
 //  render(element, waypointComponent, renderPosition.BEFOREEND);
 //};
 
-const listElement = eventElement.querySelector('.trip-events__list');
+//const listElement = eventElement.querySelector('.trip-events__list');
 
 //if (DESTINATION_POINTS_MOCKS > 0) {
 //  for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
