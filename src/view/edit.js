@@ -172,7 +172,7 @@ export default class Edit extends AbstractView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.editSubmit();
+    this._callback.editSubmit(this._waypointForm);
   }
 
   _editClickHandler(evt) {

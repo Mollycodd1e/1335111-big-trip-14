@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {WAYPOINT_TYPE, TOWNS, DESCRIPTION, OFFERS} from '../const.js';
 import {generateNumber, filterByTitle} from '../utils/common.js';
 
@@ -79,6 +80,7 @@ const generateOffer = () => {
 
 export const generateWaypoint = () => {
   return {
+    id: nanoid(),
     data: generateDate(),
     description: generateDescription(),
     waypointType: generateWaypointType(),
