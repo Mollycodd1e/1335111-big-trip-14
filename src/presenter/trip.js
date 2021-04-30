@@ -32,7 +32,9 @@ export default class Trip {
   }
 
   _renderWaypoint(waypoint) {
-    const pointPresenter = new PointPresenter(this._handleWaypointChange);
+    const headerElement = document.querySelector('.page-header');
+
+    const pointPresenter = new PointPresenter(headerElement, this._handleWaypointChange);
     pointPresenter.init(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
   }

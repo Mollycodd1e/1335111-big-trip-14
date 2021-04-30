@@ -14,6 +14,7 @@ export default class Point {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._noWaypointComponent = new NoWaypointView();
     this._listComponent = new ListView();
+    this._offerComponent = new OfferView();
     this._waypointComponent = null;
     this._editComponent = null;
   }
@@ -87,7 +88,7 @@ export default class Point {
     };
 
     waypointComponent.setFavoriteClickHandler(() => {
-
+      this._handleFavoriteClick();
     });
 
     waypointComponent.setWaypointClickHandler(() => {
@@ -129,7 +130,6 @@ export default class Point {
     const mainElement = document.querySelector('.page-body__page-main');
     const eventElement = mainElement.querySelector('.trip-events');
     const offerList = eventElement.querySelectorAll('.event__selected-offers');
-    this._offerComponent = new OfferView();
 
     for (let i = 0; i < offerList.length; i++) {
       const orderOfferList = offerList[i];
