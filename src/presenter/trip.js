@@ -1,6 +1,7 @@
 import SortView from '../view/sort.js';
 import InfoView from '../view/info.js';
 import MenuView from '../view/menu.js';
+import ListView from '../view/list.js';
 import PointPresenter from '../presenter/point.js';
 import {updateItem} from '../utils/common.js';
 import {render, renderPosition} from '../utils/render.js';
@@ -8,6 +9,7 @@ import {render, renderPosition} from '../utils/render.js';
 export default class Trip {
   constructor() {
     this._pointPresenter = {};
+    this._listComponent = new ListView();
     this._menuComponent = new MenuView();
     this._handleWaypointChange = this._handleWaypointChange.bind(this);
   }
@@ -31,13 +33,6 @@ export default class Trip {
     render(navigationElement, this._menuComponent, renderPosition.BEFOREEND);
   }
 
-  _renderWaypoint(waypoint) {
-    const headerElement = document.querySelector('.page-header');
-    const pointPresenter = new PointPresenter(headerElement, this._handleWaypointChange);
-    pointPresenter.init(waypoint);
-    this._pointPresenter[waypoint.id] = pointPresenter;
-  }
-
   _renderInfo(waypoint) {
     this._infoComponent = new InfoView(waypoint);
     const headerElement = document.querySelector('.page-header');
@@ -52,9 +47,24 @@ export default class Trip {
     render(eventElement, this._sortComponent, renderPosition.BEFOREEND);
   }
 
+  _renderList() {
+    const mainElement = document.querySelector('.page-body__page-main');
+    const eventElement = mainElement.querySelector('.trip-events');
+    render(eventElement, this._listComponent, renderPosition.BEFOREEND);
+  }
+
+  _renderWaypoint(waypoint) {
+    const mainElement = document.querySelector('.page-body__page-main');
+    const eventElement = mainElement.querySelector('.trip-events');
+    const pointPresenter = new PointPresenter(eventElement, this._handleWaypointChange);
+    pointPresenter.init(this._waypoint);
+    this._pointPresenter[waypoint.id] = pointPresenter;
+  }
+
   _renderTrip(waypoint) {
     this._renderInfo(waypoint);
     this._renderMenu();
     this._renderSort();
+    this._renderList();
   }
 }

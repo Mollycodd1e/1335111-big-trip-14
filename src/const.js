@@ -85,4 +85,4 @@ export const NAMES_OF_SORTS = [
   'offer',
 ];
 
-export const DESTINATION_POINTS_MOCKS = 15;
+export const DESTINATION_POINTS_MOCKS = 3;
