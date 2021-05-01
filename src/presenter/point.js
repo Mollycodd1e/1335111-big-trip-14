@@ -1,24 +1,26 @@
-import {DESTINATION_POINTS_MOCKS} from '../const.js';
 import EditView from '../view/edit.js';
-
-import OfferView from '../view/offer.js';
 import WaypointView from '../view/waypoint.js';
-import NoWaypointView from '../view/nowaypoint.js';
 import {render, renderPosition, replace, remove} from '../utils/render.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class Point {
-  constructor(waypointContainer, changeData) {
+  constructor(waypointContainer, changeData, changeMode) {
     this._waypointContainer = waypointContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
-    //this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._noWaypointComponent = new NoWaypointView();
-    this._offerComponent = new OfferView();
     this._waypointComponent = null;
     this._editComponent = null;
-    //this._handleEditClick = this._handleEditClick.bind(this);
-    //this._handleSubmitClick = this._handleSubmitClick.bind(this);
-    //this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._mode = Mode.DEFAULT;
+
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleSubmitClick = this._handleSubmitClick.bind(this);
+    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
   init(waypoint) {
@@ -30,41 +32,27 @@ export default class Point {
     this._waypointComponent = new WaypointView(waypoint);
     this._editComponent = new EditView(waypoint);
 
-    console.log('do')
-    console.log(prevWaypointComponent)
-    console.log(prevEditComponent)
+    this._waypointComponent.setWaypointClickHandler(this._handleEditClick);
+    this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
+    this._editComponent.setEditClickHandler(this._handleSubmitClick);
+    this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevWaypointComponent === null || prevEditComponent === null) {
-      console.log('null create')
-      this._renderPoint(waypoint);
+      const mainElement = document.querySelector('.page-body__page-main');
+      const eventElement = mainElement.querySelector('.trip-events');
+      const listElement = eventElement.querySelector('.trip-events__list');
+
+      render(listElement, this._waypointComponent, renderPosition.BEFOREEND);
       return;
     }
 
-    console.log('posle')
-    console.log(prevWaypointComponent)
-    console.log(prevEditComponent)
-
-    if (prevWaypointComponent !== null) {
-      console.log('zamena way')
+    if (this._mode === Mode.DEFAULT) {
       replace(this._waypointComponent, prevWaypointComponent);
-      return;
     }
 
-    if (prevEditComponent !== null) {
-      console.log('zamena edit')
+    if (this._mode === Mode.EDITING) {
       replace(this._editComponent, prevEditComponent);
-      return;
     }
-    //if (this._waypointComponent.getElement().contains(prevWaypointComponent.getElement())) {
-    //  console.log('zamena')
-    //  replace(this._waypointComponent, prevWaypointComponent);
-    //}
-//
-    //if (this._editComponent.getElement().contains(prevEditComponent.getElement())) {
-    //  replace(this._editComponent, prevEditComponent);
-    //}
-
-    this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick());
 
     remove(prevWaypointComponent);
     remove(prevEditComponent);
@@ -75,124 +63,41 @@ export default class Point {
     remove(this._editComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToWaypoint();
+    }
+  }
+
   _handleFavoriteClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._waypoint,
-        {
-          isFavorite: !this._waypoint.isFavorite,
-        },
-      ),
-    );
+    this._changeData(Object.assign({},this._waypoint,{isFavorite: !this._waypoint.isFavorite}));
   }
 
-  //_replaceWaypointToForm() {
-  //  replace(this._editComponent,this._waypointComponent);
-  //  document.addEventListener('keydown', this._escKeyDownHandler);
-  //}
-//
-  //_replaceFormToWaypoint() {
-  //  replace(this._waypointComponent,this._editComponent);
-  //  document.removeEventListener('keydown', this._escKeyDownHandler);
-  //}
-//
-  //_escKeyDownHandler(evt) {
-  //  if (evt.key === 'Escape' || evt.key === 'Esc') {
-  //    evt.preventDefault();
-  //    this._replaceFormToWaypoint();
-  //  }
-  //}
-//
-  //_handleEditClick() {
-  //  this._replaceWaypointToForm();
-  //}
-//
-  //_handleSubmitClick() {
-  //  this._replaceFormToWaypoint();
-  //}
-
-  _renderWaypoint(element, waypoint) {
-    const waypointComponent = new WaypointView(waypoint);
-    const editComponent = new EditView(waypoint);
-
-    const replaceWaypointToForm = () => {
-      replace(editComponent,waypointComponent);
-    };
-
-    const replaceFormToWaypoint = () => {
-      replace(waypointComponent,editComponent);
-    };
-
-    const onEscKeyPress = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToWaypoint();
-        document.removeEventListener('keydown', onEscKeyPress);
-      }
-    };
-
-    waypointComponent.setFavoriteClickHandler(() => {
-      this._handleFavoriteClick();
-    });
-
-    waypointComponent.setWaypointClickHandler(() => {
-      replaceWaypointToForm();
-      document.addEventListener('keydown', onEscKeyPress);
-    });
-
-    editComponent.setEditSubmitHandler(() => {
-      replaceFormToWaypoint();
-      document.removeEventListener('keydown', onEscKeyPress);
-    });
-
-    editComponent.setEditClickHandler(() => {
-      replaceFormToWaypoint();
-      document.removeEventListener('keydown', onEscKeyPress);
-    });
-
-    render(element, waypointComponent, renderPosition.BEFOREEND);
+  _replaceWaypointToForm() {
+    replace(this._editComponent,this._waypointComponent);
+    document.addEventListener('keydown', this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
-  _renderWaypoints(waypoint) {
-    const mainElement = document.querySelector('.page-body__page-main');
-    const eventElement = mainElement.querySelector('.trip-events');
-    const listElement = eventElement.querySelector('.trip-events__list');
-    if (DESTINATION_POINTS_MOCKS > 0) {
-      for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
-        this._renderWaypoint(listElement, waypoint[i]);
-      }
-    } else {
-      this._renderNoWaypoint();
+  _replaceFormToWaypoint() {
+    replace(this._waypointComponent,this._editComponent);
+    document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._replaceFormToWaypoint();
     }
   }
 
-  _renderNoWaypoint() {
-    const mainElement = document.querySelector('.page-body__page-main');
-    const eventElement = mainElement.querySelector('.trip-events');
-    render(eventElement, this._noWaypointComponent, renderPosition.BEFOREEND);
+  _handleEditClick() {
+    this._replaceWaypointToForm();
   }
 
-  _renderOffer(waypoint) {
-    const mainElement = document.querySelector('.page-body__page-main');
-    const eventElement = mainElement.querySelector('.trip-events');
-    const offerList = eventElement.querySelectorAll('.event__selected-offers');
-
-
-    for (let i = 0; i < offerList.length; i++) {
-      const orderOfferList = offerList[i];
-      const orderOffer = waypoint[i].offer;
-      orderOffer.forEach((element) => {
-        this._offerComponent = new OfferView(element);
-        render(orderOfferList, this._offerComponent, renderPosition.BEFOREEND);
-      });
-    }
-  }
-
-  _renderPoint(waypoint) {
-
-    this._renderWaypoints(waypoint);
-
-    this._renderOffer(waypoint);
+  _handleSubmitClick() {
+    this._replaceFormToWaypoint();
   }
 }
