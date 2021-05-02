@@ -85,4 +85,10 @@ export const NAMES_OF_SORTS = [
   'offer',
 ];
 
+export const SORT_TYPE = {
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
 export const DESTINATION_POINTS_MOCKS = 3;

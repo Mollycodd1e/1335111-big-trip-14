@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const generateNumber = (a = 0, b = 3) => {
   const lower = Math.ceil(a);
   const upper = Math.floor(b);
@@ -23,4 +25,12 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
+};
+
+export const sortWaypointTime = (waypointA, waypointB) => {
+  return dayjs(waypointB.upperTime).diff(dayjs(waypointA.upperTime)) - dayjs(waypointB.lowerTime).diff(dayjs(waypointA.lowerTime));
+};
+
+export const sortWaypointPrice = (priceA, priceB) => {
+  return priceB.price - priceA.price;
 };
