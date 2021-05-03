@@ -1,5 +1,6 @@
 import {TYPES, TOWNS} from '../const.js';
 import AbstractView from '../view/abstract.js';
+//import SmartView from '../view/smart.js';
 
 const createEditTypeTemplate = (currentType) => {
   return  TYPES.map((type) => `<div class="event__type-item">

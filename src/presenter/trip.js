@@ -30,7 +30,7 @@ export default class Trip {
     this._sourceWaypoint = waypoint.slice();
 
     this._renderTrip(waypoint);
-    this._renderWaypoints(waypoint);
+    this._renderWaypoints();
     this._renderOffer(waypoint);
   }
 
@@ -66,7 +66,7 @@ export default class Trip {
 
     this._sortWaypoint(sortType);
     this._clearWaypoint();
-    this._renderWaypointsS();
+    this._renderWaypoints();
   }
 
   _renderMenu() {
@@ -107,14 +107,11 @@ export default class Trip {
     this._pointPresenter[waypoint.id] = pointPresenter;
   }
 
-  _renderWaypointsS() {
+  _renderWaypoints() {
+    //for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
+    //  this._renderWaypoint(waypoint[i]);
+    //}
     this._waypoint.slice().forEach((item) => this._renderWaypoint(item));
-  }
-
-  _renderWaypoints(waypoint) {
-    for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
-      this._renderWaypoint(waypoint[i]);
-    }
   }
 
   _renderOffer(waypoint) {
