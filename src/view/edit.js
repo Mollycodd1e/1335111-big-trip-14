@@ -1,6 +1,6 @@
 import {TYPES, TOWNS} from '../const.js';
-import AbstractView from '../view/abstract.js';
-//import SmartView from '../view/smart.js';
+import {generateDescription, generatePicture, generateOffer} from '../mock/waipoint.js';
+import SmartView from '../view/smart.js';
 
 const createEditTypeTemplate = (currentType) => {
   return  TYPES.map((type) => `<div class="event__type-item">
@@ -102,8 +102,6 @@ const createEditTemplate = (waypoint = {}) => {
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
                     <legend class="visually-hidden">Event type</legend>
-
-
                     ${typesTemplate}
                   </fieldset>
                 </div>
@@ -158,22 +156,71 @@ const createEditTemplate = (waypoint = {}) => {
           </form>`;
 };
 
-export default class Edit extends AbstractView {
+export default class Edit extends SmartView {
   constructor(waypointForm) {
     super();
-    this._waypointForm = waypointForm;
-
+    this._data = Edit.parseWaypointToData(waypointForm);
     this._editSubmitHandler = this._editSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._routeTypeChangeHandler = this._routeTypeChangeHandler.bind(this);
+    this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
+    this._destinationKeydownHandler = this._destinationKeydownHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createEditTemplate(this._waypointForm);
+    return createEditTemplate(this._data);
+  }
+
+  _routeTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData({waypointType: evt.target.value, offer: generateOffer()});
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setEditSubmitHandler(this._callback.editSubmit);
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._destinationChangeHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('keydown', this._destinationKeydownHandler);
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._routeTypeChangeHandler);
+    this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
+  }
+
+  _priceChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData({price: evt.target.value}, true);
+  }
+
+  _destinationChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData({town: evt.target.value , description: generateDescription(), picture: generatePicture()});
+  }
+
+  _destinationKeydownHandler(evt) {
+    evt.preventDefault();
+
+    if (evt.code === 'Backspace') {
+      evt.target.value = '';
+    }
+
+    if (evt.code !== 'Backspace') {
+      return false;
+    }
+  }
+
+  reset(waypointForm) {
+    this.updateData(Edit.parseWaypointToData(waypointForm));
   }
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.editSubmit(this._waypointForm);
+    this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 
   _editClickHandler(evt) {
@@ -189,5 +236,15 @@ export default class Edit extends AbstractView {
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  static parseWaypointToData(waypointForm) {
+    return Object.assign({}, waypointForm);
+  }
+
+  static parseDataToWaypoint(data) {
+    data = Object.assign({}, data);
+
+    return data;
   }
 }

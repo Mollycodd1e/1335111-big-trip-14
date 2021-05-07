@@ -41,7 +41,6 @@ export default class Point {
       const mainElement = document.querySelector('.page-body__page-main');
       const eventElement = mainElement.querySelector('.trip-events');
       const listElement = eventElement.querySelector('.trip-events__list');
-
       render(listElement, this._waypointComponent, renderPosition.BEFOREEND);
       return;
     }
@@ -89,6 +88,7 @@ export default class Point {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._editComponent.reset(this._waypoint);
       this._replaceFormToWaypoint();
     }
   }

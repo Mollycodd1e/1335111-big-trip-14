@@ -31,7 +31,7 @@ export default class Trip {
 
     this._renderTrip(waypoint);
     this._renderWaypoints();
-    this._renderOffer(waypoint);
+    //this._renderOffer(waypoint);
   }
 
   _handleModeChange() {
@@ -108,9 +108,6 @@ export default class Trip {
   }
 
   _renderWaypoints() {
-    //for (let i = 0; i < DESTINATION_POINTS_MOCKS; i ++) {
-    //  this._renderWaypoint(waypoint[i]);
-    //}
     this._waypoint.slice().forEach((item) => this._renderWaypoint(item));
   }
 
