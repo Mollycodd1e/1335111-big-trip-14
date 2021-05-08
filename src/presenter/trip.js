@@ -31,7 +31,6 @@ export default class Trip {
 
     this._renderTrip(waypoint);
     this._renderWaypoints();
-    //this._renderOffer(waypoint);
   }
 
   _handleModeChange() {
@@ -66,7 +65,7 @@ export default class Trip {
 
     this._sortWaypoint(sortType);
     this._clearWaypoint();
-    this._renderWaypoints();
+    this._renderWaypoints(this._waypoint);
   }
 
   _renderMenu() {
@@ -104,27 +103,28 @@ export default class Trip {
   _renderWaypoint(waypoint) {
     const pointPresenter = new PointPresenter(this._listComponent, this._handleWaypointChange, this._handleModeChange);
     pointPresenter.init(waypoint);
-    this._renderOffer(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
   }
 
   _renderWaypoints() {
     this._waypoint.slice().forEach((item) => this._renderWaypoint(item));
+    this._renderOffer();
   }
 
-  _renderOffer(waypoint) {
+  _renderOffer() {
     const mainElement = document.querySelector('.page-body__page-main');
     const eventElement = mainElement.querySelector('.trip-events');
-    const offerList = eventElement.querySelector('.event__selected-offers');
+    const offerList = eventElement.querySelectorAll('.event__selected-offers');
 
-    //for (let i = 0; i < offerList.length; i++) {
-    //  const orderOfferList = offerList[i];
-    const orderOffer = waypoint.offer;
-    orderOffer.forEach((element) => {
-      this._offerComponent = new OfferView(element);
-      render(offerList, this._offerComponent, renderPosition.BEFOREEND);
-    });
-    //}
+    for (let i = 0; i < offerList.length; i++) {
+      const orderOfferList = offerList[i];
+      const orderOffer = this._waypoint[i].offer;
+
+      orderOffer.forEach((element) => {
+        this._offerComponent = new OfferView(element);
+        render( orderOfferList, this._offerComponent, renderPosition.BEFOREEND);
+      });
+    }
   }
 
   _renderNoWaypoint() {
