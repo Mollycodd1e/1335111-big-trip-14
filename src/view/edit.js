@@ -1,6 +1,9 @@
 import {TYPES, TOWNS} from '../const.js';
 import {generateDescription, generatePicture, generateOffer} from '../mock/waipoint.js';
 import SmartView from '../view/smart.js';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createEditTypeTemplate = (currentType) => {
   return  TYPES.map((type) => `<div class="event__type-item">
@@ -119,10 +122,10 @@ const createEditTemplate = (waypoint = {}) => {
 
               <div class="event__field-group  event__field-group--time">
                 <label class="visually-hidden" for="event-start-time-1">From</label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${lowerTime}">
+                <input class="event__input  event__input--time event__input--date-from" id="event-start-time-1" type="text" name="event-start-time" value="${lowerTime}">
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">To</label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${upperTime}">
+                <input class="event__input  event__input--time event__input--date-to" id="event-end-time-1" type="text" name="event-end-time" value="${upperTime}">
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -160,6 +163,10 @@ export default class Edit extends SmartView {
   constructor(waypointForm) {
     super();
     this._data = Edit.parseWaypointToData(waypointForm);
+    this._datepicker = null;
+    this._endPicker = null;
+
+    this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._editSubmitHandler = this._editSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._routeTypeChangeHandler = this._routeTypeChangeHandler.bind(this);
@@ -168,10 +175,45 @@ export default class Edit extends SmartView {
     this._destinationKeydownHandler = this._destinationKeydownHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setDatepicker();
+    this._setEndPicker();
   }
 
   getTemplate() {
     return createEditTemplate(this._data);
+  }
+
+  _setDatepicker() {
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+
+    this._datepicker = flatpickr(this.getElement().querySelector('.event__input--date-from'), {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      time_24hr: true,
+      onChange: this._dateFromChangeHandler,
+    });
+  }
+
+  _setEndPicker() {
+    if (this._endPicker) {
+      this._endPicker.destroy();
+      this._endPicker = null;
+    }
+
+    this._endPicker = flatpickr(this.getElement().querySelector('.event__input--date-to'), {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      time_24hr: true,
+      minDate: this._data.lowerTime || new Date(),
+      onChange: this._dateToChangeHandler,
+    });
+  }
+
+  _dateFromChangeHandler([userDate]) {
+    this.updateData({lowerTime: userDate},true);
   }
 
   _routeTypeChangeHandler(evt) {
@@ -181,6 +223,8 @@ export default class Edit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepicker();
+    this._setEndPicker();
     this.setEditSubmitHandler(this._callback.editSubmit);
     this.setEditClickHandler(this._callback.editClick);
   }

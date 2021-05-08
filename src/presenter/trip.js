@@ -104,6 +104,7 @@ export default class Trip {
   _renderWaypoint(waypoint) {
     const pointPresenter = new PointPresenter(this._listComponent, this._handleWaypointChange, this._handleModeChange);
     pointPresenter.init(waypoint);
+    this._renderOffer(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
   }
 
@@ -114,16 +115,16 @@ export default class Trip {
   _renderOffer(waypoint) {
     const mainElement = document.querySelector('.page-body__page-main');
     const eventElement = mainElement.querySelector('.trip-events');
-    const offerList = eventElement.querySelectorAll('.event__selected-offers');
+    const offerList = eventElement.querySelector('.event__selected-offers');
 
-    for (let i = 0; i < offerList.length; i++) {
-      const orderOfferList = offerList[i];
-      const orderOffer = waypoint[i].offer;
-      orderOffer.forEach((element) => {
-        this._offerComponent = new OfferView(element);
-        render(orderOfferList, this._offerComponent, renderPosition.BEFOREEND);
-      });
-    }
+    //for (let i = 0; i < offerList.length; i++) {
+    //  const orderOfferList = offerList[i];
+    const orderOffer = waypoint.offer;
+    orderOffer.forEach((element) => {
+      this._offerComponent = new OfferView(element);
+      render(offerList, this._offerComponent, renderPosition.BEFOREEND);
+    });
+    //}
   }
 
   _renderNoWaypoint() {

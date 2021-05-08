@@ -41,7 +41,9 @@ export default class Point {
       const mainElement = document.querySelector('.page-body__page-main');
       const eventElement = mainElement.querySelector('.trip-events');
       const listElement = eventElement.querySelector('.trip-events__list');
+
       render(listElement, this._waypointComponent, renderPosition.BEFOREEND);
+
       return;
     }
 
