@@ -85,10 +85,28 @@ export const NAMES_OF_SORTS = [
   'offer',
 ];
 
+export const UserAction = {
+  UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
+  ADD_WAYPOINT: 'ADD_WAYPOINT',
+  DELETE_WAYPOINT: 'DELETE_WAYPOINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export const SORT_TYPE = {
   DAY: 'day',
   TIME: 'time',
   PRICE: 'price',
+};
+
+export const FilterType = {
+  EVERYTHING: 'everything',
+  PAST: 'past',
+  FUTURE: 'future',
 };
 
 export const DESTINATION_POINTS_MOCKS = 3;

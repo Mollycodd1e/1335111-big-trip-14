@@ -1,6 +1,8 @@
 import EditView from '../view/edit.js';
 import WaypointView from '../view/waypoint.js';
+//import OfferView from '../view/offer.js';
 import {render, renderPosition, replace, remove} from '../utils/render.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -21,6 +23,8 @@ export default class Point {
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleSubmitClick = this._handleSubmitClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._handleCloseClick = this._handleCloseClick.bind(this);
   }
 
   init(waypoint) {
@@ -34,8 +38,9 @@ export default class Point {
 
     this._waypointComponent.setWaypointClickHandler(this._handleEditClick);
     this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
-    this._editComponent.setEditClickHandler(this._handleSubmitClick);
+    this._editComponent.setEditClickHandler(this._handleCloseClick);
     this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._editComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevWaypointComponent === null || prevEditComponent === null) {
       const mainElement = document.querySelector('.page-body__page-main');
@@ -71,7 +76,7 @@ export default class Point {
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({},this._waypoint,{isFavorite: !this._waypoint.isFavorite}));
+    this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
   }
 
   _replaceWaypointToForm() {
@@ -99,7 +104,17 @@ export default class Point {
     this._replaceWaypointToForm();
   }
 
-  _handleSubmitClick() {
+  _handleCloseClick() {
     this._replaceFormToWaypoint();
+  }
+
+  _handleSubmitClick(waypoint) {
+    this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, waypoint);
+
+    this._replaceFormToWaypoint();
+  }
+
+  _handleDeleteClick(waypoint) {
+    this._changeData(UserAction.DELETE_WAYPOINT, UpdateType.MINOR, waypoint);
   }
 }

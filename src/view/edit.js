@@ -1,5 +1,5 @@
 import {TYPES, TOWNS} from '../const.js';
-import {generateDescription, generatePicture, generateOffer} from '../mock/waipoint.js';
+import {generateDescription, generatePicture, generateOffer} from '../mock/waypoint.js';
 import SmartView from '../view/smart.js';
 import flatpickr from 'flatpickr';
 
@@ -59,10 +59,12 @@ const createEditTemplate = (waypoint = {}) => {
       },
     ];
 
-    for (let i = 0; i < offer.length; i++) {
-      for (let j = 0; j < ADD_OFFERS.length; j++) {
-        if (offer[i].name === ADD_OFFERS[j].name) {
-          ADD_OFFERS[j]['isChecked'] = 'true';
+    if (offer !== undefined) {
+      for (let i = 0; i < offer.length; i++) {
+        for (let j = 0; j < ADD_OFFERS.length; j++) {
+          if (offer[i].name === ADD_OFFERS[j].name) {
+            ADD_OFFERS[j]['isChecked'] = 'true';
+          }
         }
       }
     }
@@ -89,7 +91,7 @@ const createEditTemplate = (waypoint = {}) => {
     description = '',
     town = '',
     upperTime = '',
-    lowerTime ,
+    lowerTime = '',
     price = '',
   } = waypoint;
 
@@ -171,8 +173,10 @@ export default class Edit extends SmartView {
     this._editClickHandler = this._editClickHandler.bind(this);
     this._routeTypeChangeHandler = this._routeTypeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._editDeleteClickHandler = this._editDeleteClickHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._destinationKeydownHandler = this._destinationKeydownHandler.bind(this);
+    this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -207,13 +211,17 @@ export default class Edit extends SmartView {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
-      minDate: this._data.lowerTime || new Date(),
+      //minDate: this._data.lowerTime || new Date(),
       onChange: this._dateToChangeHandler,
     });
   }
 
   _dateFromChangeHandler([userDate]) {
     this.updateData({lowerTime: userDate},true);
+  }
+
+  _dateToChangeHandler([userDate]) {
+    this.updateData({upperTime: userDate},true);
   }
 
   _routeTypeChangeHandler(evt) {
@@ -225,6 +233,7 @@ export default class Edit extends SmartView {
     this._setInnerHandlers();
     this._setDatepicker();
     this._setEndPicker();
+    this.setDeleteClickHandler(this._callback.deleteClick);
     this.setEditSubmitHandler(this._callback.editSubmit);
     this.setEditClickHandler(this._callback.editClick);
   }
@@ -280,6 +289,25 @@ export default class Edit extends SmartView {
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+  }
+
+  _editDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(Edit.parseDataToWaypoint(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editDeleteClickHandler);
   }
 
   static parseWaypointToData(waypointForm) {
