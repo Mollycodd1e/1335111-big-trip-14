@@ -34,3 +34,7 @@ export const sortWaypointTime = (waypointA, waypointB) => {
 export const sortWaypointPrice = (priceA, priceB) => {
   return priceB.price - priceA.price;
 };
+
+export const arrayOfFilterType = (waypoints, type) => {
+  return type.map((element) => waypoints.filter((waypoint) => waypoint.waypointType.toLowerCase() === element));
+};

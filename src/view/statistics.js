@@ -1,19 +1,45 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from '../view/smart.js';
+import {TYPES} from '../const.js';
+import {arrayOfFilterType} from '../utils/common.js';
 
 const BAR_HEIGHT = 55;
 
-const renderMoneyChart = (moneyCtx) => {
-  moneyCtx.height = BAR_HEIGHT * 5;
+const types = TYPES.slice().map((item) => item.toUpperCase());
+
+const renderMoneyChart = (moneyCtx, waypoints) => {
+  moneyCtx.height = BAR_HEIGHT * 10;
+
+  const sumOfType = (elements) => {
+    let sum = 0;
+
+    elements.map((element) => {
+      sum += element.price;
+    });
+
+    return sum;
+  };
+
+  const sumOfFilteredTypes = (array) => {
+    return array.map((element) => {
+      if (element.length === 0) {
+        return element = 0;
+      } else {
+        return (sumOfType(element));
+      }
+    });
+  };
+
+  const arrayOfSum = sumOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],// Типы трат денег
+      labels: types,
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],// Количество трат на каждый тип
+        data: arrayOfSum,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -28,7 +54,7 @@ const renderMoneyChart = (moneyCtx) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          //formatter: (val) => '€ ${val}',
+          formatter: (arrayOfSum) => '€ ' + arrayOfSum,
         },
       },
       title: {
@@ -73,16 +99,28 @@ const renderMoneyChart = (moneyCtx) => {
   });
 };
 
-const renderTypeChart = (typeCtx) => {
-  typeCtx.height = BAR_HEIGHT * 5;
+const renderTypeChart = (typeCtx, waypoints) => {
+  typeCtx.height = BAR_HEIGHT * 10;
+
+  const countOfFilteredTypes = (array) => {
+    return array.map((element) => {
+      if (element.length === 0) {
+        return element = 0;
+      } else {
+        return element.length;
+      }
+    });
+  };
+
+  const arrayOfCount = countOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],// Типы транспорта
+      labels: types,
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],// Количество каждого типа транспорта
+        data: arrayOfCount,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -97,7 +135,7 @@ const renderTypeChart = (typeCtx) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          //formatter: (val) => '${val}x',
+          formatter: (arrayOfCount) => arrayOfCount + 'x',
         },
       },
       title: {
@@ -142,16 +180,55 @@ const renderTypeChart = (typeCtx) => {
   });
 };
 
-const renderTimeSpendChart = (timeSpendCtx) => {
-  timeSpendCtx.height = BAR_HEIGHT * 5;
+const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
+  timeSpendCtx.height = BAR_HEIGHT * 10;
+
+  //function ConvertMinutes(num) {
+  //  const hours = Math.floor(num / 60);
+  //  const days = Math.floor(hours / 24);
+  //  const rhours = hours - days * 24;
+  //  const minutes = Math.floor(num % 60);
+
+  //  const dateObj = {
+  //    D: days < 10 ? '0' + days : days,
+  //    H: rhours < 10 ? '0' + rhours : rhours,
+  //    M: minutes < 10 ? '0' + minutes : minutes,
+  //  };
+
+  //  return Object.keys(dateObj).map((item) =>
+  //    dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
+  //}
+
+  const timeDifference = (elements) => {
+    let sumOfTime = 0;
+
+    for (let i = 0; i < elements.length; i++) {
+      const num = elements[i].upperTime.diff(elements[i].lowerTime, 'minutes');
+      sumOfTime += num;
+    }
+
+    return sumOfTime;
+  };
+
+  const timeOfFilteredTypes = (array) => {
+    return array.map((element) => {
+      if (element.length === 0) {
+        return element = 0;
+      } else {
+        return timeDifference(element);
+      }
+    });
+  };
+
+  const arrayOfTime = timeOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
 
   return new Chart(timeSpendCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],// Типы транспорта
+      labels: types,
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],// Количество времени потраченного на каждый вид транспорта
+        data: arrayOfTime,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -166,7 +243,7 @@ const renderTimeSpendChart = (timeSpendCtx) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          //formatter: (val) => '${val}x',
+          formatter: (arrayOfTime) => arrayOfTime,
         },
       },
       title: {
@@ -214,7 +291,7 @@ const renderTimeSpendChart = (timeSpendCtx) => {
 const createStatisticsTemplate = () => {
 
   return `<section class="statistics">
-            <h2>Trip statistics</h2>
+            <h2 class="visually-hidden">Trip statistics</h2>
 
             <div class="statistics__item statistics__item--money">
               <canvas class="statistics__chart  statistics__chart--money" width="900"></canvas>
@@ -267,8 +344,8 @@ export default class Statistics extends SmartView {
     const timeSpendCtx = this.getElement().querySelector('.statistics__chart--time');
     const typeCtx = this.getElement().querySelector('.statistics__chart--transport');
 
-    this._moneyChart = renderMoneyChart(moneyCtx);
-    this._typeChart = renderTypeChart(typeCtx);
-    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx);
+    this._moneyChart = renderMoneyChart(moneyCtx, this._waypoints);
+    this._typeChart = renderTypeChart(typeCtx, this._waypoints);
+    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._waypoints);
   }
 }
