@@ -88,7 +88,7 @@ const createEditTemplate = (waypoint = {}) => {
   const addCheckedOptions = addOption();
 
   const {waypointType = 'flight',
-    description = '',
+    description = 'привет',
     town = '',
     upperTime = '',
     lowerTime = '',
@@ -135,7 +135,7 @@ const createEditTemplate = (waypoint = {}) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -194,7 +194,7 @@ export default class Edit extends SmartView {
     }
 
     this._datepicker = flatpickr(this.getElement().querySelector('.event__input--date-from'), {
-      dateFormat: 'd/m/y H:i',
+      dateFormat: 'd m y H:i',
       enableTime: true,
       time_24hr: true,
       onChange: this._dateFromChangeHandler,
@@ -211,7 +211,6 @@ export default class Edit extends SmartView {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
-      //minDate: this._data.lowerTime || new Date(),
       onChange: this._dateToChangeHandler,
     });
   }

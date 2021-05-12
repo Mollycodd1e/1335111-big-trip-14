@@ -9,6 +9,7 @@ export default class PointNew {
     this._changeData = changeData;
 
     this._editComponent = null;
+    this._destroyCallback = null;
 
     this._handleSubmitClick = this._handleSubmitClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -16,12 +17,14 @@ export default class PointNew {
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
-  init() {
+  init(callback) {
+    this._destroyCallback = callback;
+
     if (this._editComponent !== null) {
       return;
     }
 
-    this._editComponent = new EditView();
+    this._editComponent = new EditView(this._changeData);
     this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
     this._editComponent.setDeleteClickHandler(this._handleDeleteClick);
 

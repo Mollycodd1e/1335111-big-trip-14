@@ -85,6 +85,11 @@ export const NAMES_OF_SORTS = [
   'offer',
 ];
 
+export const MenuItem = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
+
 export const UserAction = {
   UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
   ADD_WAYPOINT: 'ADD_WAYPOINT',

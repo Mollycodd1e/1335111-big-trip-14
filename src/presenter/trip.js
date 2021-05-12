@@ -21,7 +21,7 @@ export default class Trip {
     this._sortComponent = null;
     this._noWaypointComponent = new NoWaypointView();
     this._listComponent = new ListView();
-    this._menuComponent = new MenuView();
+    //this._menuComponent = new MenuView();
     this._offerComponent = new OfferView();
     //this._sortComponent = new SortView();
 
@@ -44,10 +44,10 @@ export default class Trip {
     this._renderTrip(/*this._waypointsModel._waypoint*/);
   }
 
-  createWaypoint() {
+  createWaypoint(callback) {
     this._currentSorttype = SORT_TYPE.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.init();
+    this._pointNewPresenter.init(callback);
   }
 
   _getWaypoints() {
@@ -139,10 +139,23 @@ export default class Trip {
   }
 
   _renderMenu() {
+    this._menuComponent = new MenuView();
+
     const headerElement = document.querySelector('.page-header');
     const tripElement = headerElement.querySelector('.trip-main');
     const navigationElement = tripElement.querySelector('.trip-controls__navigation');
+
     render(navigationElement, this._menuComponent, renderPosition.BEFOREEND);
+  }
+
+  destroy() {
+    this._clearTrip({resetRenderedTaskCount: true, resetSortType: true});
+
+    remove(this._listComponent);
+    remove(this._sortComponent);
+
+    this._waypointModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _renderInfo(waypoint) {
@@ -175,6 +188,7 @@ export default class Trip {
     this._pointPresenter = {};
 
     remove(this._infoComponent);
+    remove(this._menuComponent);
     remove(this._sortComponent);
     remove(this._noWaypointComponent);
 
@@ -223,10 +237,12 @@ export default class Trip {
       const orderOfferList = offerList[i];
       const orderOffer = waypoints[i].offer;
 
-      orderOffer.forEach((element) => {
-        this._offerComponent = new OfferView(element);
-        render(orderOfferList, this._offerComponent, renderPosition.BEFOREEND);
-      });
+      if (orderOffer !== undefined) {
+        orderOffer.forEach((element) => {
+          this._offerComponent = new OfferView(element);
+          render(orderOfferList, this._offerComponent, renderPosition.BEFOREEND);
+        });
+      }
     }
   }
 

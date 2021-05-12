@@ -28,8 +28,11 @@ const createWaypointTemplate = (waypoint) => {
   }
 
   const timeDifference = (ariveTime, departureTime) => {
-    const num = departureTime.diff(ariveTime, 'minutes');
-    return ConvertMinutes(num);
+
+    if (departureTime !== undefined && ariveTime !== undefined) {
+      const num = departureTime.diff(ariveTime, 'minutes');
+      return ConvertMinutes(num);
+    }
   };
 
   const diff = timeDifference(lowerTime, upperTime);
