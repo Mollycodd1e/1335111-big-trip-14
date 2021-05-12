@@ -5,16 +5,15 @@ import SmartView from '../view/smart.js';
 const BAR_HEIGHT = 55;
 
 const renderMoneyChart = (moneyCtx) => {
-
   moneyCtx.height = BAR_HEIGHT * 5;
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],
+      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],// Типы трат денег
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data: [400, 300, 200, 160, 150, 100],// Количество трат на каждый тип
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -75,16 +74,15 @@ const renderMoneyChart = (moneyCtx) => {
 };
 
 const renderTypeChart = (typeCtx) => {
-
   typeCtx.height = BAR_HEIGHT * 5;
 
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],
+      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],// Типы транспорта
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],
+        data: [4, 3, 2, 1, 1, 1],// Количество каждого типа транспорта
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -144,9 +142,74 @@ const renderTypeChart = (typeCtx) => {
   });
 };
 
-//const renderTimeSpendChart = (timeSpendCtx, waypoint) => {
-//
-//};
+const renderTimeSpendChart = (timeSpendCtx) => {
+  timeSpendCtx.height = BAR_HEIGHT * 5;
+
+  return new Chart(timeSpendCtx, {
+    plugins: [ChartDataLabels],
+    type: 'horizontalBar',
+    data: {
+      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],// Типы транспорта
+      datasets: [{
+        data: [4, 3, 2, 1, 1, 1],// Количество времени потраченного на каждый вид транспорта
+        backgroundColor: '#ffffff',
+        hoverBackgroundColor: '#ffffff',
+        anchor: 'start',
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13,
+          },
+          color: '#000000',
+          anchor: 'end',
+          align: 'start',
+          //formatter: (val) => '${val}x',
+        },
+      },
+      title: {
+        display: true,
+        text: 'TIME-SPEND',
+        fontColor: '#000000',
+        fontSize: 23,
+        position: 'left',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#000000',
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          minBarLength: 50,
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
+      },
+    },
+  });
+};
 
 const createStatisticsTemplate = () => {
 
@@ -175,6 +238,8 @@ export default class Statistics extends SmartView {
     this._moneysChart = null;
     this._typeChart = null;
     this._timeSpendChart = null;
+
+    this._setCharts();
   }
 
   removeElement() {
@@ -199,11 +264,11 @@ export default class Statistics extends SmartView {
     }
 
     const moneyCtx = this.getElement().querySelector('.statistics__chart--money');
-    //const timeSpendCtx = this.getElement().querySelector('.statistics__chart--time');
+    const timeSpendCtx = this.getElement().querySelector('.statistics__chart--time');
     const typeCtx = this.getElement().querySelector('.statistics__chart--transport');
 
-    this._moneyChart = renderMoneyChart(moneyCtx, this._waypoints);
-    this._typeChart = renderTypeChart(typeCtx, this._waypoints);
-    //this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._waypoints);
+    this._moneyChart = renderMoneyChart(moneyCtx);
+    this._typeChart = renderTypeChart(typeCtx);
+    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx);
   }
 }
