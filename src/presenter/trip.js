@@ -31,8 +31,8 @@ export default class Trip {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._waypointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    //this._waypointsModel.addObserver(this._handleModelEvent);
+    //this._filterModel.addObserver(this._handleModelEvent);
 
     this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction);
   }
@@ -41,6 +41,14 @@ export default class Trip {
     //this._waypoint = waypoint.slice();
     //this._sourceWaypoint = waypoint.slice();
     //console.log(this._waypointsModel._waypoint)
+
+    this._waypointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
+    if (this._infoComponent !== undefined) {
+      remove(this._infoComponent);
+    }
+
     this._renderTrip(/*this._waypointsModel._waypoint*/);
   }
 
@@ -95,10 +103,12 @@ export default class Trip {
         break;
       case UpdateType.MINOR:
         this._clearTrip();
+        remove(this._infoComponent);
         this._renderTrip();
         break;
       case UpdateType.MAJOR:
         this._clearTrip({resetRenderedWaypoint: true, resetSortType: true});
+        remove(this._infoComponent);
         this._renderTrip();
         break;
     }
@@ -130,6 +140,7 @@ export default class Trip {
       return;
     }
 
+    remove(this._infoComponent);
     //this._sortWaypoint(sortType);
     this._currentSortType = sortType;
     //this._clearWaypoint();
@@ -154,7 +165,7 @@ export default class Trip {
     remove(this._listComponent);
     remove(this._sortComponent);
 
-    this._waypointModel.removeObserver(this._handleModelEvent);
+    this._waypointsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
@@ -187,8 +198,8 @@ export default class Trip {
     Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
 
-    remove(this._infoComponent);
-    remove(this._menuComponent);
+    //remove(this._infoComponent);
+    //remove(this._menuComponent);
     remove(this._sortComponent);
     remove(this._noWaypointComponent);
 
@@ -256,7 +267,6 @@ export default class Trip {
     const waypoints = this._getWaypoints();
 
     this._renderInfo(waypoints);
-    this._renderMenu();
     this._renderSort();
 
     if (DESTINATION_POINTS_MOCKS < 1) {
