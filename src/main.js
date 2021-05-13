@@ -1,18 +1,18 @@
 //import FilterView from './view/filter.js';
 import MenuView from './view/menu.js';
-import {generateWaypoint} from './mock/waypoint.js';
+//import {generateWaypoint} from './mock/waypoint.js';
 import Api from './api.js';
 //import {generateFilter} from './mock/filter.js';
 //import {render, renderPosition} from './utils/render.js';
 import StatisticsView from './view/statistics.js';
-import {DESTINATION_POINTS_MOCKS, MenuItem, UpdateType} from './const.js';
+import {/*DESTINATION_POINTS_MOCKS,*/ MenuItem, UpdateType} from './const.js';
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
 import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
 import {render, renderPosition, remove} from './utils/render.js';
 
-const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
+//const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const api = new Api(END_POINT, AUTHORIZATION);
@@ -68,4 +68,4 @@ api.getWaypoints().then((waypoints) => {
   waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
 }).catch(() => {
   waypointsModel.setWaypoints(UpdateType.INIT, []);
-})
+});

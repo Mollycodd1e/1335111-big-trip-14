@@ -206,7 +206,6 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
   const timeDifference = (elements) => {
     let sumOfTime = 0;
 
-    console.log(elements)
     for (let i = 0; i < elements.length; i++) {
 
       const num = dayjs(elements[i].upperTime).diff(dayjs(elements[i].lowerTime), 'minutes');
