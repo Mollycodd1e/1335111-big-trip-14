@@ -1,6 +1,7 @@
 //import FilterView from './view/filter.js';
 import MenuView from './view/menu.js';
 import {generateWaypoint} from './mock/waypoint.js';
+import Api from './api.js';
 //import {generateFilter} from './mock/filter.js';
 //import {render, renderPosition} from './utils/render.js';
 import StatisticsView from './view/statistics.js';
@@ -12,12 +13,19 @@ import FilterModel from './model/filter.js';
 import {render, renderPosition, remove} from './utils/render.js';
 
 const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
+const AUTHORIZATION = 'Basic y012VANYA890';
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+const api = new Api(END_POINT, AUTHORIZATION);
 //const filter = generateFilter(waypoints);
 
 const waypointsModel = new PointModel();
 waypointsModel.setWaypoints(waypoints);
 
 const filterModel = new FilterModel();
+
+api.getWaypoints().then((/*waypoints*/) => {
+  //console.log(waypoints);
+});
 
 const headerElement = document.querySelector('.page-header');
 const tripElement = headerElement.querySelector('.trip-main');
@@ -59,3 +67,7 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   evt.preventDefault();
   tripPresenter.createWaypoint();
 });
+
+//api.getWaypoints().then((waypoints) => {
+//  waypointsModel.setWaypoints(waypoints);
+//})
