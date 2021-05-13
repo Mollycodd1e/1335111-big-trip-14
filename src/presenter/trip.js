@@ -2,6 +2,7 @@ import SortView from '../view/sort.js';
 import InfoView from '../view/info.js';
 import MenuView from '../view/menu.js';
 import ListView from '../view/list.js';
+import LoadingView from '../view/loading.js';
 import OfferView from '../view/offer.js';
 import {filter} from '../utils/filter.js';
 import NoWaypointView from '../view/nowaypoint.js';
@@ -17,12 +18,14 @@ export default class Trip {
     this._waypointsModel = waypointsModel;
     this._filterModel = filterModel;
     this._currentSortType = SORT_TYPE.DAY;
+    this._isLoading = true;
 
     this._sortComponent = null;
     this._noWaypointComponent = new NoWaypointView();
     this._listComponent = new ListView();
     //this._menuComponent = new MenuView();
     this._offerComponent = new OfferView();
+    this._loadingComponent = new LoadingView();
     //this._sortComponent = new SortView();
 
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -111,6 +114,11 @@ export default class Trip {
         remove(this._infoComponent);
         this._renderTrip();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderTrip();
+        break;
     }
   }
 
@@ -147,6 +155,13 @@ export default class Trip {
     //this._renderWaypoints(this._waypointsModel._waypoint);
     this._clearTrip({resetRenderedWaypoint: true});
     this._renderTrip(this._waypointsModel._waypoint);
+  }
+
+  _renderLoading() {
+    const headerElement = document.querySelector('.page-header');
+    const tripElement = headerElement.querySelector('.trip-main');
+
+    render(tripElement, this._loadingComponent, renderPosition.AFTERBEGIN);
   }
 
   _renderMenu() {
@@ -202,6 +217,7 @@ export default class Trip {
     //remove(this._menuComponent);
     remove(this._sortComponent);
     remove(this._noWaypointComponent);
+    remove(this._loadingComponent);
 
     if (resetRenderedWaypoint) {
       this._renderedWaypoint = DESTINATION_POINTS_MOCKS;
@@ -264,6 +280,11 @@ export default class Trip {
   }
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const waypoints = this._getWaypoints();
 
     this._renderInfo(waypoints);

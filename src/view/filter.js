@@ -1,18 +1,19 @@
 import AbstractView from '../view/abstract.js';
+//import {FilterType} from '../const.js';
 
 const createFilterItem = (filter, currentFilterType) => {
-  const {type, name} = filter;
+  const {type, name, count} = filter;
 
   return `<div class="trip-filters__filter">
-          <input id="filter-${name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${name}"
+          <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}"
           ${type === currentFilterType ? 'checked' : ''}>
-          <label class="trip-filters__filter-label" for="filter-${name}">${name}</label>
+          <label class="trip-filters__filter-label" for="filter-${type}">${name}</label>
           </div>`;
 };
 
 export const createFilterTemplate = function (filterItems, currentFilterType) {
 
-  const filterItemsTemplate = filterItems.map((filter/*, index*/) => createFilterItem(filter, currentFilterType/*index === 0*/)).join('');
+  const filterItemsTemplate = filterItems.map((filter) => createFilterItem(filter, currentFilterType)).join('');
 
   return `<form class="trip-filters" action="#" method="get">
             ${filterItemsTemplate}

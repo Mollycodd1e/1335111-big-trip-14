@@ -1,4 +1,5 @@
 import Chart from 'chart.js';
+import dayjs from 'dayjs';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from '../view/smart.js';
 import {TYPES} from '../const.js';
@@ -205,8 +206,10 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
   const timeDifference = (elements) => {
     let sumOfTime = 0;
 
+    console.log(elements)
     for (let i = 0; i < elements.length; i++) {
-      const num = elements[i].upperTime.diff(elements[i].lowerTime, 'minutes');
+
+      const num = dayjs(elements[i].upperTime).diff(dayjs(elements[i].lowerTime), 'minutes');
       sumOfTime += num;
     }
 

@@ -14,6 +14,7 @@ const createWaypointTemplate = (waypoint) => {
   function ConvertMinutes(num) {
     const hours = Math.floor(num / 60);
     const days = Math.floor(hours / 24);
+    console.log(days)
     const rhours = hours - days * 24;
     const minutes = Math.floor(num % 60);
 
@@ -28,9 +29,8 @@ const createWaypointTemplate = (waypoint) => {
   }
 
   const timeDifference = (ariveTime, departureTime) => {
-
     if (departureTime !== undefined && ariveTime !== undefined) {
-      const num = departureTime.diff(ariveTime, 'minutes');
+      const num = dayjs(departureTime).diff(dayjs(ariveTime), 'minutes');
       return ConvertMinutes(num);
     }
   };

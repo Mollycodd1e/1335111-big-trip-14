@@ -6,8 +6,12 @@ export default class Point extends Observer {
     this._waypoints = [];
   }
 
-  setWaypoints(waypoints) {
-    this._waypoints = waypoints.slice();
+  setWaypoints(updateType, waypoints) {
+    if (waypoints !== undefined) {
+      this._waypoints = waypoints.slice();
+    }
+
+    this._notify(updateType);
   }
 
   getWaypoints() {

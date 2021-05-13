@@ -5,7 +5,7 @@ import Api from './api.js';
 //import {generateFilter} from './mock/filter.js';
 //import {render, renderPosition} from './utils/render.js';
 import StatisticsView from './view/statistics.js';
-import {DESTINATION_POINTS_MOCKS, MenuItem} from './const.js';
+import {DESTINATION_POINTS_MOCKS, MenuItem, UpdateType} from './const.js';
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
 import PointModel from './model/point.js';
@@ -19,13 +19,9 @@ const api = new Api(END_POINT, AUTHORIZATION);
 //const filter = generateFilter(waypoints);
 
 const waypointsModel = new PointModel();
-waypointsModel.setWaypoints(waypoints);
+waypointsModel.setWaypoints(/*waypoints*/);
 
 const filterModel = new FilterModel();
-
-api.getWaypoints().then((/*waypoints*/) => {
-  //console.log(waypoints);
-});
 
 const headerElement = document.querySelector('.page-header');
 const tripElement = headerElement.querySelector('.trip-main');
@@ -68,6 +64,8 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   tripPresenter.createWaypoint();
 });
 
-//api.getWaypoints().then((waypoints) => {
-//  waypointsModel.setWaypoints(waypoints);
-//})
+api.getWaypoints().then((waypoints) => {
+  waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
+}).catch(() => {
+  waypointsModel.setWaypoints(UpdateType.INIT, []);
+})
