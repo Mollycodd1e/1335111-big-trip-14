@@ -40,10 +40,12 @@ let statisticsComponent = null;
 const handleMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      tripPresenter.destroy();
       tripPresenter.init();
       remove(statisticsComponent);
       break;
     case MenuItem.STATS:
+      remove(statisticsComponent);
       tripPresenter.destroy();
       statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
       render(statisticsElement, statisticsComponent, renderPosition.BEFOREEND);
