@@ -21,60 +21,64 @@ const createOptionTemplate = () => {
 const listOfTown = createOptionTemplate();
 
 const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
-  const editOffer = () => {
+  //const editOffer = () => {
+//
+  //  const {offer} = waypoint;
+//
+  //  const ADD_OFFERS = [
+  //    {
+  //      name: 'uber',
+  //      title: 'Order Uber',
+  //      price: 20,
+  //    },
+  //    {
+  //      name: 'luggage',
+  //      title: 'Add luggage',
+  //      price: 50,
+  //    },
+  //    {
+  //      name: 'comfort',
+  //      title: 'Switch to comfort',
+  //      price: 80,
+  //    },
+  //    {
+  //      name: 'meal',
+  //      title: 'Add meal',
+  //      price: 15,
+  //    },
+  //    {
+  //      name: 'seats',
+  //      title: 'Choose seats',
+  //      price: 5,
+  //    },
+  //    {
+  //      name: 'train',
+  //      title: 'Travel by train',
+  //      price: 40,
+  //    },
+  //  ];
+//
+  //  if (offer !== undefined) {
+  //    for (let i = 0; i < offer.length; i++) {
+  //      for (let j = 0; j < ADD_OFFERS.length; j++) {
+  //        if (offer[i].name === ADD_OFFERS[j].name) {
+  //          ADD_OFFERS[j]['isChecked'] = 'true';
+  //        }
+  //      }
+  //    }
+  //  }
+//
+  //  return ADD_OFFERS;
+  //};
 
-    const {offer} = waypoint;
+  //const  checkedOptions = editOffer();
 
-    const ADD_OFFERS = [
-      {
-        name: 'uber',
-        title: 'Order Uber',
-        price: 20,
-      },
-      {
-        name: 'luggage',
-        title: 'Add luggage',
-        price: 50,
-      },
-      {
-        name: 'comfort',
-        title: 'Switch to comfort',
-        price: 80,
-      },
-      {
-        name: 'meal',
-        title: 'Add meal',
-        price: 15,
-      },
-      {
-        name: 'seats',
-        title: 'Choose seats',
-        price: 5,
-      },
-      {
-        name: 'train',
-        title: 'Travel by train',
-        price: 40,
-      },
-    ];
-
-    if (offer !== undefined) {
-      for (let i = 0; i < offer.length; i++) {
-        for (let j = 0; j < ADD_OFFERS.length; j++) {
-          if (offer[i].name === ADD_OFFERS[j].name) {
-            ADD_OFFERS[j]['isChecked'] = 'true';
-          }
-        }
-      }
-    }
-
-    return ADD_OFFERS;
-  };
-
-  const  checkedOptions = editOffer();
+  if (waypoint.offer === undefined) {
+    waypoint.offer === [{}];
+  }
 
   const addOption = () => {
-    return checkedOptions.map((option) => `<div class="event__offer-selector">
+    return waypoint.offer.map((option) => `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}" checked>
       <label class="event__offer-label" for="event-offer-${option.title}-1">
       <span class="event__offer-title">${option.title}</span>
