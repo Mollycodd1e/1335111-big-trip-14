@@ -1,11 +1,12 @@
-import {NAMES_OF_SORTS, SORT_TYPE} from '../const.js';
+import {NAMES_OF_SORTS} from '../const.js';
 import AbstractView from '../view/abstract.js';
 
 const TARGET_TAG_NAME = 'LABEL';
+
 const DISABLED_SORTS = {
   EVENT: 'event',
   OFFER: 'offer',
-}
+};
 
 const createSortItemTemplate = (currentSortType) => {
 
