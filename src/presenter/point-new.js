@@ -1,5 +1,5 @@
 import EditView from '../view/edit.js';
-import {nanoid} from 'nanoid';
+//import {nanoid} from 'nanoid';
 import {render, renderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
@@ -48,14 +48,34 @@ export default class PointNew {
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._editComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._editComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._editComponent.shake(resetFormState);
+  }
+
   _handleSubmitClick(waypoint) {
     this._changeData(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, waypoint),
+      //Object.assign({id: nanoid()}, waypoint),
+      waypoint,
     );
 
-    this.destroy();
+    //this.destroy();
   }
 
   _handleDeleteClick() {

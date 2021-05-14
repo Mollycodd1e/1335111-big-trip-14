@@ -10,7 +10,11 @@ const createInfoTemplate = (waypoint) => {
       arrayOfTown.push(waypoint[i].town);
     }
 
-    return arrayOfTown.map((town) => `${town}`).join(' - ');
+    if (arrayOfTown.length < 3) {
+      return arrayOfTown.map((town) => `${town}`).join(' - ');
+    } else {
+      return arrayOfTown[0] + ' - ... - ' + arrayOfTown[arrayOfTown.length - 1];
+    }
   };
 
   const listOfTowns = sortByTown();

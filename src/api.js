@@ -3,6 +3,8 @@ import PointModel from './model/point.js';
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 const SuccessHTTPStatusRange = {
@@ -28,6 +30,24 @@ export default class Api {
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJSON).then(PointModel.adaptToClient);
+  }
+
+  addWaypoint(point) {
+    return this._load({
+      url: 'points',
+      method: Method.POST,
+      body: JSON.stringify(PointModel.adaptToServer(point)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON)
+      .then(PointModel.adaptToClient);
+  }
+
+  deleteWaypoint(point) {
+    return this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
   }
 
   _load({

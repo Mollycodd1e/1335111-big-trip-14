@@ -9,6 +9,12 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export default class Point {
   constructor(waypointContainer, changeData, changeMode) {
     this._waypointContainer = waypointContainer;
@@ -79,6 +85,34 @@ export default class Point {
     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
   }
 
+  setViewState(state) {
+    const resetFormState = () => {
+      this._editComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._editComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._editComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._waypointComponent.shake(resetFormState);
+        this._editComponent.shake(resetFormState);
+    }
+  }
+
   _replaceWaypointToForm() {
     replace(this._editComponent,this._waypointComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
@@ -111,7 +145,7 @@ export default class Point {
   _handleSubmitClick(waypoint) {
     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, waypoint);
 
-    this._replaceFormToWaypoint();
+    //this._replaceFormToWaypoint();
   }
 
   _handleDeleteClick(waypoint) {

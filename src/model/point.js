@@ -92,12 +92,15 @@ export default class Point extends Observer {
       {},
       point,
       {
-        'base_price': point.price,
+        'base_price': Number(point.price),
         'date_from': point.lowerTime ? point.lowerTime : new Date(),
         'date_to': point.upperTime ? point.upperTime : new Date(),
-        'destination.description': point.description,
-        'destination.name': point.town,
-        'destination.pictures': point.picture,
+        'destination':
+        {
+          'description': point.description,
+          'name': point.town,
+          'pictures': point.picture,
+        },
         'id': point.id,
         'is_favorite': point.isFavorite,
         'type': point.waypointType,
@@ -107,8 +110,8 @@ export default class Point extends Observer {
 
     delete adaptedWaypoint.price;
     delete adaptedWaypoint.isFavorite;
-    delete adaptedWaypoint.point.lowerTime;
-    delete adaptedWaypoint.point.upperTime;
+    delete adaptedWaypoint.lowerTime;
+    delete adaptedWaypoint.upperTime;
     delete adaptedWaypoint.description;
     delete adaptedWaypoint.town;
     delete adaptedWaypoint.waypointType;

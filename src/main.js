@@ -33,7 +33,7 @@ const filterElement = tripElement.querySelector('.trip-controls__filters');
 //render(filterElement, new FilterView(filter, 'everything'), renderPosition.BEFOREEND);
 const menuComponent = new MenuView();
 
-render(navigationElement, menuComponent, renderPosition.BEFOREEND);
+//render(navigationElement, menuComponent, renderPosition.BEFOREEND);
 
 let statisticsComponent = null;
 
@@ -53,9 +53,10 @@ const handleMenuClick = (menuItem) => {
   }
 };
 
-menuComponent.setMenuClickHandler(handleMenuClick);
+//render(navigationElement, menuComponent, renderPosition.BEFOREEND);
+//menuComponent.setMenuClickHandler(handleMenuClick);
 
-const tripPresenter = new TripPresenter(waypointsModel, filterModel);
+const tripPresenter = new TripPresenter(waypointsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, waypointsModel);
 
 tripPresenter.init(/*waypoints*/);
@@ -68,6 +69,10 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
 
 api.getWaypoints().then((waypoints) => {
   waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
+  render(navigationElement, menuComponent, renderPosition.BEFOREEND);
+  menuComponent.setMenuClickHandler(handleMenuClick);
 }).catch(() => {
   waypointsModel.setWaypoints(UpdateType.INIT, []);
+  render(navigationElement, menuComponent, renderPosition.BEFOREEND);
+  menuComponent.setMenuClickHandler(handleMenuClick);
 });
