@@ -10,16 +10,20 @@ const createInfoTemplate = (waypoint) => {
       arrayOfTown.push(waypoint[i].town);
     }
 
-    return arrayOfTown.map((town) => `${town}`).join(' - ');
+    if (arrayOfTown.length < 3) {
+      return arrayOfTown.map((town) => `${town}`).join(' - ');
+    } else {
+      return arrayOfTown[0] + ' - ... - ' + arrayOfTown[arrayOfTown.length - 1];
+    }
   };
 
   const listOfTowns = sortByTown();
 
-  const sortByDate = () => {
+  const sortByDate = (waypoint) => {
     const result = [];
 
     for (let i = 0; i < waypoint.length; i++ ) {
-      result.push(waypoint[i].data);
+      result.push(waypoint[i].lowerTime);
     }
 
     result.sort((a, b) => {
@@ -29,16 +33,18 @@ const createInfoTemplate = (waypoint) => {
     return result;
   };
 
-  const arrayOfDays = sortByDate();
+  const arrayOfDays = sortByDate(waypoint);
   const minDay = dayjs(arrayOfDays[0]).format('D');
   const maxDay = dayjs(arrayOfDays[arrayOfDays.length - 1]).format('D');
   const minMonth = dayjs(arrayOfDays[0]).format('MMM');
+  const maxMonth = dayjs(arrayOfDays[arrayOfDays.length - 1]).format('MMM');
 
   const sumOfPrice = () => {
     let sum = 0;
 
     for (let i = 0; i < waypoint.length; i ++) {
-      sum += waypoint[i].price;
+      const price = Number(waypoint[i].price);
+      sum += price;
     }
 
     return sum;
@@ -50,7 +56,7 @@ const createInfoTemplate = (waypoint) => {
             <div class="trip-info__main">
               <h1 class="trip-info__title">${listOfTowns}</h1>
 
-              <p class="trip-info__dates">${minMonth} ${minDay}&nbsp;&mdash;&nbsp;${maxDay}</p>
+              <p class="trip-info__dates">${minMonth} ${minDay}&nbsp;&mdash;&nbsp;${maxMonth} ${maxDay}</p>
             </div>
 
             <p class="trip-info__cost">

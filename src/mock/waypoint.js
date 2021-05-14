@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {WAYPOINT_TYPE, TOWNS, DESCRIPTION, OFFERS} from '../const.js';
 import {generateNumber, filterByTitle} from '../utils/common.js';
 
@@ -21,29 +22,10 @@ const generateWaypointType = () => {
   return WAYPOINT_TYPE[randomType];
 };
 
-const generateDescription = () => {
-  const sentenceCount = generateNumber(1, 5);
-
-  let descriptionText = '';
-
-  for (let i = 0; i < sentenceCount; i++) {
-    const randomSentence = generateNumber(0, 10);
-    descriptionText += DESCRIPTION[randomSentence];
-  }
-
-  return descriptionText;
-};
-
 const generatePrice = () => {
   const price = generateNumber(1, 100);
 
   return (price);
-};
-
-const generatePicture = () => {
-  const randomPicture = generateNumber(0, 10);
-
-  return ('http://picsum.photos/248/152?r=' + randomPicture);
 };
 
 const generateLowerTime = () => {
@@ -60,7 +42,7 @@ const generateUpperTime = () => {
   return (timeUpper);
 };
 
-const generateOffer = () => {
+export const generateOffer = () => {
   const offersCount = generateNumber(0, 5);
 
   const offerArray = [];
@@ -77,8 +59,28 @@ const generateOffer = () => {
   return offerArray;
 };
 
+export const generateDescription = () => {
+  const sentenceCount = generateNumber(1, 5);
+
+  let descriptionText = '';
+
+  for (let i = 0; i < sentenceCount; i++) {
+    const randomSentence = generateNumber(0, 10);
+    descriptionText += DESCRIPTION[randomSentence];
+  }
+
+  return descriptionText;
+};
+
+export const generatePicture = () => {
+  const randomPicture = generateNumber(0, 10);
+
+  return ('http://picsum.photos/248/152?r=' + randomPicture);
+};
+
 export const generateWaypoint = () => {
   return {
+    id: nanoid(),
     data: generateDate(),
     description: generateDescription(),
     waypointType: generateWaypointType(),

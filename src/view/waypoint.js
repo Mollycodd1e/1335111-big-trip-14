@@ -2,12 +2,12 @@ import dayjs from 'dayjs';
 import AbstractView from '../view/abstract.js';
 
 const createWaypointTemplate = (waypoint) => {
-  const {waypointType, data, town, upperTime, lowerTime, price, isFavorite} = waypoint;
+  const {waypointType, town, upperTime, lowerTime, price, isFavorite} = waypoint;
 
   const lowerTimeFormat = dayjs(lowerTime).format('HH:mm');
   const upperTimeFormat = dayjs(upperTime).format('HH:mm');
-  const dateFormat = dayjs(data).format('MMM DD');
-  const dateYMD = dayjs(data).format('YYYY-MM-DD');
+  const dateFormat = dayjs(lowerTime).format('MMM DD');
+  const dateYMD = dayjs(lowerTime).format('YYYY-MM-DD');
   const startEvent = dayjs(lowerTime).format('YYYY-MM-DDTHH:mm');
   const endEvent = dayjs(upperTime).format('YYYY-MM-DDTHH:mm');
 
@@ -28,8 +28,10 @@ const createWaypointTemplate = (waypoint) => {
   }
 
   const timeDifference = (ariveTime, departureTime) => {
-    const num = departureTime.diff(ariveTime, 'minutes');
-    return ConvertMinutes(num);
+    if (departureTime !== undefined && ariveTime !== undefined) {
+      const num = dayjs(departureTime).diff(dayjs(ariveTime), 'minutes');
+      return ConvertMinutes(num);
+    }
   };
 
   const diff = timeDifference(lowerTime, upperTime);
@@ -77,6 +79,7 @@ export default class Waypoint extends AbstractView {
     super();
     this._waypoint = waypoint;
 
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._waypointClickHandler = this._waypointClickHandler.bind(this);
   }
 
@@ -87,6 +90,16 @@ export default class Waypoint extends AbstractView {
   _waypointClickHandler(evt) {
     evt.preventDefault();
     this._callback.waypointClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
   }
 
   setWaypointClickHandler(callback) {

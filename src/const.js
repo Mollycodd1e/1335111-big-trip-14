@@ -85,4 +85,34 @@ export const NAMES_OF_SORTS = [
   'offer',
 ];
 
-export const DESTINATION_POINTS_MOCKS = 15;
+export const MenuItem = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
+
+export const UserAction = {
+  UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
+  ADD_WAYPOINT: 'ADD_WAYPOINT',
+  DELETE_WAYPOINT: 'DELETE_WAYPOINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
+};
+
+export const SORT_TYPE = {
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
+export const FilterType = {
+  EVERYTHING: 'everything',
+  PAST: 'past',
+  FUTURE: 'future',
+};
+
+export const DESTINATION_POINTS_MOCKS = 3;
