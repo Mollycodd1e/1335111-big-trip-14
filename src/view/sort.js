@@ -1,4 +1,4 @@
-import {NAMES_OF_SORTS, SORT_TYPE} from '../const.js';
+import {/*NAMES_OF_SORTS,*/ SORT_TYPE} from '../const.js';
 import AbstractView from '../view/abstract.js';
 
 const TARGET_TAG_NAME = 'LABEL';
@@ -26,7 +26,7 @@ const createSortItemTemplate = (/*isChecked,*/ currentSortType) => {
           <div class="trip-sort__item  trip-sort__item--offer">
             <input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled>
             <label class="trip-sort__btn" for="sort-offer">OFFER</label>
-          </div>`
+          </div>`;
   //return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
   //                            <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}"
   //                            ${currentSortType === sort ? 'checked' : ''}>
