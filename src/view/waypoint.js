@@ -2,12 +2,12 @@ import dayjs from 'dayjs';
 import AbstractView from '../view/abstract.js';
 
 const createWaypointTemplate = (waypoint) => {
-  const {waypointType, data, town, upperTime, lowerTime, price, isFavorite} = waypoint;
+  const {waypointType, town, upperTime, lowerTime, price, isFavorite} = waypoint;
 
   const lowerTimeFormat = dayjs(lowerTime).format('HH:mm');
   const upperTimeFormat = dayjs(upperTime).format('HH:mm');
-  const dateFormat = dayjs(data).format('MMM DD');
-  const dateYMD = dayjs(data).format('YYYY-MM-DD');
+  const dateFormat = dayjs(lowerTime).format('MMM DD');
+  const dateYMD = dayjs(lowerTime).format('YYYY-MM-DD');
   const startEvent = dayjs(lowerTime).format('YYYY-MM-DDTHH:mm');
   const endEvent = dayjs(upperTime).format('YYYY-MM-DDTHH:mm');
 

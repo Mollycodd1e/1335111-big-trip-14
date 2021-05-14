@@ -22,8 +22,8 @@ const listOfTown = createOptionTemplate();
 
 const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
   const editOffer = () => {
-    const {offer,
-    } = waypoint;
+
+    const {offer} = waypoint;
 
     const ADD_OFFERS = [
       {
@@ -71,12 +71,12 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
     return ADD_OFFERS;
   };
 
-  const checkedOptions = editOffer();
+  const  checkedOptions = editOffer();
 
   const addOption = () => {
     return checkedOptions.map((option) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.name}-1" type="checkbox" name="event-offer-${option.name}" ${option.isChecked ? 'checked' : ''}>
-      <label class="event__offer-label" for="event-offer-${option.name}-1">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}" checked>
+      <label class="event__offer-label" for="event-offer-${option.title}-1">
       <span class="event__offer-title">${option.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${option.price}</span>
@@ -196,7 +196,7 @@ export default class Edit extends SmartView {
     }
 
     this._datepicker = flatpickr(this.getElement().querySelector('.event__input--date-from'), {
-      dateFormat: 'd m y H:i',
+      dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
       onChange: this._dateFromChangeHandler,
