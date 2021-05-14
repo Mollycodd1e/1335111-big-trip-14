@@ -57,7 +57,7 @@ export default class Trip {
   }
 
   createWaypoint(callback) {
-    this._currentSorttype = SORT_TYPE.DAY;
+    this._currentSortType = SORT_TYPE.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init(callback);
   }

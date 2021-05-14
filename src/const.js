@@ -105,8 +105,10 @@ export const UpdateType = {
 
 export const SORT_TYPE = {
   DAY: 'day',
+  EVENT: 'event',
   TIME: 'time',
   PRICE: 'price',
+  OFFER: 'offer',
 };
 
 export const FilterType = {
