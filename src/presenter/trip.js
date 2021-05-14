@@ -162,7 +162,7 @@ export default class Trip {
   //}
 
   _handleSortTypeChange(sortType) {
-    if (this._currentSortType === sortType) {
+    if (this._currentSortType === sortType || sortType === undefined) {
       return;
     }
 

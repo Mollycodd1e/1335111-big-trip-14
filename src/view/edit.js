@@ -74,7 +74,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
   //const  checkedOptions = editOffer();
 
   if (waypoint.offer === undefined) {
-    waypoint.offer === [{}];
+    waypoint.offer = [{}];
   }
 
   const addOption = () => {
