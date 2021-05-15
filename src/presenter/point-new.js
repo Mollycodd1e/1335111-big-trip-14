@@ -68,6 +68,7 @@ export default class PointNew {
   }
 
   _handleSubmitClick(waypoint) {
+    document.querySelector('.trip-main__event-add-btn').disabled = '';
     this._changeData(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
@@ -89,6 +90,7 @@ export default class PointNew {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      document.querySelector('.trip-main__event-add-btn').disabled = '',
       this.destroy();
     }
   }

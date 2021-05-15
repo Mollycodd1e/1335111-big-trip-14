@@ -44,6 +44,11 @@ const createInfoTemplate = (waypoint) => {
 
     for (let i = 0; i < waypoint.length; i ++) {
       const price = Number(waypoint[i].price);
+
+      for (let j = 0; j < waypoint[i].offer.length; j++) {
+        sum += waypoint[i].offer[j].price;
+      }
+
       sum += price;
     }
 
