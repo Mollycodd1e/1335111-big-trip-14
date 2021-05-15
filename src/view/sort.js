@@ -1,22 +1,28 @@
-import {NAMES_OF_SORTS, SORT_TYPE} from '../const.js';
+import {NAMES_OF_SORTS} from '../const.js';
 import AbstractView from '../view/abstract.js';
 
-const createSortItemTemplate = (/*isChecked,*/ currentSortType) => {
+const TARGET_TAG_NAME = 'LABEL';
+
+const DISABLED_SORTS = {
+  EVENT: 'event',
+  OFFER: 'offer',
+};
+
+const createSortItemTemplate = (currentSortType) => {
 
   return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
                               <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}"
-                              ${currentSortType === SORT_TYPE.DAY ? 'checked' : ''}>
-
+                              ${currentSortType === sort ? 'checked' : ''}>
                               <label class="trip-sort__btn" for="sort-${sort}" data-sort-type="${sort}">${sort}</label>
                               </div>`).join('');
 };
 
-const sortTemplate = createSortItemTemplate();
+//const sortTemplate = createSortItemTemplate();
 
-const createSortTemplate = () => {
+const createSortTemplate = (currentSortType) => {
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-            ${sortTemplate}
+            ${createSortItemTemplate(currentSortType)}
           </form>`;
 };
 
@@ -33,12 +39,14 @@ export default class Sort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'LABEL') {
+    if (evt.target.tagName !== TARGET_TAG_NAME) {
       return;
     }
 
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.dataset.sortType);
+    if(evt.target.dataset.sortType !== DISABLED_SORTS.EVENT && evt.target.dataset.sortType !== DISABLED_SORTS.OFFER) {
+      this._callback.sortTypeChange(evt.target.dataset.sortType);
+    }
   }
 
   setSortTypeChangeHandler(callback) {

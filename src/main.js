@@ -64,6 +64,7 @@ filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
+  document.querySelector('.trip-main__event-add-btn').disabled = 'disabled',
   tripPresenter.createWaypoint();
 });
 

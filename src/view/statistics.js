@@ -9,6 +9,10 @@ const BAR_HEIGHT = 55;
 
 const types = TYPES.slice().map((item) => item.toUpperCase());
 
+const decreaseSort = (priceA, priceB) => {
+  return priceB - priceA;
+};
+
 const renderMoneyChart = (moneyCtx, waypoints) => {
   moneyCtx.height = BAR_HEIGHT * 10;
 
@@ -40,7 +44,7 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
     data: {
       labels: types,
       datasets: [{
-        data: arrayOfSum,
+        data: arrayOfSum.sort(decreaseSort),
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -121,7 +125,7 @@ const renderTypeChart = (typeCtx, waypoints) => {
     data: {
       labels: types,
       datasets: [{
-        data: arrayOfCount,
+        data: arrayOfCount.sort(decreaseSort),
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -233,7 +237,7 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
     data: {
       labels: types,
       datasets: [{
-        data: arrayOfTime,
+        data: arrayOfTime.sort(decreaseSort),
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
