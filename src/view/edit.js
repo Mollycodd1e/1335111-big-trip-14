@@ -1,4 +1,4 @@
-import {TYPES, TOWNS} from '../const.js';
+import {TYPES /*, TOWNS*/} from '../const.js';
 import {generateDescription, generatePicture, generateOffer} from '../mock/waypoint.js';
 import SmartView from '../view/smart.js';
 import flatpickr from 'flatpickr';
@@ -14,17 +14,29 @@ const createEditTypeTemplate = (currentType) => {
 
 const typesTemplate = createEditTypeTemplate();
 
-const createOptionTemplate = () => {
-  return TOWNS.map((town) => `<option value="${town}"></option>`).join('');
+const createOptionTemplate = (array) => {
+  return array.map((element) => `<option value="${element}"></option>`).join('');
 };
 
-const listOfTown = createOptionTemplate();
+//const listOfTown = createOptionTemplate();
+
+const get = [];
 
 const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
+
+  const towns = () => {
+    const {town} = waypoint;
+    get.push(town);
+
+    return get;
+  };
+
+  const listOfTown = createOptionTemplate(towns());
+
   //const editOffer = () => {
-//
+  //
   //  const {offer} = waypoint;
-//
+  //
   //  const ADD_OFFERS = [
   //    {
   //      name: 'uber',
@@ -57,7 +69,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
   //      price: 40,
   //    },
   //  ];
-//
+  //
   //  if (offer !== undefined) {
   //    for (let i = 0; i < offer.length; i++) {
   //      for (let j = 0; j < ADD_OFFERS.length; j++) {
@@ -67,7 +79,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
   //      }
   //    }
   //  }
-//
+  //
   //  return ADD_OFFERS;
   //};
 

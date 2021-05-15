@@ -65,8 +65,8 @@ export default class Point extends Observer {
       {
         price: point.base_price,
         isFavorite: point.is_favorite,
-        lowerTime: new Date(point.date_from),
-        upperTime: new Date(point.date_to),
+        lowerTime: point.date_from,
+        upperTime: point.date_to,
         description: point.destination.description,
         town: point.destination.name,
         id: point.id,

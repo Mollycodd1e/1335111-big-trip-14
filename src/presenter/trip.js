@@ -5,6 +5,7 @@ import ListView from '../view/list.js';
 import LoadingView from '../view/loading.js';
 import OfferView from '../view/offer.js';
 import {filter} from '../utils/filter.js';
+//import PointModel from '../model/point.js';
 import NoWaypointView from '../view/nowaypoint.js';
 import PointPresenter, {State as PointPresenterViewState} from '../presenter/point.js';
 import PointNewPresenter from '../presenter/point-new.js';
