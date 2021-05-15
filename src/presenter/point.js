@@ -139,6 +139,7 @@ export default class Point {
   }
 
   _handleCloseClick() {
+    this._editComponent.reset(this._waypoint);
     this._replaceFormToWaypoint();
   }
 
