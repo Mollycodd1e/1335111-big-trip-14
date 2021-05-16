@@ -257,9 +257,9 @@ export default class Edit extends SmartView {
 
     //console.log(this._checkedOffers)
 
-    //if (!evt.target.checked) {
-    //  evt.target.removeAttribute('checked', '');
-    //}
+    if (!evt.target.checked) {
+      evt.target.removeAttribute('checked', '');
+    }
   }
 
   restoreHandlers() {
@@ -356,7 +356,7 @@ export default class Edit extends SmartView {
 
   static parseDataToWaypoint(data) {
     data = Object.assign({}, data);
-    console.log(data.isDisabled);
+
     delete data.isDisabled;
     delete data.isSaving;
     delete data.isDeleting;
