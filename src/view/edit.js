@@ -256,7 +256,6 @@ export default class Edit extends SmartView {
     }
 
     //console.log(this._checkedOffers)
-    //console.log(evt.target.checked)
 
     if (!evt.target.checked) {
       evt.target.removeAttribute('checked', '');
