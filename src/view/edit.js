@@ -185,6 +185,7 @@ export default class Edit extends SmartView {
     this._data = Edit.parseWaypointToData(waypointForm);
     this._datepicker = null;
     this._endPicker = null;
+    this._checkedOffers = this._data.offer;
 
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._editSubmitHandler = this._editSubmitHandler.bind(this);
@@ -195,6 +196,7 @@ export default class Edit extends SmartView {
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._destinationKeydownHandler = this._destinationKeydownHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
+    this._offersChangeHandler = this._offersChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -202,7 +204,7 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data);
+    return createEditTemplate(this._data, this._checkedOffers);
   }
 
   _setDatepicker() {
@@ -244,6 +246,21 @@ export default class Edit extends SmartView {
   _routeTypeChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({waypointType: evt.target.value, offer: generateOffer()});
+
+    this._checkedOffers = null;
+  }
+
+  _offersChangeHandler(evt) {
+    if (!this._checkedOffers) {
+      return this._checkedOffers = this._data.offers || [];
+    }
+
+    //console.log(this._checkedOffers)
+    //console.log(evt.target.checked)
+
+    if (!evt.target.checked) {
+      evt.target.removeAttribute('checked', '');
+    }
   }
 
   restoreHandlers() {
@@ -260,6 +277,7 @@ export default class Edit extends SmartView {
     this.getElement().querySelector('.event__input--destination').addEventListener('keydown', this._destinationKeydownHandler);
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._routeTypeChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
+    this.getElement().querySelector('.event__details').addEventListener('change', this._offersChangeHandler);
   }
 
   _priceChangeHandler(evt) {
@@ -285,11 +303,13 @@ export default class Edit extends SmartView {
   }
 
   reset(waypointForm) {
+    this._checkedOffers = this._data.offer;
     this.updateData(Edit.parseWaypointToData(waypointForm));
   }
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
+    this.updateData({ offer: this._checkedOffers });
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 
