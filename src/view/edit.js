@@ -1,4 +1,4 @@
-import {TYPES, TOWNS} from '../const.js';
+import {TYPES /*, TOWNS*/} from '../const.js';
 import {generateDescription, generatePicture, generateOffer} from '../mock/waypoint.js';
 import SmartView from '../view/smart.js';
 import flatpickr from 'flatpickr';
@@ -14,17 +14,29 @@ const createEditTypeTemplate = (currentType) => {
 
 const typesTemplate = createEditTypeTemplate();
 
-const createOptionTemplate = () => {
-  return TOWNS.map((town) => `<option value="${town}"></option>`).join('');
+const createOptionTemplate = (array) => {
+  return array.map((element) => `<option value="${element}"></option>`).join('');
 };
 
-const listOfTown = createOptionTemplate();
+//const listOfTown = createOptionTemplate();
+
+const get = [];
 
 const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
+
+  const towns = () => {
+    const {town} = waypoint;
+    get.push(town);
+
+    return get;
+  };
+
+  const listOfTown = createOptionTemplate(towns());
+
   //const editOffer = () => {
-//
+  //
   //  const {offer} = waypoint;
-//
+  //
   //  const ADD_OFFERS = [
   //    {
   //      name: 'uber',
@@ -57,7 +69,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
   //      price: 40,
   //    },
   //  ];
-//
+  //
   //  if (offer !== undefined) {
   //    for (let i = 0; i < offer.length; i++) {
   //      for (let j = 0; j < ADD_OFFERS.length; j++) {
@@ -67,7 +79,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
   //      }
   //    }
   //  }
-//
+  //
   //  return ADD_OFFERS;
   //};
 
@@ -173,6 +185,7 @@ export default class Edit extends SmartView {
     this._data = Edit.parseWaypointToData(waypointForm);
     this._datepicker = null;
     this._endPicker = null;
+    this._checkedOffers = this._data.offer;
 
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._editSubmitHandler = this._editSubmitHandler.bind(this);
@@ -183,6 +196,7 @@ export default class Edit extends SmartView {
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._destinationKeydownHandler = this._destinationKeydownHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
+    this._offersChangeHandler = this._offersChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -190,7 +204,7 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data);
+    return createEditTemplate(this._data, this._checkedOffers);
   }
 
   _setDatepicker() {
@@ -232,6 +246,21 @@ export default class Edit extends SmartView {
   _routeTypeChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({waypointType: evt.target.value, offer: generateOffer()});
+
+    this._checkedOffers = null;
+  }
+
+  _offersChangeHandler(evt) {
+    if (!this._checkedOffers) {
+      return this._checkedOffers = this._data.offers || [];
+    }
+
+    //console.log(this._checkedOffers)
+    //console.log(evt.target.checked)
+
+    if (!evt.target.checked) {
+      evt.target.removeAttribute('checked', '');
+    }
   }
 
   restoreHandlers() {
@@ -248,6 +277,7 @@ export default class Edit extends SmartView {
     this.getElement().querySelector('.event__input--destination').addEventListener('keydown', this._destinationKeydownHandler);
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._routeTypeChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
+    this.getElement().querySelector('.event__details').addEventListener('change', this._offersChangeHandler);
   }
 
   _priceChangeHandler(evt) {
@@ -273,11 +303,13 @@ export default class Edit extends SmartView {
   }
 
   reset(waypointForm) {
+    this._checkedOffers = this._data.offer;
     this.updateData(Edit.parseWaypointToData(waypointForm));
   }
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
+    this.updateData({ offer: this._checkedOffers });
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 

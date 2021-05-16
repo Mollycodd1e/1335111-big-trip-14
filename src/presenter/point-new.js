@@ -68,7 +68,7 @@ export default class PointNew {
   }
 
   _handleSubmitClick(waypoint) {
-    document.querySelector('.trip-main__event-add-btn').disabled = '';
+    this._disableButton();
     this._changeData(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
@@ -79,18 +79,24 @@ export default class PointNew {
     //this.destroy();
   }
 
+  _disableButton() {
+    document.querySelector('.trip-main__event-add-btn').disabled = '';
+  }
+
   _handleDeleteClick() {
+    this._disableButton();
     this.destroy();
   }
 
   _handleEditClick() {
+    this._disableButton();
     this._replaceWaypointToForm();
   }
 
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      document.querySelector('.trip-main__event-add-btn').disabled = '',
+      this._disableButton();
       this.destroy();
     }
   }

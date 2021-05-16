@@ -28,6 +28,7 @@ export const TOWNS = [
   'Amsterdam',
   'Chamonix',
   'Geneva',
+  'Paris',
 ];
 
 export const DESCRIPTION = [

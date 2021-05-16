@@ -135,6 +135,7 @@ export default class Point {
   }
 
   _handleEditClick() {
+    document.querySelector('.trip-main__event-add-btn').disabled = '';
     this._replaceWaypointToForm();
   }
 

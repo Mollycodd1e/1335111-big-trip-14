@@ -8,16 +8,26 @@ const DISABLED_SORTS = {
   OFFER: 'offer',
 };
 
+const disabledSorts = (sortType) => {
+  if (Object.values(DISABLED_SORTS).indexOf(sortType) >= 0) {
+    return Object.assign({}, DISABLED_SORTS, {
+      isDisabled: true,
+    });
+  } else {
+    return Object.assign({}, DISABLED_SORTS, {
+      isDisabled: false,
+    });
+  }
+};
+
 const createSortItemTemplate = (currentSortType) => {
 
   return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
                               <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}"
-                              ${currentSortType === sort ? 'checked' : ''}>
+                              ${currentSortType === sort ? 'checked' : ''} ${disabledSorts(sort).isDisabled === true ? 'disabled' : ''}>
                               <label class="trip-sort__btn" for="sort-${sort}" data-sort-type="${sort}">${sort}</label>
                               </div>`).join('');
 };
-
-//const sortTemplate = createSortItemTemplate();
 
 const createSortTemplate = (currentSortType) => {
 
@@ -44,7 +54,7 @@ export default class Sort extends AbstractView {
     }
 
     evt.preventDefault();
-    if(evt.target.dataset.sortType !== DISABLED_SORTS.EVENT && evt.target.dataset.sortType !== DISABLED_SORTS.OFFER) {
+    if (Object.values(DISABLED_SORTS).indexOf(evt.target.dataset.sortType) < 0) {
       this._callback.sortTypeChange(evt.target.dataset.sortType);
     }
   }
