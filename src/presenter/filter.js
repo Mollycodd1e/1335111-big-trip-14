@@ -2,6 +2,7 @@ import FilterView from '../view/filter.js';
 import {render, renderPosition, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
 import {FilterType, UpdateType} from '../const.js';
+import {newEventButtonDisableOff} from '../utils/common.js';
 
 export default class Filter {
   constructor(filterContainer, filterModel, waypointModel) {
@@ -44,6 +45,10 @@ export default class Filter {
   _handleFilterTypeChange(filterType) {
     if (this._filterModel.getFilter() === filterType) {
       return;
+    }
+
+    if (document.querySelector('.trip-tabs__btn[name="Table"]').classList.contains('trip-tabs__btn--active')) {
+      newEventButtonDisableOff();
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);

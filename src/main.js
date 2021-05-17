@@ -11,6 +11,7 @@ import FilterPresenter from './presenter/filter.js';
 import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
 import {render, renderPosition, remove} from './utils/render.js';
+import {newEventButtonDisableOn} from './utils/common.js';
 
 //const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
 const AUTHORIZATION = 'Basic y012VANYA890';
@@ -64,7 +65,7 @@ filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
-  document.querySelector('.trip-main__event-add-btn').disabled = 'disabled',
+  newEventButtonDisableOn();
   tripPresenter.createWaypoint();
 });
 

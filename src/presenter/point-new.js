@@ -2,6 +2,7 @@ import EditView from '../view/edit.js';
 //import {nanoid} from 'nanoid';
 import {render, renderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
+import {newEventButtonDisableOff} from '../utils/common.js';
 
 export default class PointNew {
   constructor(listContainer, changeData) {
@@ -69,7 +70,7 @@ export default class PointNew {
   }
 
   _handleSubmitClick(waypoint) {
-    this._disableButton();
+    newEventButtonDisableOff();
     this._changeData(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
@@ -85,12 +86,12 @@ export default class PointNew {
   }
 
   _handleDeleteClick() {
-    this._disableButton();
+    newEventButtonDisableOff();
     this.destroy();
   }
 
   _handleEditClick() {
-    this._disableButton();
+    newEventButtonDisableOff();
     this._replaceWaypointToForm();
   }
 

@@ -38,3 +38,11 @@ export const sortWaypointPrice = (priceA, priceB) => {
 export const arrayOfFilterType = (waypoints, type) => {
   return type.map((element) => waypoints.filter((waypoint) => waypoint.waypointType.toLowerCase() === element));
 };
+
+export const newEventButtonDisableOff = () => {
+  document.querySelector('.trip-main__event-add-btn').disabled = '';
+};
+
+export const newEventButtonDisableOn = () => {
+  document.querySelector('.trip-main__event-add-btn').disabled = 'disabled';
+};
