@@ -205,13 +205,13 @@ export default class Edit extends SmartView {
     return createEditTemplate(this._data, this._checkedOffers);
   }
 
-  _setDatepicker() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+  _setPicker(element, input) {
+    if (element) {
+      element.destroy();
+      element = null;
     }
 
-    this._datepicker = flatpickr(this.getElement().querySelector('.event__input--date-from'), {
+    element = flatpickr(input, {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
@@ -219,18 +219,12 @@ export default class Edit extends SmartView {
     });
   }
 
-  _setEndPicker() {
-    if (this._endPicker) {
-      this._endPicker.destroy();
-      this._endPicker = null;
-    }
+  _setDatepicker() {
+    this._setPicker(this._datepicker, this.getElement().querySelector('.event__input--date-from'));
+  }
 
-    this._endPicker = flatpickr(this.getElement().querySelector('.event__input--date-to'), {
-      dateFormat: 'd/m/y H:i',
-      enableTime: true,
-      time_24hr: true,
-      onChange: this._dateToChangeHandler,
-    });
+  _setEndPicker() {
+    this._setPicker(this._endPicker, this.getElement().querySelector('.event__input--date-to'));
   }
 
   _dateFromChangeHandler([userDate]) {
