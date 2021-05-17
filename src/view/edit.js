@@ -5,6 +5,9 @@ import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
+const classOfStartDateInput = '.event__input--date-from';
+const classOfEndDateInput = '.event__input--date-to';
+
 const createEditTypeTemplate = (currentType) => {
   return  TYPES.map((type) => `<div class="event__type-item">
                             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
@@ -211,7 +214,7 @@ export default class Edit extends SmartView {
       element = null;
     }
 
-    element = flatpickr(input, {
+    element = flatpickr(this.getElement().querySelector(input), {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
@@ -220,11 +223,11 @@ export default class Edit extends SmartView {
   }
 
   _setDatepicker() {
-    this._setPicker(this._datepicker, this.getElement().querySelector('.event__input--date-from'));
+    this._setPicker(this._datepicker, classOfStartDateInput);
   }
 
   _setEndPicker() {
-    this._setPicker(this._endPicker, this.getElement().querySelector('.event__input--date-to'));
+    this._setPicker(this._endPicker, classOfEndDateInput);
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -333,12 +336,12 @@ export default class Edit extends SmartView {
   }
 
   removeElement() {
-    super.removeElement();
-
     if (this._datepicker) {
       this._datepicker.destroy();
       this._datepicker = null;
     }
+
+    super.removeElement();
   }
 
   _editDeleteClickHandler(evt) {
