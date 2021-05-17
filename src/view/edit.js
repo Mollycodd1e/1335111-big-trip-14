@@ -20,18 +20,15 @@ const createOptionTemplate = (array) => {
 
 //const listOfTown = createOptionTemplate();
 
-const get = [];
+const getTowns = [];
 
 const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
 
-  const towns = () => {
-    const {town} = waypoint;
-    get.push(town);
+  if (getTowns.indexOf(waypoint.town) === -1) {
+    getTowns.push(waypoint.town);
+  }
 
-    return get;
-  };
-
-  const listOfTown = createOptionTemplate(towns());
+  const listOfTown = createOptionTemplate(getTowns);
 
   //const editOffer = () => {
   //
@@ -185,6 +182,7 @@ export default class Edit extends SmartView {
     this._data = Edit.parseWaypointToData(waypointForm);
     this._datepicker = null;
     this._endPicker = null;
+
     this._checkedOffers = this._data.offer;
 
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
