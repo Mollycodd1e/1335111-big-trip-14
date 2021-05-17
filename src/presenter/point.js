@@ -35,7 +35,6 @@ export default class Point {
 
   init(waypoint) {
     this._waypoint = waypoint;
-
     const prevWaypointComponent = this._waypointComponent;
     const prevEditComponent = this._editComponent;
 

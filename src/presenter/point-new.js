@@ -27,6 +27,7 @@ export default class PointNew {
     this._editComponent = new EditView(this._changeData);
     this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
     this._editComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._editComponent.setEditClickHandler(this._handleDeleteClick);
 
     const mainElement = document.querySelector('.page-body__page-main');
     const eventElement = mainElement.querySelector('.trip-events');

@@ -5,6 +5,9 @@ import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
+const classOfStartDateInput = '.event__input--date-from';
+const classOfEndDateInput = '.event__input--date-to';
+
 const createEditTypeTemplate = (currentType) => {
   return  TYPES.map((type) => `<div class="event__type-item">
                             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
@@ -20,18 +23,15 @@ const createOptionTemplate = (array) => {
 
 //const listOfTown = createOptionTemplate();
 
-const get = [];
+const getTowns = [];
 
 const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
 
-  const towns = () => {
-    const {town} = waypoint;
-    get.push(town);
+  if (getTowns.indexOf(waypoint.town) === -1) {
+    getTowns.push(waypoint.town);
+  }
 
-    return get;
-  };
-
-  const listOfTown = createOptionTemplate(towns());
+  const listOfTown = createOptionTemplate(getTowns);
 
   //const editOffer = () => {
   //
@@ -117,7 +117,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
                   <span class="visually-hidden">Choose event type</span>
                   <img class="event__type-icon" width="17" height="17" src="img/icons/${waypointType}.png" alt="Event type icon">
                 </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
+                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled === true ? 'disabled' : ''}>
 
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
@@ -132,7 +132,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
                   ${waypointType}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${town}" list="destination-list-1"
-                ${isDisabled ? 'disabled' : ''}>
+                ${isDisabled === true ? 'disabled' : ''}>
                 <datalist id="destination-list-1">
                   ${listOfTown}
                 </datalist>
@@ -141,11 +141,11 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
               <div class="event__field-group  event__field-group--time">
                 <label class="visually-hidden" for="event-start-time-1">From</label>
                 <input class="event__input  event__input--time event__input--date-from" id="event-start-time-1" type="text" name="event-start-time" value="${lowerTime}"
-                ${isDisabled ? 'disabled' : ''}>
+                ${isDisabled === true ? 'disabled' : ''}>
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">To</label>
                 <input class="event__input  event__input--time event__input--date-to" id="event-end-time-1" type="text" name="event-end-time" value="${upperTime}"
-                ${isDisabled ? 'disabled' : ''}>
+                ${isDisabled === true ? 'disabled' : ''}>
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -153,11 +153,11 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${isDisabled ? 'disabled' : ''}>
+                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${isDisabled === true ? 'disabled' : ''}>
               </div>
 
-              <button class="event__save-btn  btn  btn--blue" type="submit" ${isDeleting ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-              <button class="event__reset-btn" type="reset" ${isSaving ? 'disabled' : ''}>${isDeleting ? 'Deleting' : 'Delete'}</button>
+              <button class="event__save-btn  btn  btn--blue" type="submit" ${isDeleting === true ? 'disabled' : ''}>${isSaving === true ? 'Saving...' : 'Save'}</button>
+              <button class="event__reset-btn" type="reset" ${isSaving === true ? 'disabled' : ''}>${isDeleting === true ? 'Deleting' : 'Delete'}</button>
               <button class="event__rollup-btn" type="button">
                 <span class="visually-hidden">Open event</span>
               </button>
@@ -185,6 +185,7 @@ export default class Edit extends SmartView {
     this._data = Edit.parseWaypointToData(waypointForm);
     this._datepicker = null;
     this._endPicker = null;
+
     this._checkedOffers = this._data.offer;
 
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
@@ -207,13 +208,13 @@ export default class Edit extends SmartView {
     return createEditTemplate(this._data, this._checkedOffers);
   }
 
-  _setDatepicker() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+  _setPicker(element, input) {
+    if (element) {
+      element.destroy();
+      element = null;
     }
 
-    this._datepicker = flatpickr(this.getElement().querySelector('.event__input--date-from'), {
+    element = flatpickr(this.getElement().querySelector(input), {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
@@ -221,18 +222,12 @@ export default class Edit extends SmartView {
     });
   }
 
-  _setEndPicker() {
-    if (this._endPicker) {
-      this._endPicker.destroy();
-      this._endPicker = null;
-    }
+  _setDatepicker() {
+    this._setPicker(this._datepicker, classOfStartDateInput);
+  }
 
-    this._endPicker = flatpickr(this.getElement().querySelector('.event__input--date-to'), {
-      dateFormat: 'd/m/y H:i',
-      enableTime: true,
-      time_24hr: true,
-      onChange: this._dateToChangeHandler,
-    });
+  _setEndPicker() {
+    this._setPicker(this._endPicker, classOfEndDateInput);
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -255,11 +250,23 @@ export default class Edit extends SmartView {
       return this._checkedOffers = this._data.offers || [];
     }
 
-    //console.log(this._checkedOffers)
-    //console.log(evt.target.checked)
+    const targetOffer = this._checkedOffers.some((item) => item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
 
-    if (!evt.target.checked) {
+    if (targetOffer && evt.target.checked === false) {
+      this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
+
       evt.target.removeAttribute('checked', '');
+
+    } else if (evt.target.checked === true) {
+      evt.target.setAttribute('checked', '');
+
+      const title = document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent;
+      const price = document.querySelector('[for="' + evt.target.id + '"] .event__offer-price').textContent;
+
+      this._checkedOffers.push({
+        title: title,
+        price: price,
+      });
     }
   }
 
@@ -329,12 +336,12 @@ export default class Edit extends SmartView {
   }
 
   removeElement() {
-    super.removeElement();
-
     if (this._datepicker) {
       this._datepicker.destroy();
       this._datepicker = null;
     }
+
+    super.removeElement();
   }
 
   _editDeleteClickHandler(evt) {
