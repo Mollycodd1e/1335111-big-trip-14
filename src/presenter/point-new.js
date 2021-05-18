@@ -74,15 +74,10 @@ export default class PointNew {
     this._changeData(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
-      //Object.assign({id: nanoid()}, waypoint),
       waypoint,
     );
 
     //this.destroy();
-  }
-
-  _disableButton() {
-    document.querySelector('.trip-main__event-add-btn').disabled = '';
   }
 
   _handleDeleteClick() {
@@ -98,7 +93,7 @@ export default class PointNew {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this._disableButton();
+      newEventButtonDisableOff();
       this.destroy();
     }
   }

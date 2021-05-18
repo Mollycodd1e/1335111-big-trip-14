@@ -96,13 +96,13 @@ export default class Point extends Observer {
         'date_from': point.lowerTime ? point.lowerTime : new Date(),
         'date_to': point.upperTime ? point.upperTime : new Date(),
         'destination':
-        {
+        [{
           'description': point.description,
           'name': point.town,
           'pictures': point.picture,
-        },
+        }],
         'id': point.id,
-        'is_favorite': point.isFavorite,
+        'is_favorite': point.isFavorite ? point.isFavorite : false,
         'type': point.waypointType,
         'offers': point.offer,
       },

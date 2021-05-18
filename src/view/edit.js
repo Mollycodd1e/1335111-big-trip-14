@@ -15,8 +15,6 @@ const createEditTypeTemplate = (currentType) => {
                             </div>`).join('');
 };
 
-const typesTemplate = createEditTypeTemplate();
-
 const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
 };
@@ -26,6 +24,8 @@ const createOptionTemplate = (array) => {
 const getTowns = [];
 
 const createEditTemplate = (waypoint = {}) => {
+
+  const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
 
   if (getTowns.indexOf(waypoint.town) === -1) {
     getTowns.push(waypoint.town);
@@ -86,7 +86,21 @@ const createEditTemplate = (waypoint = {}) => {
   //const  checkedOptions = editOffer();
 
   if (waypoint.offer === undefined) {
-    waypoint.offer = [{}];
+    waypoint.offer = [{
+      title: 'Order Uber',
+      name: 'Uber',
+      price: '20',
+    }];
+  }
+
+  const ggg = [];
+
+  if (waypoint.offer !== null) {
+    ggg.push(waypoint.offer);
+  }
+
+  if (waypoint.offer === null) {
+    waypoint.offer = ggg;
   }
 
   const addOption = () => {
@@ -117,7 +131,7 @@ const createEditTemplate = (waypoint = {}) => {
                   <span class="visually-hidden">Choose event type</span>
                   <img class="event__type-icon" width="17" height="17" src="img/icons/${waypointType}.png" alt="Event type icon">
                 </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${waypoint.isDisabled === true ? 'disabled' : ''}>
+                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${waypoint.isDisabled === true ? 'disabled' : ''} required>
 
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
@@ -132,7 +146,7 @@ const createEditTemplate = (waypoint = {}) => {
                   ${waypointType}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${town}" list="destination-list-1"
-                ${waypoint.isDisabled === true ? 'disabled' : ''}>
+                ${waypoint.isDisabled === true ? 'disabled' : ''} required>
                 <datalist id="destination-list-1">
                   ${listOfTown}
                 </datalist>
@@ -153,7 +167,7 @@ const createEditTemplate = (waypoint = {}) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''}>
+                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''} required>
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDeleting === true ? 'disabled' : ''}>${waypoint.isSaving === true ? 'Saving...' : 'Save'}</button>
@@ -205,10 +219,10 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data, this._checkedOffers);
+    return createEditTemplate(this._data);
   }
 
-  _setPicker(element, input) {
+  _setPicker(element, input, change) {
     if (element) {
       element.destroy();
       element = null;
@@ -218,16 +232,16 @@ export default class Edit extends SmartView {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
-      onChange: this._dateFromChangeHandler,
+      onChange: change,
     });
   }
 
   _setDatepicker() {
-    this._setPicker(this._datepicker, classOfStartDateInput);
+    this._setPicker(this._datepicker, classOfStartDateInput, this._dateFromChangeHandler);
   }
 
   _setEndPicker() {
-    this._setPicker(this._endPicker, classOfEndDateInput);
+    this._setPicker(this._endPicker, classOfEndDateInput, this._dateToChangeHandler);
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -242,7 +256,7 @@ export default class Edit extends SmartView {
     evt.preventDefault();
     this.updateData({waypointType: evt.target.value, offer: generateOffer()});
 
-    this._checkedOffers = null;
+    //this._checkedOffers = null;
   }
 
   _offersChangeHandler(evt) {
@@ -268,6 +282,8 @@ export default class Edit extends SmartView {
         price: price,
       });
     }
+
+    //this.updateData({waypointType: evt.target.value, offer: {}});
   }
 
   restoreHandlers() {
@@ -316,7 +332,7 @@ export default class Edit extends SmartView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-    this.updateData({ offer: this._checkedOffers });
+    //this.updateData({ offer: this._checkedOffers });
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 
