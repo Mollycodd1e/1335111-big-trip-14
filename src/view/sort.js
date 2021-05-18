@@ -9,17 +9,6 @@ const DISABLED_SORTS = {
   OFFER: 'offer',
 };
 
-//const disabledSorts = (sortType) => {
-//  if (Object.values(DISABLED_SORTS).indexOf(sortType) >= 0) {
-//    return Object.assign({}, DISABLED_SORTS, {
-//      isDisabled: true,
-//    });
-//  } else {
-//    return Object.assign({}, DISABLED_SORTS, {
-//      isDisabled: false,
-//    });
-//  }
-//};
 const createSortTemplate = (currentSortType) => {
 
   const createSortItemTemplate = (currentSortType) => {

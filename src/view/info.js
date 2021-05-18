@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-//import { generateWaypoint } from '../mock/waypoint.js';
 import AbstractView from '../view/abstract.js';
 
 const createInfoTemplate = (waypoint) => {

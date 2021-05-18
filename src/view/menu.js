@@ -2,6 +2,8 @@ import AbstractView from '../view/abstract.js';
 import {MenuItem} from '../const.js';
 import {newEventButtonDisableOn, newEventButtonDisableOff} from '../utils/common.js';
 
+const TARGET_TAG_NAME = 'A';
+
 const createMenuTemplate = () => {
   return `<nav class="trip-controls__trip-tabs  trip-tabs">
             <a class="trip-tabs__btn  trip-tabs__btn--active" name="${MenuItem.TABLE}" href="#">${MenuItem.TABLE}</a>
@@ -21,7 +23,7 @@ export default class Menu extends AbstractView {
   }
 
   _menuClickHandler(evt) {
-    if (evt.target.tagName !== 'A') {
+    if (evt.target.tagName !== TARGET_TAG_NAME) {
       return;
     }
 

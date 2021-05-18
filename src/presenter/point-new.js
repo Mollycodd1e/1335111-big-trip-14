@@ -1,5 +1,4 @@
 import EditView from '../view/edit.js';
-//import {nanoid} from 'nanoid';
 import {render, renderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
 import {newEventButtonDisableOff} from '../utils/common.js';
