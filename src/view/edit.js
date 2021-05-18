@@ -104,8 +104,21 @@ const createEditTemplate = (waypoint = {}) => {
   }
 
   const addOption = () => {
+    const addCheckedFlag = () => {
+      waypoint.offer.map((offer) => {
+        Object.assign(offer, {
+          isChecked: true,
+        });
+      });
+    };
+
+    addCheckedFlag(waypoint.offer);
+
+    //console.log(waypoint.offer)
+
     return waypoint.offer.map((option) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}" checked>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}"
+      ${option.isChecked ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${option.title}-1">
       <span class="event__offer-title">${option.title}</span>
       &plus;&euro;&nbsp;
@@ -256,34 +269,37 @@ export default class Edit extends SmartView {
     evt.preventDefault();
     this.updateData({waypointType: evt.target.value, offer: generateOffer()});
 
-    //this._checkedOffers = null;
+    this._checkedOffers = null;
   }
 
   _offersChangeHandler(evt) {
     if (!this._checkedOffers) {
-      return this._checkedOffers = this._data.offers || [];
+      return this._checkedOffers = this._data.offer;
     }
 
     const targetOffer = this._checkedOffers.some((item) => item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
 
     if (targetOffer && evt.target.checked === false) {
-      this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
+      //this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
+      this._checkedOffers.map((item) => {
+        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+          item.isChecked = false;
+        }
+      });
 
       evt.target.removeAttribute('checked', '');
-
     } else if (evt.target.checked === true) {
-      evt.target.setAttribute('checked', '');
+      this._checkedOffers.map((item) => {
 
-      const title = document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent;
-      const price = document.querySelector('[for="' + evt.target.id + '"] .event__offer-price').textContent;
-
-      this._checkedOffers.push({
-        title: title,
-        price: price,
+        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+          item.isChecked = true;
+        }
       });
+
+      evt.target.setAttribute('checked', '');
     }
 
-    //this.updateData({waypointType: evt.target.value, offer: {}});
+    //this.updateData({offer: this._checkedOffers});
   }
 
   restoreHandlers() {
@@ -332,7 +348,7 @@ export default class Edit extends SmartView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-    //this.updateData({ offer: this._checkedOffers });
+
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 
