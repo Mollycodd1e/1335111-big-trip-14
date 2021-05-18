@@ -104,15 +104,15 @@ const createEditTemplate = (waypoint = {}) => {
   }
 
   const addOption = () => {
-    const addCheckedFlag = () => {
-      waypoint.offer.map((offer) => {
-        Object.assign(offer, {
-          isChecked: true,
-        });
-      });
-    };
-
-    addCheckedFlag(waypoint.offer);
+  //  const addCheckedFlag = () => {
+  //    waypoint.offer.map((offer) => {
+  //      Object.assign(offer, {
+  //        isChecked: waypoint.offer.isChecked,
+  //      });
+  //    });
+  //  };
+  //
+  //  addCheckedFlag(waypoint.offer);
 
     //console.log(waypoint.offer)
 
@@ -286,11 +286,10 @@ export default class Edit extends SmartView {
           item.isChecked = false;
         }
       });
-
+      //this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
       evt.target.removeAttribute('checked', '');
     } else if (evt.target.checked === true) {
       this._checkedOffers.map((item) => {
-
         if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
           item.isChecked = true;
         }
@@ -348,7 +347,7 @@ export default class Edit extends SmartView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-
+    this.updateData({offer: this._checkedOffers});
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 

@@ -59,6 +59,9 @@ export default class Point extends Observer {
   }
 
   static adaptToClient(point) {
+
+    const newOffers = point.offers.map((offer) => Object.assign({}, offer,{isChecked: true}));
+
     const adaptedWaypoint = Object.assign(
       {},
       point,
@@ -71,7 +74,7 @@ export default class Point extends Observer {
         town: point.destination.name,
         id: point.id,
         waypointType: point.type,
-        offer: point.offers,
+        offer: newOffers,
         picture: point.destination.pictures,
       },
     );
@@ -88,6 +91,12 @@ export default class Point extends Observer {
   }
 
   static adaptToServer(point) {
+
+    const newOffers = point.offer.map((offer) => {
+      delete offer.isChecked;
+      return offer;
+    });
+
     const adaptedWaypoint = Object.assign(
       {},
       point,
@@ -104,10 +113,11 @@ export default class Point extends Observer {
         'id': point.id,
         'is_favorite': point.isFavorite ? point.isFavorite : false,
         'type': point.waypointType,
-        'offers': point.offer,
+        'offers': newOffers,
       },
     );
 
+    delete adaptedWaypoint.offers.isChecked;
     delete adaptedWaypoint.price;
     delete adaptedWaypoint.isFavorite;
     delete adaptedWaypoint.lowerTime;

@@ -1,6 +1,9 @@
 import AbstractView from '../view/abstract.js';
 
 const createOfferTemplate = (offer) => {
+  if (offer.isChecked === false) {
+    return;
+  }
 
   return `<li class="event__offer">
           <span class="event__offer-title">${offer.title}</span>
