@@ -310,7 +310,7 @@ export default class Edit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData({town: evt.target.value , description: generateDescription(), picture: generatePicture()});
+    this.updateData({town: evt.target.value , description: generateDescription(), picture: [{src: generatePicture(), description: ''}]});
   }
 
   _destinationKeydownHandler(evt) {
