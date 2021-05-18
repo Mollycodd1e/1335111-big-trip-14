@@ -131,7 +131,7 @@ const createEditTemplate = (waypoint = {}) => {
                   <span class="visually-hidden">Choose event type</span>
                   <img class="event__type-icon" width="17" height="17" src="img/icons/${waypointType}.png" alt="Event type icon">
                 </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${waypoint.isDisabled === true ? 'disabled' : ''} required>
+                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${waypoint.isDisabled === true ? 'disabled' : ''}>
 
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
