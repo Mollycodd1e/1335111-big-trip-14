@@ -271,7 +271,7 @@ export default class Trip {
     }
 
     const waypoints = this._getWaypoints();
-    console.log(waypoints)
+
     this._renderInfo(waypoints);
     this._renderSort();
 
