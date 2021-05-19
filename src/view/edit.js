@@ -225,7 +225,6 @@ export default class Edit extends SmartView {
 
     this._checkedOffers.map((item) => {
       if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-        console.log(evt.target)
         item.isChecked = evt.target.checked;
       }
     });
