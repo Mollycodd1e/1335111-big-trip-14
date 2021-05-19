@@ -1,4 +1,4 @@
-import {TYPES /*, TOWNS*/} from '../const.js';
+import {TYPES} from '../const.js';
 import {generateDescription, generatePicture, generateOffer} from '../mock/waypoint.js';
 import SmartView from '../view/smart.js';
 import flatpickr from 'flatpickr';
@@ -22,8 +22,6 @@ const createEditTypeTemplate = (currentType) => {
 const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
 };
-
-//const listOfTown = createOptionTemplate();
 
 const towns = [];
 
