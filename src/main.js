@@ -78,3 +78,7 @@ api.getWaypoints().then((waypoints) => {
   render(navigationElement, menuComponent, renderPosition.BEFOREEND);
   menuComponent.setMenuClickHandler(handleMenuClick);
 });
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('/sw.js');
+});
