@@ -1,4 +1,5 @@
 import {NAMES_OF_SORTS} from '../const.js';
+import {newEventButtonDisableOff} from '../utils/common.js';
 import AbstractView from '../view/abstract.js';
 
 const TARGET_TAG_NAME = 'LABEL';
@@ -8,28 +9,16 @@ const DISABLED_SORTS = {
   OFFER: 'offer',
 };
 
-const disabledSorts = (sortType) => {
-  if (Object.values(DISABLED_SORTS).indexOf(sortType) >= 0) {
-    return Object.assign({}, DISABLED_SORTS, {
-      isDisabled: true,
-    });
-  } else {
-    return Object.assign({}, DISABLED_SORTS, {
-      isDisabled: false,
-    });
-  }
-};
-
-const createSortItemTemplate = (currentSortType) => {
-
-  return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
-                              <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}"
-                              ${currentSortType === sort ? 'checked' : ''} ${disabledSorts(sort).isDisabled === true ? 'disabled' : ''}>
-                              <label class="trip-sort__btn" for="sort-${sort}" data-sort-type="${sort}">${sort}</label>
-                              </div>`).join('');
-};
-
 const createSortTemplate = (currentSortType) => {
+
+  const createSortItemTemplate = (currentSortType) => {
+
+    return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
+                                          <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}"
+                                          ${currentSortType === sort ? 'checked' : ''} ${Object.values(DISABLED_SORTS).includes(sort) ? 'disabled' : ''}>
+                                          <label class="trip-sort__btn" for="sort-${sort}" data-sort-type="${sort}">${sort}</label>
+                                          </div>`).join('');
+  };
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${createSortItemTemplate(currentSortType)}
@@ -54,7 +43,8 @@ export default class Sort extends AbstractView {
     }
 
     evt.preventDefault();
-    if (Object.values(DISABLED_SORTS).indexOf(evt.target.dataset.sortType) < 0) {
+    if (!Object.values(DISABLED_SORTS).includes(evt.target.dataset.sortType)) {
+      newEventButtonDisableOff();
       this._callback.sortTypeChange(evt.target.dataset.sortType);
     }
   }

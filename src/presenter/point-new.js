@@ -1,7 +1,7 @@
 import EditView from '../view/edit.js';
-//import {nanoid} from 'nanoid';
 import {render, renderPosition, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
+import {newEventButtonDisableOff} from '../utils/common.js';
 
 export default class PointNew {
   constructor(listContainer, changeData) {
@@ -69,35 +69,30 @@ export default class PointNew {
   }
 
   _handleSubmitClick(waypoint) {
-    this._disableButton();
+    newEventButtonDisableOff();
     this._changeData(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
-      //Object.assign({id: nanoid()}, waypoint),
       waypoint,
     );
 
     //this.destroy();
   }
 
-  _disableButton() {
-    document.querySelector('.trip-main__event-add-btn').disabled = '';
-  }
-
   _handleDeleteClick() {
-    this._disableButton();
+    newEventButtonDisableOff();
     this.destroy();
   }
 
   _handleEditClick() {
-    this._disableButton();
+    newEventButtonDisableOff();
     this._replaceWaypointToForm();
   }
 
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this._disableButton();
+      newEventButtonDisableOff();
       this.destroy();
     }
   }

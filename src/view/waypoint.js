@@ -4,14 +4,14 @@ import AbstractView from '../view/abstract.js';
 const createWaypointTemplate = (waypoint) => {
   const {waypointType, town, upperTime, lowerTime, price, isFavorite} = waypoint;
 
-  const lowerTimeFormat = dayjs(lowerTime).format('HH:mm');
-  const upperTimeFormat = dayjs(upperTime).format('HH:mm');
+  const lowerTimeFormated = dayjs(lowerTime).format('HH:mm');
+  const upperTimeFormated = dayjs(upperTime).format('HH:mm');
   const dateFormat = dayjs(lowerTime).format('MMM DD');
   const dateYMD = dayjs(lowerTime).format('YYYY-MM-DD');
   const startEvent = dayjs(lowerTime).format('YYYY-MM-DDTHH:mm');
   const endEvent = dayjs(upperTime).format('YYYY-MM-DDTHH:mm');
 
-  function ConvertMinutes(num) {
+  function convertMinutes(num) {
     const hours = Math.floor(num / 60);
     const days = Math.floor(hours / 24);
     const rhours = hours - days * 24;
@@ -27,14 +27,14 @@ const createWaypointTemplate = (waypoint) => {
       dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
   }
 
-  const timeDifference = (ariveTime, departureTime) => {
-    if (departureTime !== undefined && ariveTime !== undefined) {
-      const num = dayjs(departureTime).diff(dayjs(ariveTime), 'minutes');
-      return ConvertMinutes(num);
+  const getTimeDifference = (arriveTime, departureTime) => {
+    if (departureTime !== undefined && arriveTime !== undefined) {
+      const tripInMinutes = dayjs(departureTime).diff(dayjs(arriveTime), 'minutes');
+      return convertMinutes(tripInMinutes);
     }
   };
 
-  const diff = timeDifference(lowerTime, upperTime);
+  const difference = getTimeDifference(lowerTime, upperTime);
 
   const favoriteClassName = isFavorite
     ? 'event__favorite-btn event__favorite-btn--active'
@@ -49,11 +49,11 @@ const createWaypointTemplate = (waypoint) => {
               <h3 class="event__title">${waypointType} ${town}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="${startEvent}">${lowerTimeFormat}</time>
+                  <time class="event__start-time" datetime="${startEvent}">${lowerTimeFormated}</time>
                   &mdash;
-                  <time class="event__end-time" datetime="${endEvent}">${upperTimeFormat}</time>
+                  <time class="event__end-time" datetime="${endEvent}">${upperTimeFormated}</time>
                 </p>
-                <p class="event__duration">${diff}</p>
+                <p class="event__duration">${difference}</p>
               </div>
               <p class="event__price">
                 &euro;&nbsp;<span class="event__price-value">${price}</span>

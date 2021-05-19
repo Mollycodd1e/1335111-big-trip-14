@@ -24,6 +24,8 @@ export const TYPES = [
   'restaurant',
 ];
 
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const TOWNS = [
   'Amsterdam',
   'Chamonix',

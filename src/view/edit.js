@@ -9,13 +9,15 @@ const classOfStartDateInput = '.event__input--date-from';
 const classOfEndDateInput = '.event__input--date-to';
 
 const createEditTypeTemplate = (currentType) => {
+  if (currentType === undefined) {
+    currentType = 'flight';
+  }
+
   return  TYPES.map((type) => `<div class="event__type-item">
                             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
                             <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
                             </div>`).join('');
 };
-
-const typesTemplate = createEditTypeTemplate();
 
 const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
@@ -23,75 +25,42 @@ const createOptionTemplate = (array) => {
 
 //const listOfTown = createOptionTemplate();
 
-const getTowns = [];
+const towns = [];
 
-const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => {
+const createEditTemplate = (waypoint = {}) => {
 
-  if (getTowns.indexOf(waypoint.town) === -1) {
-    getTowns.push(waypoint.town);
+  const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
+
+  if (towns.indexOf(waypoint.town) === -1) {
+    towns.push(waypoint.town);
   }
 
-  const listOfTown = createOptionTemplate(getTowns);
-
-  //const editOffer = () => {
-  //
-  //  const {offer} = waypoint;
-  //
-  //  const ADD_OFFERS = [
-  //    {
-  //      name: 'uber',
-  //      title: 'Order Uber',
-  //      price: 20,
-  //    },
-  //    {
-  //      name: 'luggage',
-  //      title: 'Add luggage',
-  //      price: 50,
-  //    },
-  //    {
-  //      name: 'comfort',
-  //      title: 'Switch to comfort',
-  //      price: 80,
-  //    },
-  //    {
-  //      name: 'meal',
-  //      title: 'Add meal',
-  //      price: 15,
-  //    },
-  //    {
-  //      name: 'seats',
-  //      title: 'Choose seats',
-  //      price: 5,
-  //    },
-  //    {
-  //      name: 'train',
-  //      title: 'Travel by train',
-  //      price: 40,
-  //    },
-  //  ];
-  //
-  //  if (offer !== undefined) {
-  //    for (let i = 0; i < offer.length; i++) {
-  //      for (let j = 0; j < ADD_OFFERS.length; j++) {
-  //        if (offer[i].name === ADD_OFFERS[j].name) {
-  //          ADD_OFFERS[j]['isChecked'] = 'true';
-  //        }
-  //      }
-  //    }
-  //  }
-  //
-  //  return ADD_OFFERS;
-  //};
-
-  //const  checkedOptions = editOffer();
+  const listOfTown = createOptionTemplate(towns);
 
   if (waypoint.offer === undefined) {
-    waypoint.offer = [{}];
+    waypoint.offer =  [];
   }
 
+  const emptyArray = [];
+
+  if (waypoint.offer !== null) {
+    emptyArray.push(waypoint.offer);
+  }
+  if (waypoint.offer === null) {
+    waypoint.offer = emptyArray;
+  }
+
+  waypoint.offer.map((item) => {
+    if (!Object.prototype.hasOwnProperty.call(item, 'isChecked')) {
+      item.isChecked = false;
+    }
+  });
+
   const addOption = () => {
+
     return waypoint.offer.map((option) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}" checked>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}"
+      ${option.isChecked === true ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${option.title}-1">
       <span class="event__offer-title">${option.title}</span>
       &plus;&euro;&nbsp;
@@ -110,6 +79,10 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
     price = '',
   } = waypoint;
 
+  if (waypoint.waypointType === undefined) {
+    waypoint.waypointType = waypointType;
+  }
+
   return `<form class="event event--edit" action="#" method="post">
             <header class="event__header">
               <div class="event__type-wrapper">
@@ -117,7 +90,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
                   <span class="visually-hidden">Choose event type</span>
                   <img class="event__type-icon" width="17" height="17" src="img/icons/${waypointType}.png" alt="Event type icon">
                 </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled === true ? 'disabled' : ''}>
+                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${waypoint.isDisabled === true ? 'disabled' : ''}>
 
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
@@ -132,7 +105,7 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
                   ${waypointType}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${town}" list="destination-list-1"
-                ${isDisabled === true ? 'disabled' : ''}>
+                ${waypoint.isDisabled === true ? 'disabled' : ''} required>
                 <datalist id="destination-list-1">
                   ${listOfTown}
                 </datalist>
@@ -141,11 +114,11 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
               <div class="event__field-group  event__field-group--time">
                 <label class="visually-hidden" for="event-start-time-1">From</label>
                 <input class="event__input  event__input--time event__input--date-from" id="event-start-time-1" type="text" name="event-start-time" value="${lowerTime}"
-                ${isDisabled === true ? 'disabled' : ''}>
+                ${waypoint.isDisabled === true ? 'disabled' : ''}>
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">To</label>
                 <input class="event__input  event__input--time event__input--date-to" id="event-end-time-1" type="text" name="event-end-time" value="${upperTime}"
-                ${isDisabled === true ? 'disabled' : ''}>
+                ${waypoint.isDisabled === true ? 'disabled' : ''}>
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -153,11 +126,11 @@ const createEditTemplate = (waypoint = {}, isDisabled, isSaving, isDeleting) => 
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${isDisabled === true ? 'disabled' : ''}>
+                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''} required>
               </div>
 
-              <button class="event__save-btn  btn  btn--blue" type="submit" ${isDeleting === true ? 'disabled' : ''}>${isSaving === true ? 'Saving...' : 'Save'}</button>
-              <button class="event__reset-btn" type="reset" ${isSaving === true ? 'disabled' : ''}>${isDeleting === true ? 'Deleting' : 'Delete'}</button>
+              <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDeleting === true ? 'disabled' : ''}>${waypoint.isSaving === true ? 'Saving...' : 'Save'}</button>
+              <button class="event__reset-btn" type="reset" ${waypoint.isSaving === true ? 'disabled' : ''}>${waypoint.isDeleting === true ? 'Deleting' : 'Delete'}</button>
               <button class="event__rollup-btn" type="button">
                 <span class="visually-hidden">Open event</span>
               </button>
@@ -205,10 +178,10 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data, this._checkedOffers);
+    return createEditTemplate(this._data);
   }
 
-  _setPicker(element, input) {
+  _setPicker(element, input, change) {
     if (element) {
       element.destroy();
       element = null;
@@ -218,16 +191,16 @@ export default class Edit extends SmartView {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       time_24hr: true,
-      onChange: this._dateFromChangeHandler,
+      onChange: change,
     });
   }
 
   _setDatepicker() {
-    this._setPicker(this._datepicker, classOfStartDateInput);
+    this._setPicker(this._datepicker, classOfStartDateInput, this._dateFromChangeHandler);
   }
 
   _setEndPicker() {
-    this._setPicker(this._endPicker, classOfEndDateInput);
+    this._setPicker(this._endPicker, classOfEndDateInput, this._dateToChangeHandler);
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -242,32 +215,19 @@ export default class Edit extends SmartView {
     evt.preventDefault();
     this.updateData({waypointType: evt.target.value, offer: generateOffer()});
 
-    this._checkedOffers = null;
+    this._checkedOffers = this._data.offer;
   }
 
   _offersChangeHandler(evt) {
-    if (!this._checkedOffers) {
-      return this._checkedOffers = this._data.offers || [];
+    if (this._checkedOffers === undefined) {
+      this._checkedOffers = this._data.offers;
     }
 
-    const targetOffer = this._checkedOffers.some((item) => item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
-
-    if (targetOffer && evt.target.checked === false) {
-      this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
-
-      evt.target.removeAttribute('checked', '');
-
-    } else if (evt.target.checked === true) {
-      evt.target.setAttribute('checked', '');
-
-      const title = document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent;
-      const price = document.querySelector('[for="' + evt.target.id + '"] .event__offer-price').textContent;
-
-      this._checkedOffers.push({
-        title: title,
-        price: price,
-      });
-    }
+    this._checkedOffers.map((item) => {
+      if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+        item.isChecked = evt.target.checked;
+      }
+    });
   }
 
   restoreHandlers() {
@@ -294,7 +254,7 @@ export default class Edit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData({town: evt.target.value , description: generateDescription(), picture: generatePicture()});
+    this.updateData({town: evt.target.value , description: generateDescription(), picture: [{src: generatePicture(), description: ''}]});
   }
 
   _destinationKeydownHandler(evt) {
@@ -316,7 +276,7 @@ export default class Edit extends SmartView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-    this.updateData({ offer: this._checkedOffers });
+    this.updateData({offer: this._checkedOffers});
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 

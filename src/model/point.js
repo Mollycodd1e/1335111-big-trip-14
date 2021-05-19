@@ -102,7 +102,7 @@ export default class Point extends Observer {
           'pictures': point.picture,
         },
         'id': point.id,
-        'is_favorite': point.isFavorite,
+        'is_favorite': point.isFavorite ? point.isFavorite : false,
         'type': point.waypointType,
         'offers': point.offer,
       },

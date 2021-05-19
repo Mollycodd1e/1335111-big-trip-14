@@ -3,6 +3,7 @@ import WaypointView from '../view/waypoint.js';
 //import OfferView from '../view/offer.js';
 import {render, renderPosition, replace, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
+import {newEventButtonDisableOff} from '../utils/common.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -134,7 +135,7 @@ export default class Point {
   }
 
   _handleEditClick() {
-    document.querySelector('.trip-main__event-add-btn').disabled = '';
+    newEventButtonDisableOff();
     this._replaceWaypointToForm();
   }
 
