@@ -9,6 +9,10 @@ const classOfStartDateInput = '.event__input--date-from';
 const classOfEndDateInput = '.event__input--date-to';
 
 const createEditTypeTemplate = (currentType) => {
+  if (currentType === undefined) {
+    currentType = 'flight';
+  }
+
   return  TYPES.map((type) => `<div class="event__type-item">
                             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
                             <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
@@ -21,17 +25,17 @@ const createOptionTemplate = (array) => {
 
 //const listOfTown = createOptionTemplate();
 
-const getTowns = [];
+const Towns = [];
 
 const createEditTemplate = (waypoint = {}) => {
 
   const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
 
-  if (getTowns.indexOf(waypoint.town) === -1) {
-    getTowns.push(waypoint.town);
+  if (Towns.indexOf(waypoint.town) === -1) {
+    Towns.push(waypoint.town);
   }
 
-  const listOfTown = createOptionTemplate(getTowns);
+  const listOfTown = createOptionTemplate(Towns);
 
   //const editOffer = () => {
   //
@@ -86,21 +90,17 @@ const createEditTemplate = (waypoint = {}) => {
   //const  checkedOptions = editOffer();
 
   if (waypoint.offer === undefined) {
-    waypoint.offer = [{
-      title: 'Order Uber',
-      name: 'Uber',
-      price: '20',
-    }];
+    waypoint.offer =  [];
   }
 
-  const ggg = [];
+  const emptyArray = [];
 
   if (waypoint.offer !== null) {
-    ggg.push(waypoint.offer);
+    emptyArray.push(waypoint.offer);
   }
 
   if (waypoint.offer === null) {
-    waypoint.offer = ggg;
+    waypoint.offer = emptyArray;
   }
 
   const addOption = () => {
@@ -136,6 +136,10 @@ const createEditTemplate = (waypoint = {}) => {
     lowerTime = '',
     price = '',
   } = waypoint;
+
+  if (waypoint.waypointType === undefined) {
+    waypoint.waypointType = waypointType;
+  }
 
   return `<form class="event event--edit" action="#" method="post">
             <header class="event__header">
@@ -273,19 +277,20 @@ export default class Edit extends SmartView {
   }
 
   _offersChangeHandler(evt) {
-    if (!this._checkedOffers) {
-      return this._checkedOffers = this._data.offer;
-    }
-
-    const targetOffer = this._checkedOffers.some((item) => item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
-
-    if (targetOffer && evt.target.checked === false) {
+    //if (!this._checkedOffers) {
+    //  return this._checkedOffers;
+    //}
+    this._checkedOffers = this._data.offer;
+    //const targetOffer = this._checkedOffers.some((item) => item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
+    //console.log(targetOffer)
+    if (/*targetOffer && */evt.target.checked === false) {
       //this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
       this._checkedOffers.map((item) => {
         if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
           item.isChecked = false;
         }
       });
+
       //this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
       evt.target.removeAttribute('checked', '');
     } else if (evt.target.checked === true) {
@@ -298,7 +303,8 @@ export default class Edit extends SmartView {
       evt.target.setAttribute('checked', '');
     }
 
-    //this.updateData({offer: this._checkedOffers});
+    //console.log(this._checkedOffers)
+    this.updateData({offer: this._checkedOffers});
   }
 
   restoreHandlers() {
@@ -347,7 +353,7 @@ export default class Edit extends SmartView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
-    this.updateData({offer: this._checkedOffers});
+    //this.updateData({offer: this._checkedOffers});
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }
 
