@@ -108,8 +108,6 @@ export default class Point extends Observer {
       },
     );
 
-    delete adaptedWaypoint.offers.offerisChecked;
-    delete adaptedWaypoint.offers.isChecked;
     delete adaptedWaypoint.price;
     delete adaptedWaypoint.isFavorite;
     delete adaptedWaypoint.lowerTime;

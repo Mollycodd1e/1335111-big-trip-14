@@ -52,7 +52,7 @@ const createEditTemplate = (waypoint = {}) => {
 
   waypoint.offer.map((item) => {
     if (!Object.prototype.hasOwnProperty.call(item, 'isChecked')) {
-      item.isChecked = true;
+      item.isChecked = false;
     }
   });
 
@@ -223,23 +223,12 @@ export default class Edit extends SmartView {
       this._checkedOffers = this._data.offers;
     }
 
-    if (evt.target.checked === false) {
-      this._checkedOffers.map((item) => {
-        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-          item.isChecked = false;
-        }
-      });
-
-      //this._checkedOffers = this._checkedOffers.filter((item) => item.title !== document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent);
-      evt.target.removeAttribute('checked', '');
-    } else if (evt.target.checked === true) {
-      this._checkedOffers.map((item) => {
-        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-          item.isChecked = true;
-        }
-      });
-      evt.target.setAttribute('checked', '');
-    }
+    this._checkedOffers.map((item) => {
+      if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+        console.log(evt.target)
+        item.isChecked = evt.target.checked;
+      }
+    });
   }
 
   restoreHandlers() {
