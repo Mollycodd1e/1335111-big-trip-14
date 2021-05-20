@@ -25,11 +25,11 @@ export default class Api {
   }
 
   getDestinations() {
-    return this._load({url: 'destinations'}).then(Api.toJSON).then((destination) => destination.map(DestinationModel.adaptToClient))
+    return this._load({url: 'destinations'}).then(Api.toJSON).then((destination) => destination.map(DestinationModel.adaptToClient));
   }
 
   getOffers() {
-    return this._load({url: 'offers'}).then(Api.toJSON).then((offer) => offer.map(OfferModel.adaptToClient))
+    return this._load({url: 'offers'}).then(Api.toJSON).then((offer) => offer.map(OfferModel.adaptToClient));
   }
 
   updateWaypoint(point) {

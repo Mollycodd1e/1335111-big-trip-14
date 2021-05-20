@@ -11,80 +11,80 @@ const NAMES_OF_CHART = {
   MONEY: 'MONEY',
   TYPE: 'TYPE',
   TIMESPEND: 'TIME-SPEND',
-}
+};
 
 const types = TYPES.slice().map((item) => item.toUpperCase());
 
-const decreaseSort = (priceA, priceB) => {
-  return priceB - priceA;
+const sortByField = (field) => {
+  return (a, b) => a[field] < b[field] ? 1 : -1;
 };
 
-const renderChart = (context, array, namesOfChart, format) => {
-  new Chart(context, {
+const renderChart = (context, arrayOfTypes, arrayOfChart, namesOfChart, format) => {
+  return new Chart(context, {
     plugins: [ChartDataLabels],
-      type: 'horizontalBar',
-      data: {
-        labels: types,
-        datasets: [{
-          data: array,//.sort(decreaseSort),
-          backgroundColor: '#ffffff',
-          hoverBackgroundColor: '#ffffff',
-          anchor: 'start',
+    type: 'horizontalBar',
+    data: {
+      labels: arrayOfTypes,
+      datasets: [{
+        data: arrayOfChart,
+        backgroundColor: '#ffffff',
+        hoverBackgroundColor: '#ffffff',
+        anchor: 'start',
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13,
+          },
+          color: '#000000',
+          anchor: 'end',
+          align: 'start',
+          formatter: format,
+        },
+      },
+      title: {
+        display: true,
+        text: namesOfChart,
+        fontColor: '#000000',
+        fontSize: 23,
+        position: 'left',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#000000',
+            padding: 3,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          minBarLength: 50,
         }],
       },
-      options: {
-        plugins: {
-          datalabels: {
-            font: {
-              size: 13,
-            },
-            color: '#000000',
-            anchor: 'end',
-            align: 'start',
-            formatter: format,
-          },
-        },
-        title: {
-          display: true,
-          text: namesOfChart,
-          fontColor: '#000000',
-          fontSize: 23,
-          position: 'left',
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              fontColor: '#000000',
-              padding: 5,
-              fontSize: 13,
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false,
-            },
-            barThickness: 44,
-          }],
-          xAxes: [{
-            ticks: {
-              display: false,
-              beginAtZero: true,
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false,
-            },
-            minBarLength: 50,
-          }],
-        },
-        legend: {
-          display: false,
-        },
-        tooltips: {
-          enabled: false,
-        },
+      legend: {
+        display: false,
       },
+      tooltips: {
+        enabled: false,
+      },
+    },
   });
-}
+};
 
 const renderMoneyChart = (moneyCtx, waypoints) => {
   moneyCtx.height = BAR_HEIGHT * 10;
@@ -111,20 +111,30 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
 
   const finalArrayOfTypes = sumOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
 
-  const ggg = new Map();
+  const formatOfTypes = {
+    MONEY: (finalArrayOfTypes) => '€ ' + finalArrayOfTypes,
+  };
+
+  const arrayOfpoints = [];
+
   for (let i = 0; i < types.length;i++) {
     for (let j = 0; j < finalArrayOfTypes.length; j++) {
       if (i === j) {
-        ggg.set(types[i],finalArrayOfTypes[j])
+        arrayOfpoints.push({type: types[i], price: finalArrayOfTypes[j]});
       }
     }
   }
-  console.log(ggg)
-  const formatOfTypes = {
-    MONEY: (finalArrayOfTypes) => '€ ' + finalArrayOfTypes
-  }
 
-  renderChart(moneyCtx, finalArrayOfTypes, NAMES_OF_CHART.MONEY, formatOfTypes.MONEY)
+  arrayOfpoints.sort(sortByField('price'));
+
+  const arrayOfType = [];
+  const arrayOfTotalPrice = [];
+
+  arrayOfpoints.map((item) => arrayOfType.push(item.type));
+
+  arrayOfpoints.map((item) => arrayOfTotalPrice.push(item.price));
+
+  renderChart(moneyCtx, arrayOfType, arrayOfTotalPrice, NAMES_OF_CHART.MONEY, formatOfTypes.MONEY);
 };
 
 const renderTypeChart = (typeCtx, waypoints) => {
@@ -143,10 +153,29 @@ const renderTypeChart = (typeCtx, waypoints) => {
   const arrayOfCount = countOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
 
   const formatOfTypes = {
-    TYPE: (arrayOfCount) =>  + arrayOfCount + 'x'
+    TYPE: (arrayOfCount) =>  + arrayOfCount + 'x',
+  };
+
+  const arrayOfpoints = [];
+
+  for (let i = 0; i < types.length;i++) {
+    for (let j = 0; j < arrayOfCount.length; j++) {
+      if (i === j) {
+        arrayOfpoints.push({type: types[i], count: arrayOfCount[j]});
+      }
+    }
   }
 
-  renderChart(typeCtx, arrayOfCount, NAMES_OF_CHART.TYPE, formatOfTypes.TYPE)
+  arrayOfpoints.sort(sortByField('count'));
+
+  const arrayOfType = [];
+  const arrayOfTotalCount = [];
+
+  arrayOfpoints.map((item) => arrayOfType.push(item.type));
+
+  arrayOfpoints.map((item) => arrayOfTotalCount.push(item.count));
+
+  renderChart(typeCtx, arrayOfType, arrayOfTotalCount, NAMES_OF_CHART.TYPE, formatOfTypes.TYPE);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
@@ -195,13 +224,30 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
 
   const arrayOfTime = timeOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
 
-  console.log(arrayOfTime)
-
   const formatOfTypes = {
     TIMESPEND: (arrayOfTime) => ConvertMinutes(arrayOfTime),
+  };
+
+  const arrayOfpoints = [];
+
+  for (let i = 0; i < types.length;i++) {
+    for (let j = 0; j < arrayOfTime.length; j++) {
+      if (i === j) {
+        arrayOfpoints.push({type: types[i], time: arrayOfTime[j]});
+      }
+    }
   }
 
-  renderChart(timeSpendCtx, arrayOfTime, NAMES_OF_CHART.TIMESPEND, formatOfTypes.TIMESPEND)
+  arrayOfpoints.sort(sortByField('time'));
+
+  const arrayOfType = [];
+  const arrayOfTotalTime = [];
+
+  arrayOfpoints.map((item) => arrayOfType.push(item.type));
+
+  arrayOfpoints.map((item) => arrayOfTotalTime.push(item.time));
+
+  renderChart(timeSpendCtx, arrayOfType, arrayOfTotalTime, NAMES_OF_CHART.TIMESPEND, formatOfTypes.TIMESPEND);
 };
 
 const createStatisticsTemplate = () => {
@@ -226,7 +272,7 @@ const createStatisticsTemplate = () => {
 export default class Statistics extends SmartView {
   constructor(waypoints) {
     super();
-    console.log(waypoints)
+
     this._waypoints = waypoints;
     this._moneysChart = null;
     this._typeChart = null;

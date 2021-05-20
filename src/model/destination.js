@@ -22,7 +22,7 @@ export default class Destination extends Observer {
         description: destination.description,
         name: destination.name,
         pictures: destination.pictures,
-      }
+      },
     );
 
     return adaptedDestination;
@@ -39,9 +39,9 @@ export default class Destination extends Observer {
           {
             src: destination.pictures.src,
             description: destination.pictures.description,
-          }
-        ]
-      }
+          },
+        ],
+      },
     );
 
     return adaptedDestination;

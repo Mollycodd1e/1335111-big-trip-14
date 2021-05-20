@@ -18,17 +18,11 @@ const api = new Api(END_POINT, AUTHORIZATION);
 const waypointsModel = new PointModel();
 waypointsModel.setWaypoints();
 
-console.log(waypointsModel);
-
 const destinationModel = new DestinationModel();
 destinationModel.setDestinations();
 
-console.log(destinationModel);
-
 const offerModel = new OfferModel();
 offerModel.setOffers();
-
-console.log(offerModel);
 
 const filterModel = new FilterModel();
 
@@ -57,8 +51,8 @@ const handleMenuClick = (menuItem) => {
       remove(statisticsComponent);
       tripPresenter.destroy();
       //if (!statisticsComponent) {
-        statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
-        render(statisticsElement, statisticsComponent, renderPosition.BEFOREEND);
+      statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
+      render(statisticsElement, statisticsComponent, renderPosition.BEFOREEND);
       //} else {
       //  statisticsComponent.show();
       //}
@@ -80,17 +74,16 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
 
 api.getOffers().then((offer) => {
   offerModel.setOffers(offer);
-})
-.then(() => {
+}).then(() => {
   api.getDestinations().then((destinations) => {
     destinationModel.setDestinations(destinations);
-  })
+  });
 }).then(() => {
   api.getWaypoints().then((waypoints) => {
     waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
     render(navigationElement, menuComponent, renderPosition.BEFOREEND);
     menuComponent.setMenuClickHandler(handleMenuClick);
-  })
+  });
 }).catch(() => {
   waypointsModel.setWaypoints(UpdateType.INIT, []);
   render(navigationElement, menuComponent, renderPosition.BEFOREEND);

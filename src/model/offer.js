@@ -21,7 +21,7 @@ export default class Offer extends Observer {
       {
         type: offer.type,
         offers: offer.offers,
-      }
+      },
     );
 
     return adaptedOffer;
@@ -34,7 +34,7 @@ export default class Offer extends Observer {
       {
         type: offer.type,
         offers: offer.offers,
-      }
+      },
     );
 
     return adaptedOffer;
