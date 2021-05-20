@@ -5,7 +5,6 @@ import ListView from '../view/list.js';
 import LoadingView from '../view/loading.js';
 import OfferView from '../view/offer.js';
 import {filter} from '../utils/filter.js';
-
 import NoWaypointView from '../view/nowaypoint.js';
 import PointPresenter, {State as PointPresenterViewState} from '../presenter/point.js';
 import PointNewPresenter from '../presenter/point-new.js';
@@ -49,6 +48,14 @@ export default class Trip {
     }
 
     this._renderTrip();
+  }
+
+  hide() {
+    document.querySelector('.trip-events').classList.add('visually-hidden');
+  }
+
+  show() {
+    document.querySelector('.trip-events').classList.remove('visually-hidden');
   }
 
   createWaypoint(callback) {
