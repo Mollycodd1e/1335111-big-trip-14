@@ -1,5 +1,5 @@
 import MenuView from './view/menu.js';
-import Api from './api.js';
+import Api from './api/api.js';
 import StatisticsView from './view/statistics.js';
 import {MenuItem, UpdateType} from './const.js';
 import TripPresenter from './presenter/trip.js';
