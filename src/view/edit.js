@@ -22,15 +22,13 @@ const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
 };
 
-const towns = [];
+const createEditTemplate = (waypoint = {}, destination) => {
 
-const createEditTemplate = (waypoint = {}) => {
+  const towns = [];
+
+  destination.getDestinations().map((item) => towns.push(item.name));
 
   const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
-
-  if (towns.indexOf(waypoint.town) === -1) {
-    towns.push(waypoint.town);
-  }
 
   const listOfTown = createOptionTemplate(towns);
 
@@ -191,7 +189,7 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data);
+    return createEditTemplate(this._data, this._destinationModel);
   }
 
   _setPicker(element, input, change) {
