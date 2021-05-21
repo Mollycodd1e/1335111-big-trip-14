@@ -55,7 +55,7 @@ const handleMenuClick = (menuItem) => {
   }
 };
 
-const tripPresenter = new TripPresenter(waypointsModel, filterModel, api);
+const tripPresenter = new TripPresenter(waypointsModel, filterModel, destinationModel, offerModel, api);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, waypointsModel);
 
 tripPresenter.init();

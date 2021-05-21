@@ -1,5 +1,4 @@
 import {TYPES} from '../const.js';
-import {generateDescription, generatePicture, generateOffer} from '../mock/waypoint.js';
 import SmartView from '../view/smart.js';
 import flatpickr from 'flatpickr';
 
@@ -53,6 +52,14 @@ const createEditTemplate = (waypoint = {}) => {
       item.isChecked = false;
     }
   });
+
+  const addPicture = (pictures) => {
+    return pictures.map((picture) => {
+      return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
+    }).join(' ');
+  };
+
+  const addAllPictures = addPicture(waypoint.picture);
 
   const addOption = () => {
 
@@ -145,18 +152,26 @@ const createEditTemplate = (waypoint = {}) => {
               <section class="event__section  event__section--destination">
                 <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                 <p class="event__destination-description">${description}</p>
+
+                <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                      ${addAllPictures}
+                      </div>
+                    </div>
               </section>
             </section>
           </form>`;
 };
 
 export default class Edit extends SmartView {
-  constructor(waypointForm) {
+  constructor(waypointForm, destinationModel, offerModel) {
     super();
     this._data = Edit.parseWaypointToData(waypointForm);
     this._datepicker = null;
     this._endPicker = null;
 
+    this._destinationModel = destinationModel;
+    this._offerModel = offerModel;
     this._checkedOffers = this._data.offer;
 
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
@@ -211,7 +226,20 @@ export default class Edit extends SmartView {
 
   _routeTypeChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData({waypointType: evt.target.value, offer: generateOffer()});
+
+    let newOffers = [];
+
+    const getOffersByType = (evt) => {
+      this._offerModel.getOffers().forEach((offer) => {
+        if (offer.type === evt.target.value) {
+          newOffers = offer.offers;
+        }
+      });
+    };
+
+    getOffersByType(evt);
+
+    this.updateData({waypointType: evt.target.value, offer: newOffers});
 
     this._checkedOffers = this._data.offer;
   }
@@ -252,7 +280,20 @@ export default class Edit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData({town: evt.target.value , description: generateDescription(), picture: [{src: generatePicture(), description: ''}]});
+
+    let newDestination = [];
+
+    const getDestinationByTown = (evt) => {
+      this._destinationModel.getDestinations().forEach((destination) => {
+        if (destination.name === evt.target.value) {
+          newDestination = destination;
+        }
+      });
+    };
+
+    getDestinationByTown(evt);
+
+    this.updateData({town: evt.target.value , description: newDestination.description, picture: newDestination.pictures});
   }
 
   _destinationKeydownHandler(evt) {
