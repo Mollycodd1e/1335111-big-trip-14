@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from '../view/smart.js';
 import {TYPES} from '../const.js';
-import {arrayOfFilterType} from '../utils/common.js';
+import {filterOfType, convertMinutes} from '../utils/common.js';
 
 const BAR_HEIGHT = 55;
 
@@ -19,14 +19,14 @@ const sortByField = (field) => {
   return (a, b) => a[field] < b[field] ? 1 : -1;
 };
 
-const renderChart = (context, arrayOfTypes, arrayOfChart, namesOfChart, format) => {
+const renderChart = (context, listOfTypes, dataOfChart, namesOfChart, format) => {
   return new Chart(context, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: arrayOfTypes,
+      labels: listOfTypes,
       datasets: [{
-        data: arrayOfChart,
+        data:  dataOfChart,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -89,52 +89,49 @@ const renderChart = (context, arrayOfTypes, arrayOfChart, namesOfChart, format) 
 const renderMoneyChart = (moneyCtx, waypoints) => {
   moneyCtx.height = BAR_HEIGHT * 10;
 
-  const sumOfType = (elements) => {
-    let sum = 0;
+  const totalPriceOfType = (elements) => {
+    let totalPriceOfType = 0;
 
     elements.map((element) => {
-      sum += element.price;
+      totalPriceOfType += element.price;
     });
 
-    return sum;
+    return totalPriceOfType;
   };
 
-  const sumOfFilteredTypes = (array) => {
+  const totalPriceOfFilteredTypes = (array) => {
     return array.map((element) => {
+      console.log(element)
       if (element.length === 0) {
         element = 0;
       } else {
-        return (sumOfType(element));
+        return (totalPriceOfType(element));
       }
     });
   };
 
-  const finalArrayOfTypes = sumOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
+  const finalListOfTypes = totalPriceOfFilteredTypes(filterOfType(waypoints, TYPES));
 
   const formatOfTypes = {
-    MONEY: (finalArrayOfTypes) => '€ ' + finalArrayOfTypes,
+    MONEY: (finalListOfTypes) => '€ ' +  finalListOfTypes,
   };
 
-  const arrayOfpoints = [];
+  const listOfPoints = [];
 
-  for (let i = 0; i < types.length;i++) {
-    for (let j = 0; j < finalArrayOfTypes.length; j++) {
-      if (i === j) {
-        arrayOfpoints.push({type: types[i], price: finalArrayOfTypes[j]});
-      }
-    }
-  }
+  types.forEach((element, index) => {
+    listOfPoints.push({type: element, price: finalListOfTypes[index]});
+  });
 
-  arrayOfpoints.sort(sortByField('price'));
+  listOfPoints.sort(sortByField('price'));
 
-  const arrayOfType = [];
-  const arrayOfTotalPrice = [];
+  const typesOrder = [];
+  const totalPriceOrder = [];
 
-  arrayOfpoints.map((item) => arrayOfType.push(item.type));
+  listOfPoints.forEach((item) => typesOrder.push(item.type));
 
-  arrayOfpoints.map((item) => arrayOfTotalPrice.push(item.price));
+  listOfPoints.forEach((item) => totalPriceOrder.push(item.price));
 
-  renderChart(moneyCtx, arrayOfType, arrayOfTotalPrice, NAMES_OF_CHART.MONEY, formatOfTypes.MONEY);
+  renderChart(moneyCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.MONEY, formatOfTypes.MONEY);
 };
 
 const renderTypeChart = (typeCtx, waypoints) => {
@@ -150,66 +147,43 @@ const renderTypeChart = (typeCtx, waypoints) => {
     });
   };
 
-  const arrayOfCount = countOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
+  const countList = countOfFilteredTypes(filterOfType(waypoints, TYPES));
 
   const formatOfTypes = {
-    TYPE: (arrayOfCount) =>  + arrayOfCount + 'x',
+    TYPE: (countList) =>  + countList + 'x',
   };
 
-  const arrayOfpoints = [];
+  const listOfPoints = [];
 
-  for (let i = 0; i < types.length;i++) {
-    for (let j = 0; j < arrayOfCount.length; j++) {
-      if (i === j) {
-        arrayOfpoints.push({type: types[i], count: arrayOfCount[j]});
-      }
-    }
-  }
+  types.forEach((element, index) => {
+    listOfPoints.push({type: element, count: countList[index]});
+  });
 
-  arrayOfpoints.sort(sortByField('count'));
+  listOfPoints.sort(sortByField('count'));
 
-  const arrayOfType = [];
-  const arrayOfTotalCount = [];
+  const typesOrder = [];
+  const totalPriceOrder = [];
 
-  arrayOfpoints.map((item) => arrayOfType.push(item.type));
+  listOfPoints.forEach((item) => typesOrder.push(item.type));
 
-  arrayOfpoints.map((item) => arrayOfTotalCount.push(item.count));
+  listOfPoints.forEach((item) => totalPriceOrder.push(item.count));
 
-  renderChart(typeCtx, arrayOfType, arrayOfTotalCount, NAMES_OF_CHART.TYPE, formatOfTypes.TYPE);
+  renderChart(typeCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.TYPE, formatOfTypes.TYPE);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
   timeSpendCtx.height = BAR_HEIGHT * 10;
 
-  function ConvertMinutes(num) {
-    const hours = Math.floor(num / 60);
-    const days = Math.floor(hours / 24);
-    const rhours = hours - days * 24;
-    const minutes = Math.floor(num % 60);
-    const dateObj = {
-      D: days < 10 ? '0' + days : days,
-      H: rhours < 10 ? '0' + rhours : rhours,
-      M: minutes < 10 ? '0' + minutes : minutes,
-    };
-
-    if (num === 0) {
-      return 0;
-    }
-
-    return Object.keys(dateObj).map((item) =>
-      dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
-  }
-
   const timeDifference = (elements) => {
-    let sumOfTime = 0;
+    let totalTime = 0;
 
     for (let i = 0; i < elements.length; i++) {
 
       const num = dayjs(elements[i].upperTime).diff(dayjs(elements[i].lowerTime), 'minutes');
-      sumOfTime += num;
+      totalTime += num;
     }
 
-    return sumOfTime;
+    return totalTime;
   };
 
   const timeOfFilteredTypes = (array) => {
@@ -222,32 +196,28 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
     });
   };
 
-  const arrayOfTime = timeOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
+  const listOfTime = timeOfFilteredTypes(filterOfType(waypoints, TYPES));
 
   const formatOfTypes = {
-    TIMESPEND: (arrayOfTime) => ConvertMinutes(arrayOfTime),
+    TIMESPEND: (listOfTime) => convertMinutes(listOfTime),
   };
 
-  const arrayOfpoints = [];
+  const listOfPoints = [];
 
-  for (let i = 0; i < types.length;i++) {
-    for (let j = 0; j < arrayOfTime.length; j++) {
-      if (i === j) {
-        arrayOfpoints.push({type: types[i], time: arrayOfTime[j]});
-      }
-    }
-  }
+  types.forEach((element, index) => {
+    listOfPoints.push({type: element, time: listOfTime[index]});
+  });
 
-  arrayOfpoints.sort(sortByField('time'));
+  listOfPoints.sort(sortByField('time'));
 
-  const arrayOfType = [];
-  const arrayOfTotalTime = [];
+  const typesOrder = [];
+  const totalPriceOrder = [];
 
-  arrayOfpoints.map((item) => arrayOfType.push(item.type));
+  listOfPoints.forEach((item) => typesOrder.push(item.type));
 
-  arrayOfpoints.map((item) => arrayOfTotalTime.push(item.time));
+  listOfPoints.forEach((item) => totalPriceOrder.push(item.time));
 
-  renderChart(timeSpendCtx, arrayOfType, arrayOfTotalTime, NAMES_OF_CHART.TIMESPEND, formatOfTypes.TIMESPEND);
+  renderChart(timeSpendCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.TIMESPEND, formatOfTypes.TIMESPEND);
 };
 
 const createStatisticsTemplate = () => {

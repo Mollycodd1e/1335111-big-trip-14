@@ -39,13 +39,13 @@ const createEditTemplate = (waypoint = {}) => {
     waypoint.offer =  [];
   }
 
-  const emptyArray = [];
+  const emptyOffer = [];
 
   if (waypoint.offer !== null) {
-    emptyArray.push(waypoint.offer);
+    emptyOffer.push(waypoint.offer);
   }
   if (waypoint.offer === null) {
-    waypoint.offer = emptyArray;
+    waypoint.offer = emptyOffer;
   }
 
   waypoint.offer.map((item) => {
