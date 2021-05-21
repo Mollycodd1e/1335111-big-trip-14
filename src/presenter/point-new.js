@@ -4,10 +4,11 @@ import {UserAction, UpdateType} from '../const.js';
 import {newEventButtonDisableOff} from '../utils/common.js';
 
 export default class PointNew {
-  constructor(listContainer, changeData) {
+  constructor(listContainer, changeData, destinationModel, offerModel) {
     this._listContainer = listContainer;
     this._changeData = changeData;
-
+    this._destinationModel = destinationModel;
+    this._offerModel = offerModel;
     this._editComponent = null;
     this._destroyCallback = null;
 
@@ -24,7 +25,7 @@ export default class PointNew {
       return;
     }
 
-    this._editComponent = new EditView(this._changeData);
+    this._editComponent = new EditView(this._changeData, this._destinationModel, this._offerModel);
     this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
     this._editComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._editComponent.setEditClickHandler(this._handleDeleteClick);

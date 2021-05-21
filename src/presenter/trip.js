@@ -34,7 +34,7 @@ export default class Trip {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction, this._destinationModel, this._offerModel);
   }
 
   init() {

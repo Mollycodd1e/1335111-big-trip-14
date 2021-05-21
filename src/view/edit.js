@@ -26,7 +26,11 @@ const createEditTemplate = (waypoint = {}, destination) => {
 
   const towns = [];
 
+
   destination.getDestinations().map((item) => towns.push(item.name));
+  //} else {
+  //  destination = []
+  //}
 
   const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
 
@@ -52,9 +56,14 @@ const createEditTemplate = (waypoint = {}, destination) => {
   });
 
   const addPicture = (pictures) => {
-    return pictures.map((picture) => {
-      return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
-    }).join(' ');
+    if (pictures) {
+      return pictures.map((picture) => {
+        return `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
+      }).join(' ');
+    } else {
+      pictures = [];
+      return pictures;
+    }
   };
 
   const addAllPictures = addPicture(waypoint.picture);
@@ -167,7 +176,6 @@ export default class Edit extends SmartView {
     this._data = Edit.parseWaypointToData(waypointForm);
     this._datepicker = null;
     this._endPicker = null;
-
     this._destinationModel = destinationModel;
     this._offerModel = offerModel;
     this._checkedOffers = this._data.offer;
