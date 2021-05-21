@@ -92,6 +92,11 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
   const totalPriceOfType = (elements) => {
     let totalPriceOfType = 0;
 
+    if (elements === []) {
+      totalPriceOfType = 0;
+      return totalPriceOfType;
+    }
+
     elements.map((element) => {
       totalPriceOfType += element.price;
     });
@@ -101,12 +106,7 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
 
   const totalPriceOfFilteredTypes = (array) => {
     return array.map((element) => {
-      console.log(element)
-      if (element.length === 0) {
-        element = 0;
-      } else {
-        return (totalPriceOfType(element));
-      }
+      return (totalPriceOfType(element));
     });
   };
 
@@ -138,13 +138,9 @@ const renderTypeChart = (typeCtx, waypoints) => {
   typeCtx.height = BAR_HEIGHT * 10;
 
   const countOfFilteredTypes = (array) => {
-    return array.map((element) => {
-      if (element.length === 0) {
-        return element = 0;
-      } else {
-        return element.length;
-      }
-    });
+    return array.map((element) =>
+      element.length,
+    );
   };
 
   const countList = countOfFilteredTypes(filterOfType(waypoints, TYPES));
@@ -176,9 +172,12 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
 
   const timeDifference = (elements) => {
     let totalTime = 0;
+    console.log(elements)
+    if (elements === []) {
+      return totalTime;
+    }
 
     for (let i = 0; i < elements.length; i++) {
-
       const num = dayjs(elements[i].upperTime).diff(dayjs(elements[i].lowerTime), 'minutes');
       totalTime += num;
     }
@@ -186,17 +185,13 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
     return totalTime;
   };
 
-  const timeOfFilteredTypes = (array) => {
-    return array.map((element) => {
-      if (element.length === 0) {
-        return element = 0;
-      } else {
-        return timeDifference(element);
-      }
-    });
+  const getTimeOfFilteredTypes = (array) => {
+    return array.map((element) =>
+      timeDifference(element),
+    );
   };
 
-  const listOfTime = timeOfFilteredTypes(filterOfType(waypoints, TYPES));
+  const listOfTime = getTimeOfFilteredTypes(filterOfType(waypoints, TYPES));
 
   const formatOfTypes = {
     TIMESPEND: (listOfTime) => convertMinutes(listOfTime),

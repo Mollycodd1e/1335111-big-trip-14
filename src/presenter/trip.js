@@ -36,10 +36,6 @@ export default class Trip {
   }
 
   init() {
-    //this._waypoint = waypoint.slice();
-    //this._sourceWaypoint = waypoint.slice();
-    //console.log(this._waypointsModel._waypoint)
-
     this._waypointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
@@ -137,8 +133,6 @@ export default class Trip {
   }
 
   _handleWaypointChange(updatedWaypoint) {
-    //this._waypoint = updateItem(this._waypoint, updatedWaypoint);
-    //this._sourceWaypoint = updateItem(this._sourceWaypoint, updatedWaypoint);
     this._pointPresenter[updatedWaypoint.id].init(updatedWaypoint);
   }
 
@@ -148,10 +142,8 @@ export default class Trip {
     }
 
     remove(this._infoComponent);
-    //this._sortWaypoint(sortType);
+
     this._currentSortType = sortType;
-    //this._clearWaypoint();
-    //this._renderWaypoints(this._waypointsModel._waypoint);
     this._clearTrip({resetRenderedWaypoint: true});
     this._renderTrip(this._waypointsModel._waypoint);
   }
@@ -212,8 +204,6 @@ export default class Trip {
     Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
 
-    //remove(this._infoComponent);
-    //remove(this._menuComponent);
     remove(this._sortComponent);
     remove(this._noWaypointComponent);
     remove(this._loadingComponent);
@@ -238,7 +228,6 @@ export default class Trip {
   _renderWaypoint(waypoint) {
     const pointPresenter = new PointPresenter(this._listComponent, this._handleViewAction, this._handleModeChange);
     pointPresenter.init(waypoint);
-    //this._renderOffer(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
   }
 

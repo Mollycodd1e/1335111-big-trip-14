@@ -1,6 +1,5 @@
 import EditView from '../view/edit.js';
 import WaypointView from '../view/waypoint.js';
-//import OfferView from '../view/offer.js';
 import {render, renderPosition, replace, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
 import {newEventButtonDisableOff} from '../utils/common.js';
@@ -146,8 +145,6 @@ export default class Point {
 
   _handleSubmitClick(waypoint) {
     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, waypoint);
-
-    //this._replaceFormToWaypoint();
   }
 
   _handleDeleteClick(waypoint) {

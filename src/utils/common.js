@@ -45,6 +45,10 @@ export const convertMinutes = (num) => {
     M: minutes < 10 ? '0' + minutes : minutes,
   };
 
+  if (num === 0) {
+    return num;
+  }
+
   return Object.keys(dateObj).map((item) =>
     dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
 }

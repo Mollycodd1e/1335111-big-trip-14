@@ -43,19 +43,14 @@ const handleMenuClick = (menuItem) => {
       tripPresenter.show();
       tripPresenter.destroy();
       tripPresenter.init();
-      //statisticsComponent.hide();
       remove(statisticsComponent);
       break;
     case MenuItem.STATS:
       tripPresenter.hide();
       remove(statisticsComponent);
       tripPresenter.destroy();
-      //if (!statisticsComponent) {
       statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
       render(statisticsElement, statisticsComponent, renderPosition.BEFOREEND);
-      //} else {
-      //  statisticsComponent.show();
-      //}
       break;
   }
 };

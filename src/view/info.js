@@ -39,23 +39,23 @@ const createInfoTemplate = (waypoint) => {
   const minMonth = dayjs(listOfDays[0]).format('MMM');
   const maxMonth = dayjs(listOfDays[listOfDays.length - 1]).format('MMM');
 
-  const sumOfPrice = () => {
-    let sum = 0;
+  const totalOfPrice = () => {
+    let amount = 0;
 
     for (let i = 0; i < waypoint.length; i ++) {
       const price = Number(waypoint[i].price);
 
       for (let j = 0; j < waypoint[i].offer.length; j++) {
-        sum += waypoint[i].offer[j].price;
+        amount += waypoint[i].offer[j].price;
       }
 
-      sum += price;
+      amount += price;
     }
 
-    return sum;
+    return amount;
   };
 
-  const totalPrice = sumOfPrice();
+  const totalPrice = totalOfPrice();
 
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
