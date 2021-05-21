@@ -1,4 +1,4 @@
-import {TYPES /*, TOWNS*/} from '../const.js';
+import {TYPES} from '../const.js';
 import {generateDescription, generatePicture, generateOffer} from '../mock/waypoint.js';
 import SmartView from '../view/smart.js';
 import flatpickr from 'flatpickr';
@@ -23,8 +23,6 @@ const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
 };
 
-//const listOfTown = createOptionTemplate();
-
 const towns = [];
 
 const createEditTemplate = (waypoint = {}) => {
@@ -41,13 +39,13 @@ const createEditTemplate = (waypoint = {}) => {
     waypoint.offer =  [];
   }
 
-  const emptyArray = [];
+  const emptyOffer = [];
 
   if (waypoint.offer !== null) {
-    emptyArray.push(waypoint.offer);
+    emptyOffer.push(waypoint.offer);
   }
   if (waypoint.offer === null) {
-    waypoint.offer = emptyArray;
+    waypoint.offer = emptyOffer;
   }
 
   waypoint.offer.map((item) => {

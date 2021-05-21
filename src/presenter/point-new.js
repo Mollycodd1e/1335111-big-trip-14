@@ -75,8 +75,6 @@ export default class PointNew {
       UpdateType.MINOR,
       waypoint,
     );
-
-    //this.destroy();
   }
 
   _handleDeleteClick() {

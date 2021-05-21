@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import AbstractView from '../view/abstract.js';
+import {convertMinutes} from '../utils/common.js';
 
 const createWaypointTemplate = (waypoint) => {
   const {waypointType, town, upperTime, lowerTime, price, isFavorite} = waypoint;
@@ -10,22 +11,6 @@ const createWaypointTemplate = (waypoint) => {
   const dateYMD = dayjs(lowerTime).format('YYYY-MM-DD');
   const startEvent = dayjs(lowerTime).format('YYYY-MM-DDTHH:mm');
   const endEvent = dayjs(upperTime).format('YYYY-MM-DDTHH:mm');
-
-  function convertMinutes(num) {
-    const hours = Math.floor(num / 60);
-    const days = Math.floor(hours / 24);
-    const rhours = hours - days * 24;
-    const minutes = Math.floor(num % 60);
-
-    const dateObj = {
-      D: days < 10 ? '0' + days : days,
-      H: rhours < 10 ? '0' + rhours : rhours,
-      M: minutes < 10 ? '0' + minutes : minutes,
-    };
-
-    return Object.keys(dateObj).map((item) =>
-      dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
-  }
 
   const getTimeDifference = (arriveTime, departureTime) => {
     if (departureTime !== undefined && arriveTime !== undefined) {

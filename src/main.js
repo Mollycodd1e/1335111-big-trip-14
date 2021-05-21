@@ -1,26 +1,28 @@
-//import FilterView from './view/filter.js';
 import MenuView from './view/menu.js';
-//import {generateWaypoint} from './mock/waypoint.js';
 import Api from './api.js';
-//import {generateFilter} from './mock/filter.js';
-//import {render, renderPosition} from './utils/render.js';
 import StatisticsView from './view/statistics.js';
-import {/*DESTINATION_POINTS_MOCKS,*/ MenuItem, UpdateType} from './const.js';
+import {MenuItem, UpdateType} from './const.js';
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
 import PointModel from './model/point.js';
+import DestinationModel from './model/destination.js';
+import OfferModel from './model/offer.js';
 import FilterModel from './model/filter.js';
 import {render, renderPosition, remove} from './utils/render.js';
 import {newEventButtonDisableOn} from './utils/common.js';
 
-//const waypoints = new Array(DESTINATION_POINTS_MOCKS).fill().map(generateWaypoint);
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const api = new Api(END_POINT, AUTHORIZATION);
-//const filter = generateFilter(waypoints);
 
 const waypointsModel = new PointModel();
-waypointsModel.setWaypoints(/*waypoints*/);
+waypointsModel.setWaypoints();
+
+const destinationModel = new DestinationModel();
+destinationModel.setDestinations();
+
+const offerModel = new OfferModel();
+offerModel.setOffers();
 
 const filterModel = new FilterModel();
 
@@ -31,21 +33,20 @@ const mainElement = document.querySelector('.page-main');
 const statisticsElement = mainElement.querySelector('.page-body__container');
 const filterElement = tripElement.querySelector('.trip-controls__filters');
 
-//render(filterElement, new FilterView(filter, 'everything'), renderPosition.BEFOREEND);
 const menuComponent = new MenuView();
-
-//render(navigationElement, menuComponent, renderPosition.BEFOREEND);
 
 let statisticsComponent = null;
 
 const handleMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      tripPresenter.show();
       tripPresenter.destroy();
       tripPresenter.init();
       remove(statisticsComponent);
       break;
     case MenuItem.STATS:
+      tripPresenter.hide();
       remove(statisticsComponent);
       tripPresenter.destroy();
       statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
@@ -54,13 +55,10 @@ const handleMenuClick = (menuItem) => {
   }
 };
 
-//render(navigationElement, menuComponent, renderPosition.BEFOREEND);
-//menuComponent.setMenuClickHandler(handleMenuClick);
-
 const tripPresenter = new TripPresenter(waypointsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, waypointsModel);
 
-tripPresenter.init(/*waypoints*/);
+tripPresenter.init();
 filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
@@ -69,10 +67,18 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   tripPresenter.createWaypoint();
 });
 
-api.getWaypoints().then((waypoints) => {
-  waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
-  render(navigationElement, menuComponent, renderPosition.BEFOREEND);
-  menuComponent.setMenuClickHandler(handleMenuClick);
+api.getOffers().then((offer) => {
+  offerModel.setOffers(offer);
+}).then(() => {
+  api.getDestinations().then((destinations) => {
+    destinationModel.setDestinations(destinations);
+  });
+}).then(() => {
+  api.getWaypoints().then((waypoints) => {
+    waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
+    render(navigationElement, menuComponent, renderPosition.BEFOREEND);
+    menuComponent.setMenuClickHandler(handleMenuClick);
+  });
 }).catch(() => {
   waypointsModel.setWaypoints(UpdateType.INIT, []);
   render(navigationElement, menuComponent, renderPosition.BEFOREEND);

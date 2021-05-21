@@ -4,16 +4,16 @@ import AbstractView from '../view/abstract.js';
 const createInfoTemplate = (waypoint) => {
 
   const sortByTown = () => {
-    const arrayOfTown = [];
+    const townList = [];
 
     for (let i = 0; i < waypoint.length; i++ ) {
-      arrayOfTown.push(waypoint[i].town);
+      townList.push(waypoint[i].town);
     }
 
-    if (arrayOfTown.length < 3) {
-      return arrayOfTown.map((town) => `${town}`).join(' - ');
+    if (townList.length < 3) {
+      return townList.map((town) => `${town}`).join(' - ');
     } else {
-      return arrayOfTown[0] + ' - ... - ' + arrayOfTown[arrayOfTown.length - 1];
+      return townList[0] + ' - ... - ' + townList[townList.length - 1];
     }
   };
 
@@ -33,29 +33,29 @@ const createInfoTemplate = (waypoint) => {
     return result;
   };
 
-  const arrayOfDays = sortByDate(waypoint);
-  const minDay = dayjs(arrayOfDays[0]).format('D');
-  const maxDay = dayjs(arrayOfDays[arrayOfDays.length - 1]).format('D');
-  const minMonth = dayjs(arrayOfDays[0]).format('MMM');
-  const maxMonth = dayjs(arrayOfDays[arrayOfDays.length - 1]).format('MMM');
+  const listOfDays = sortByDate(waypoint);
+  const minDay = dayjs(listOfDays[0]).format('D');
+  const maxDay = dayjs(listOfDays[listOfDays.length - 1]).format('D');
+  const minMonth = dayjs(listOfDays[0]).format('MMM');
+  const maxMonth = dayjs(listOfDays[listOfDays.length - 1]).format('MMM');
 
-  const sumOfPrice = () => {
-    let sum = 0;
+  const totalOfPrice = () => {
+    let amount = 0;
 
     for (let i = 0; i < waypoint.length; i ++) {
       const price = Number(waypoint[i].price);
 
       for (let j = 0; j < waypoint[i].offer.length; j++) {
-        sum += waypoint[i].offer[j].price;
+        amount += waypoint[i].offer[j].price;
       }
 
-      sum += price;
+      amount += price;
     }
 
-    return sum;
+    return amount;
   };
 
-  const finalSum = sumOfPrice();
+  const totalPrice = totalOfPrice();
 
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
@@ -65,7 +65,7 @@ const createInfoTemplate = (waypoint) => {
             </div>
 
             <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">${finalSum}</span>
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
             </p>
           </section>`;
 };

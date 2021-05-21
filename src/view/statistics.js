@@ -3,48 +3,30 @@ import dayjs from 'dayjs';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from '../view/smart.js';
 import {TYPES} from '../const.js';
-import {arrayOfFilterType} from '../utils/common.js';
+import {filterOfType, convertMinutes} from '../utils/common.js';
 
 const BAR_HEIGHT = 55;
 
-const types = TYPES.slice().map((item) => item.toUpperCase());
-
-const decreaseSort = (priceA, priceB) => {
-  return priceB - priceA;
+const NAMES_OF_CHART = {
+  MONEY: 'MONEY',
+  TYPE: 'TYPE',
+  TIMESPEND: 'TIME-SPEND',
 };
 
-const renderMoneyChart = (moneyCtx, waypoints) => {
-  moneyCtx.height = BAR_HEIGHT * 10;
+const types = TYPES.slice().map((item) => item.toUpperCase());
 
-  const sumOfType = (elements) => {
-    let sum = 0;
+const sortByField = (field) => {
+  return (a, b) => a[field] < b[field] ? 1 : -1;
+};
 
-    elements.map((element) => {
-      sum += element.price;
-    });
-
-    return sum;
-  };
-
-  const sumOfFilteredTypes = (array) => {
-    return array.map((element) => {
-      if (element.length === 0) {
-        return element = 0;
-      } else {
-        return (sumOfType(element));
-      }
-    });
-  };
-
-  const arrayOfSum = sumOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
-
-  return new Chart(moneyCtx, {
+const renderChart = (context, listOfTypes, dataOfChart, namesOfChart, format) => {
+  return new Chart(context, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: types,
+      labels: listOfTypes,
       datasets: [{
-        data: arrayOfSum.sort(decreaseSort),
+        data:  dataOfChart,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -59,12 +41,12 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (arrayOfSum) => '€ ' + arrayOfSum,
+          formatter: format,
         },
       },
       title: {
         display: true,
-        text: 'MONEY',
+        text: namesOfChart,
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
@@ -73,7 +55,7 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
         yAxes: [{
           ticks: {
             fontColor: '#000000',
-            padding: 5,
+            padding: 3,
             fontSize: 13,
           },
           gridLines: {
@@ -102,199 +84,135 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
       },
     },
   });
+};
+
+const renderMoneyChart = (moneyCtx, waypoints) => {
+  moneyCtx.height = BAR_HEIGHT * 10;
+
+  const totalPriceOfType = (elements) => {
+    let totalPriceOfType = 0;
+
+    if (elements === []) {
+      totalPriceOfType = 0;
+      return totalPriceOfType;
+    }
+
+    elements.map((element) => {
+      totalPriceOfType += element.price;
+    });
+
+    return totalPriceOfType;
+  };
+
+  const totalPriceOfFilteredTypes = (array) => {
+    return array.map((element) => {
+      return (totalPriceOfType(element));
+    });
+  };
+
+  const finalListOfTypes = totalPriceOfFilteredTypes(filterOfType(waypoints, TYPES));
+
+  const formatOfTypes = {
+    MONEY: (finalListOfTypes) => '€ ' +  finalListOfTypes,
+  };
+
+  const listOfPoints = [];
+
+  types.forEach((element, index) => {
+    listOfPoints.push({type: element, price: finalListOfTypes[index]});
+  });
+
+  listOfPoints.sort(sortByField('price'));
+
+  const typesOrder = [];
+  const totalPriceOrder = [];
+
+  listOfPoints.forEach((item) => typesOrder.push(item.type));
+
+  listOfPoints.forEach((item) => totalPriceOrder.push(item.price));
+
+  renderChart(moneyCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.MONEY, formatOfTypes.MONEY);
 };
 
 const renderTypeChart = (typeCtx, waypoints) => {
   typeCtx.height = BAR_HEIGHT * 10;
 
   const countOfFilteredTypes = (array) => {
-    return array.map((element) => {
-      if (element.length === 0) {
-        return element = 0;
-      } else {
-        return element.length;
-      }
-    });
+    return array.map((element) =>
+      element.length,
+    );
   };
 
-  const arrayOfCount = countOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
+  const countList = countOfFilteredTypes(filterOfType(waypoints, TYPES));
 
-  return new Chart(typeCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: types,
-      datasets: [{
-        data: arrayOfCount.sort(decreaseSort),
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (arrayOfCount) => arrayOfCount + 'x',
-        },
-      },
-      title: {
-        display: true,
-        text: 'TYPE',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-          minBarLength: 50,
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
+  const formatOfTypes = {
+    TYPE: (countList) =>  + countList + 'x',
+  };
+
+  const listOfPoints = [];
+
+  types.forEach((element, index) => {
+    listOfPoints.push({type: element, count: countList[index]});
   });
+
+  listOfPoints.sort(sortByField('count'));
+
+  const typesOrder = [];
+  const totalPriceOrder = [];
+
+  listOfPoints.forEach((item) => typesOrder.push(item.type));
+
+  listOfPoints.forEach((item) => totalPriceOrder.push(item.count));
+
+  renderChart(typeCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.TYPE, formatOfTypes.TYPE);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
   timeSpendCtx.height = BAR_HEIGHT * 10;
 
-  function ConvertMinutes(num) {
-    const hours = Math.floor(num / 60);
-    const days = Math.floor(hours / 24);
-    const rhours = hours - days * 24;
-    const minutes = Math.floor(num % 60);
-    const dateObj = {
-      D: days < 10 ? '0' + days : days,
-      H: rhours < 10 ? '0' + rhours : rhours,
-      M: minutes < 10 ? '0' + minutes : minutes,
-    };
-
-    if (num === 0) {
-      return 0;
-    }
-
-    return Object.keys(dateObj).map((item) =>
-      dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
-  }
-
   const timeDifference = (elements) => {
-    let sumOfTime = 0;
+    let totalTime = 0;
+
+    if (elements === []) {
+      return totalTime;
+    }
 
     for (let i = 0; i < elements.length; i++) {
-
       const num = dayjs(elements[i].upperTime).diff(dayjs(elements[i].lowerTime), 'minutes');
-      sumOfTime += num;
+      totalTime += num;
     }
 
-    return sumOfTime;
+    return totalTime;
   };
 
-  const timeOfFilteredTypes = (array) => {
-    return array.map((element) => {
-      if (element.length === 0) {
-        return element = 0;
-      } else {
-        return timeDifference(element);
-      }
-    });
+  const getTimeOfFilteredTypes = (array) => {
+    return array.map((element) =>
+      timeDifference(element),
+    );
   };
 
-  const arrayOfTime = timeOfFilteredTypes(arrayOfFilterType(waypoints, TYPES));
+  const listOfTime = getTimeOfFilteredTypes(filterOfType(waypoints, TYPES));
 
-  return new Chart(timeSpendCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: types,
-      datasets: [{
-        data: arrayOfTime.sort(decreaseSort),
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (arrayOfTime) => ConvertMinutes(arrayOfTime),
-        },
-      },
-      title: {
-        display: true,
-        text: 'TIME-SPEND',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-          minBarLength: 50,
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
+  const formatOfTypes = {
+    TIMESPEND: (listOfTime) => convertMinutes(listOfTime),
+  };
+
+  const listOfPoints = [];
+
+  types.forEach((element, index) => {
+    listOfPoints.push({type: element, time: listOfTime[index]});
   });
+
+  listOfPoints.sort(sortByField('time'));
+
+  const typesOrder = [];
+  const totalPriceOrder = [];
+
+  listOfPoints.forEach((item) => typesOrder.push(item.type));
+
+  listOfPoints.forEach((item) => totalPriceOrder.push(item.time));
+
+  renderChart(timeSpendCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.TIMESPEND, formatOfTypes.TIMESPEND);
 };
 
 const createStatisticsTemplate = () => {
