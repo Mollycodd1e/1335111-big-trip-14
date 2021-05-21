@@ -172,7 +172,7 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
 
   const timeDifference = (elements) => {
     let totalTime = 0;
-    console.log(elements)
+
     if (elements === []) {
       return totalTime;
     }
