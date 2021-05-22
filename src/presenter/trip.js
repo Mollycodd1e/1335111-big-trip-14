@@ -13,10 +13,12 @@ import {sortWaypointPrice, sortWaypointTime} from '../utils/common.js';
 import {render, renderPosition, remove} from '../utils/render.js';
 
 export default class Trip {
-  constructor(waypointsModel, filterModel, api) {
+  constructor(waypointsModel, filterModel, destinationModel, offerModel, api) {
     this._pointPresenter = {};
     this._waypointsModel = waypointsModel;
     this._filterModel = filterModel;
+    this._destinationModel = destinationModel;
+    this._offerModel = offerModel;
     this._currentSortType = SORT_TYPE.DAY;
     this._isLoading = true;
     this._api = api;
@@ -32,7 +34,7 @@ export default class Trip {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction, this._destinationModel, this._offerModel);
   }
 
   init() {
@@ -226,7 +228,7 @@ export default class Trip {
   }
 
   _renderWaypoint(waypoint) {
-    const pointPresenter = new PointPresenter(this._listComponent, this._handleViewAction, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._listComponent, this._handleViewAction, this._handleModeChange, this._destinationModel, this._offerModel);
     pointPresenter.init(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
   }

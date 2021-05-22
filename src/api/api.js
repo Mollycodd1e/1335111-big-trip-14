@@ -1,6 +1,6 @@
-import PointModel from './model/point.js';
-import DestinationModel from './model/destination.js';
-import OfferModel from './model/offer.js';
+import PointModel from '../model/point.js';
+import DestinationModel from '../model/destination.js';
+import OfferModel from '../model/offer.js';
 
 const Method = {
   GET: 'GET',
@@ -58,6 +58,15 @@ export default class Api {
       url: `points/${point.id}`,
       method: Method.DELETE,
     });
+  }
+
+  sync(data) {
+    return this._load({
+      url: 'points/sync',
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    }).then(Api.toJSON);
   }
 
   _load({

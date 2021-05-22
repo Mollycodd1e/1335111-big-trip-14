@@ -16,10 +16,12 @@ export const State = {
 };
 
 export default class Point {
-  constructor(waypointContainer, changeData, changeMode) {
+  constructor(waypointContainer, changeData, changeMode, destinationModel, offerModel) {
     this._waypointContainer = waypointContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._destinationModel = destinationModel;
+    this._offerModel = offerModel;
 
     this._waypointComponent = null;
     this._editComponent = null;
@@ -39,7 +41,7 @@ export default class Point {
     const prevEditComponent = this._editComponent;
 
     this._waypointComponent = new WaypointView(waypoint);
-    this._editComponent = new EditView(waypoint);
+    this._editComponent = new EditView(waypoint, this._destinationModel, this._offerModel);
 
     this._waypointComponent.setWaypointClickHandler(this._handleEditClick);
     this._editComponent.setEditSubmitHandler(this._handleSubmitClick);

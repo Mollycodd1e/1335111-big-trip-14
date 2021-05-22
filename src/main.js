@@ -1,5 +1,5 @@
 import MenuView from './view/menu.js';
-import Api from './api.js';
+import Api from './api/api.js';
 import StatisticsView from './view/statistics.js';
 import {MenuItem, UpdateType} from './const.js';
 import TripPresenter from './presenter/trip.js';
@@ -55,7 +55,7 @@ const handleMenuClick = (menuItem) => {
   }
 };
 
-const tripPresenter = new TripPresenter(waypointsModel, filterModel, api);
+const tripPresenter = new TripPresenter(waypointsModel, filterModel, destinationModel, offerModel, api);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, waypointsModel);
 
 tripPresenter.init();
@@ -67,11 +67,12 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   tripPresenter.createWaypoint();
 });
 
-api.getOffers().then((offer) => {
-  offerModel.setOffers(offer);
+
+api.getDestinations().then((destination) => {
+  destinationModel.setDestinations(destination);
 }).then(() => {
-  api.getDestinations().then((destinations) => {
-    destinationModel.setDestinations(destinations);
+  api.getOffers().then((offer) => {
+    offerModel.setOffers(offer);
   });
 }).then(() => {
   api.getWaypoints().then((waypoints) => {
