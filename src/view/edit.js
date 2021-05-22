@@ -32,6 +32,14 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
     price = '',
   } = waypoint;
 
+  if (waypoint.offer === undefined || waypoint.waypointType === undefined) {
+    waypoint.waypointType = waypointType;
+    offer.getOffers().map((item) => {
+      if(item.type === waypointType) {
+        waypoint.offer = item.offers;
+      }
+    });
+  }
 
   const towns = [];
 
@@ -40,15 +48,6 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
   const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
 
   const listOfTown = createOptionTemplate(towns);
-
-  if (waypoint.offer === undefined && waypoint.waypointType === undefined) {
-    waypoint.waypointType = waypointType;
-    offer.getOffers().map((item) => {
-      if(item.type === waypointType) {
-        waypoint.offer = item.offers;
-      }
-    });
-  }
 
   const emptyOffer = [];
 
@@ -115,7 +114,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
                   ${waypointType}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${town}" list="destination-list-1"
-                ${waypoint.isDisabled === true ? 'disabled' : ''} required>
+                ${waypoint.isDisabled === true ? 'disabled' : ''}>
                 <datalist id="destination-list-1">
                   ${listOfTown}
                 </datalist>
@@ -136,7 +135,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''} required>
+                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''}>
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDeleting === true ? 'disabled' : ''}>${waypoint.isSaving === true ? 'Saving...' : 'Save'}</button>
