@@ -73,7 +73,7 @@ api.getDestinations().then((destination) => {
 }).then(() => {
   api.getOffers().then((offer) => {
     offerModel.setOffers(offer);
-  })
+  });
 }).then(() => {
   api.getWaypoints().then((waypoints) => {
     waypointsModel.setWaypoints(UpdateType.INIT, waypoints);

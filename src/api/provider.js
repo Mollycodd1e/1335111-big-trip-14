@@ -39,7 +39,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getDestinations().then((destinations) => {
         return destinations;
-      })
+      });
     }
   }
 
@@ -47,7 +47,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getOffers().then((offers) => {
         return offers;
-      })
+      });
     }
   }
 
