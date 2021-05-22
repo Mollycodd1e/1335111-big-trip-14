@@ -67,12 +67,13 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   tripPresenter.createWaypoint();
 });
 
-api.getOffers().then((offer) => {
-  offerModel.setOffers(offer);
+
+api.getDestinations().then((destination) => {
+  destinationModel.setDestinations(destination);
 }).then(() => {
-  api.getDestinations().then((destinations) => {
-    destinationModel.setDestinations(destinations);
-  });
+  api.getOffers().then((offer) => {
+    offerModel.setOffers(offer);
+  })
 }).then(() => {
   api.getWaypoints().then((waypoints) => {
     waypointsModel.setWaypoints(UpdateType.INIT, waypoints);

@@ -52,3 +52,7 @@ export const convertMinutes = (num) => {
   return Object.keys(dateObj).map((item) =>
     dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

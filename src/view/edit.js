@@ -26,11 +26,7 @@ const createEditTemplate = (waypoint = {}, destination) => {
 
   const towns = [];
 
-
   destination.getDestinations().map((item) => towns.push(item.name));
-  //} else {
-  //  destination = []
-  //}
 
   const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
 
@@ -190,7 +186,7 @@ export default class Edit extends SmartView {
     this._destinationKeydownHandler = this._destinationKeydownHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
     this._offersChangeHandler = this._offersChangeHandler.bind(this);
-
+    console.log(this._destinationModel)
     this._setInnerHandlers();
     this._setDatepicker();
     this._setEndPicker();
