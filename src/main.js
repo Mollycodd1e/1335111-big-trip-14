@@ -10,10 +10,21 @@ import OfferModel from './model/offer.js';
 import FilterModel from './model/filter.js';
 import {render, renderPosition, remove} from './utils/render.js';
 import {newEventButtonDisableOn} from './utils/common.js';
+import {isOnline} from './utils/common.js';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
+import {toast} from './utils/toast.js';
 
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+const STORE_PREFIX = 'big-trip-localstorage';
+const STORE_VER = 'v14';
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
 const api = new Api(END_POINT, AUTHORIZATION);
+
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const waypointsModel = new PointModel();
 waypointsModel.setWaypoints();
@@ -62,11 +73,14 @@ tripPresenter.init();
 filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  if (!isOnline()) {
+    toast('You can\'t create new event offline');
+    return;
+  }
   evt.preventDefault();
   newEventButtonDisableOn();
   tripPresenter.createWaypoint();
 });
-
 
 api.getDestinations().then((destination) => {
   destinationModel.setDestinations(destination);
@@ -88,4 +102,13 @@ api.getDestinations().then((destination) => {
 
 window.addEventListener('load', () => {
   navigator.serviceWorker.register('/sw.js');
+});
+
+window.addEventListener('online', () => {
+  document.title = document.title.replace(' [offline]', '');
+  apiWithProvider.sync();
+});
+
+window.addEventListener('offline', () => {
+  document.title += ' [offline]';
 });

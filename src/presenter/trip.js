@@ -9,7 +9,7 @@ import NoWaypointView from '../view/nowaypoint.js';
 import PointPresenter, {State as PointPresenterViewState} from '../presenter/point.js';
 import PointNewPresenter from '../presenter/point-new.js';
 import {DESTINATION_POINTS_MOCKS, SORT_TYPE, UserAction, UpdateType, FilterType} from '../const.js';
-import {sortWaypointPrice, sortWaypointTime} from '../utils/common.js';
+import {sortWaypointPrice, sortWaypointTime, sortWaypointDay} from '../utils/common.js';
 import {render, renderPosition, remove} from '../utils/render.js';
 
 export default class Trip {
@@ -68,6 +68,8 @@ export default class Trip {
     const filteredWaypoints = filter[filterType](waypoints);
 
     switch (this._currentSortType) {
+      case SORT_TYPE.DAY:
+        return filteredWaypoints.sort(sortWaypointDay);
       case SORT_TYPE.PRICE:
         return filteredWaypoints.sort(sortWaypointPrice);
       case SORT_TYPE.TIME:

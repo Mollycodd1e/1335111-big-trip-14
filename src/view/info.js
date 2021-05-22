@@ -46,7 +46,9 @@ const createInfoTemplate = (waypoint) => {
       const price = Number(waypoint[i].price);
 
       for (let j = 0; j < waypoint[i].offer.length; j++) {
-        amount += waypoint[i].offer[j].price;
+        if (waypoint[i].offer[j].isChecked === true) {
+          amount += waypoint[i].offer[j].price;
+        }
       }
 
       amount += price;
@@ -60,10 +62,8 @@ const createInfoTemplate = (waypoint) => {
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
               <h1 class="trip-info__title">${listOfTowns}</h1>
-
               <p class="trip-info__dates">${minMonth} ${minDay}&nbsp;&mdash;&nbsp;${maxMonth} ${maxDay}</p>
             </div>
-
             <p class="trip-info__cost">
               Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
             </p>

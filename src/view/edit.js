@@ -37,6 +37,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
     offer.getOffers().map((item) => {
       if(item.type === waypointType) {
         waypoint.offer = item.offers;
+        waypoint.isChecked = false;
       }
     });
   }
