@@ -22,7 +22,16 @@ const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
 };
 
-const createEditTemplate = (waypoint = {}, destination) => {
+const createEditTemplate = (waypoint = {}, destination, offer) => {
+
+  const {waypointType = 'flight',
+    description = '',
+    town = '',
+    upperTime = '',
+    lowerTime = '',
+    price = '',
+  } = waypoint;
+
 
   const towns = [];
 
@@ -32,8 +41,13 @@ const createEditTemplate = (waypoint = {}, destination) => {
 
   const listOfTown = createOptionTemplate(towns);
 
-  if (waypoint.offer === undefined) {
-    waypoint.offer =  [];
+  if (waypoint.offer === undefined && waypoint.waypointType === undefined) {
+    waypoint.waypointType = waypointType;
+    offer.getOffers().map((item) => {
+      if(item.type === waypointType) {
+        waypoint.offer = item.offers;
+      }
+    });
   }
 
   const emptyOffer = [];
@@ -78,18 +92,6 @@ const createEditTemplate = (waypoint = {}, destination) => {
   };
 
   const addCheckedOptions = addOption();
-
-  const {waypointType = 'flight',
-    description = '',
-    town = '',
-    upperTime = '',
-    lowerTime = '',
-    price = '',
-  } = waypoint;
-
-  if (waypoint.waypointType === undefined) {
-    waypoint.waypointType = waypointType;
-  }
 
   return `<form class="event event--edit" action="#" method="post">
             <header class="event__header">
@@ -193,7 +195,7 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data, this._destinationModel);
+    return createEditTemplate(this._data, this._destinationModel, this._offerModel);
   }
 
   _setPicker(element, input, change) {
@@ -248,7 +250,7 @@ export default class Edit extends SmartView {
 
   _offersChangeHandler(evt) {
     if (this._checkedOffers === undefined) {
-      this._checkedOffers = this._data.offers;
+      this._checkedOffers = this._data.offer;
     }
 
     this._checkedOffers.map((item) => {
