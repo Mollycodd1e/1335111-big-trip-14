@@ -50,13 +50,13 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
 
   const listOfTown = createOptionTemplate(towns);
 
-  const emptyOffer = [];
+  const emptyOffers = [];
 
   if (waypoint.offer !== null) {
-    emptyOffer.push(waypoint.offer);
+    emptyOffers.push(waypoint.offer);
   }
   if (waypoint.offer === null) {
-    waypoint.offer = emptyOffer;
+    waypoint.offer = emptyOffers;
   }
 
   waypoint.offer.map((item) => {
@@ -285,19 +285,19 @@ export default class Edit extends SmartView {
   _destinationChangeHandler(evt) {
     evt.preventDefault();
 
-    let newDestination = [];
+    let newDestinations = [];
 
     const getDestinationByTown = (evt) => {
       this._destinationModel.getDestinations().forEach((destination) => {
         if (destination.name === evt.target.value) {
-          newDestination = destination;
+          newDestinations = destination;
         }
       });
     };
 
     getDestinationByTown(evt);
 
-    this.updateData({town: evt.target.value , description: newDestination.description, picture: newDestination.pictures});
+    this.updateData({town: evt.target.value , description: newDestinations.description, picture: newDestinations.pictures});
   }
 
   _destinationKeydownHandler(evt) {

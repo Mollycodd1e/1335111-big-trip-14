@@ -93,8 +93,8 @@ export default class Point extends Observer {
       point,
       {
         'base_price': Number(point.price),
-        'date_from': point.lowerTime, //? point.lowerTime,//: new Date(),
-        'date_to': point.upperTime, //? point.upperTime, //: new Date(),
+        'date_from': point.lowerTime,
+        'date_to': point.upperTime,
         'destination':
         {
           'description': point.description,

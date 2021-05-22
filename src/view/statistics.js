@@ -89,7 +89,7 @@ const renderChart = (context, listOfTypes, dataOfChart, namesOfChart, format) =>
 const renderMoneyChart = (moneyCtx, waypoints) => {
   moneyCtx.height = BAR_HEIGHT * 10;
 
-  const totalPriceOfType = (elements) => {
+  const getTotalPriceOfType = (elements) => {
     let totalPriceOfType = 0;
 
     if (elements === []) {
@@ -104,13 +104,13 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
     return totalPriceOfType;
   };
 
-  const totalPriceOfFilteredTypes = (array) => {
+  const getTotalPriceOfFilteredTypes = (array) => {
     return array.map((element) => {
-      return (totalPriceOfType(element));
+      return (getTotalPriceOfType(element));
     });
   };
 
-  const finalListOfTypes = totalPriceOfFilteredTypes(filterOfType(waypoints, TYPES));
+  const finalListOfTypes = getTotalPriceOfFilteredTypes(filterOfType(waypoints, TYPES));
 
   const formatOfTypes = {
     MONEY: (finalListOfTypes) => '€ ' +  finalListOfTypes,
@@ -137,13 +137,13 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
 const renderTypeChart = (typeCtx, waypoints) => {
   typeCtx.height = BAR_HEIGHT * 10;
 
-  const countOfFilteredTypes = (array) => {
+  const getCountOfFilteredTypes = (array) => {
     return array.map((element) =>
       element.length,
     );
   };
 
-  const countList = countOfFilteredTypes(filterOfType(waypoints, TYPES));
+  const countList = getCountOfFilteredTypes(filterOfType(waypoints, TYPES));
 
   const formatOfTypes = {
     TYPE: (countList) =>  + countList + 'x',
@@ -170,7 +170,7 @@ const renderTypeChart = (typeCtx, waypoints) => {
 const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
   timeSpendCtx.height = BAR_HEIGHT * 10;
 
-  const timeDifference = (elements) => {
+  const getTimeDifference = (elements) => {
     let totalTime = 0;
 
     if (elements === []) {
@@ -187,7 +187,7 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
 
   const getTimeOfFilteredTypes = (array) => {
     return array.map((element) =>
-      timeDifference(element),
+      getTimeDifference(element),
     );
   };
 

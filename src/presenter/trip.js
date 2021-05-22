@@ -5,7 +5,7 @@ import ListView from '../view/list.js';
 import LoadingView from '../view/loading.js';
 import OfferView from '../view/offer.js';
 import {filter} from '../utils/filter.js';
-import NoWaypointView from '../view/nowaypoint.js';
+import NoWaypointView from '../view/no-waypoint.js';
 import PointPresenter, {State as PointPresenterViewState} from '../presenter/point.js';
 import PointNewPresenter from '../presenter/point-new.js';
 import {DESTINATION_POINTS_MOCKS, SORT_TYPE, UserAction, UpdateType, FilterType} from '../const.js';
