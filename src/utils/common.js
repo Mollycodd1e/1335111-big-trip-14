@@ -21,6 +21,10 @@ export const sortWaypointPrice = (priceA, priceB) => {
   return priceB.price - priceA.price;
 };
 
+export const sortWaypointDay = (pointA, pointB) => {
+  return new Date(pointA.lowerTime) - new Date(pointB.lowerTime);
+};
+
 export const filterOfType = (waypoints, type) => {
   return type.map((element) => waypoints.filter((waypoint) => waypoint.waypointType.toLowerCase() === element));
 };

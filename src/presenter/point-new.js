@@ -85,7 +85,7 @@ export default class PointNew {
 
   _handleEditClick() {
     newEventButtonDisableOff();
-    this._replaceWaypointToForm();
+    this.destroy();
   }
 
   _escKeyDownHandler(evt) {

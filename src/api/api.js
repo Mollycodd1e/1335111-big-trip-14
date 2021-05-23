@@ -38,8 +38,7 @@ export default class Api {
       method: Method.PUT,
       body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
-    })
-      .then(Api.toJSON).then(PointModel.adaptToClient);
+    }).then(Api.toJSON).then(PointModel.adaptToClient);
   }
 
   addWaypoint(point) {
@@ -48,9 +47,7 @@ export default class Api {
       method: Method.POST,
       body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
-    })
-      .then(Api.toJSON)
-      .then(PointModel.adaptToClient);
+    }).then(Api.toJSON).then(PointModel.adaptToClient);
   }
 
   deleteWaypoint(point) {

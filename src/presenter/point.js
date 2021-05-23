@@ -3,6 +3,8 @@ import WaypointView from '../view/waypoint.js';
 import {render, renderPosition, replace, remove} from '../utils/render.js';
 import {UserAction, UpdateType} from '../const.js';
 import {newEventButtonDisableOff} from '../utils/common.js';
+import {isOnline} from '../utils/common.js';
+import {toast} from '../utils/toast.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -136,6 +138,11 @@ export default class Point {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      toast('You can\'t edit waypoint offline');
+      return;
+    }
+
     newEventButtonDisableOff();
     this._replaceWaypointToForm();
   }
@@ -146,10 +153,20 @@ export default class Point {
   }
 
   _handleSubmitClick(waypoint) {
+    if (!isOnline()) {
+      toast('You can\'t edit waypoint offline');
+      return;
+    }
+
     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, waypoint);
   }
 
   _handleDeleteClick(waypoint) {
+    if (!isOnline()) {
+      toast('You can\'t edit waypoint offline');
+      return;
+    }
+
     this._changeData(UserAction.DELETE_WAYPOINT, UpdateType.MINOR, waypoint);
   }
 }

@@ -22,7 +22,25 @@ const createOptionTemplate = (array) => {
   return array.map((element) => `<option value="${element}"></option>`).join('');
 };
 
-const createEditTemplate = (waypoint = {}, destination) => {
+const createEditTemplate = (waypoint = {}, destination, offer) => {
+
+  const {waypointType = 'flight',
+    description = '',
+    town = '',
+    upperTime = '',
+    lowerTime = '',
+    price = '',
+  } = waypoint;
+
+  if (waypoint.offer === undefined || waypoint.waypointType === undefined) {
+    waypoint.waypointType = waypointType;
+    offer.getOffers().map((item) => {
+      if(item.type === waypointType) {
+        waypoint.offer = item.offers;
+        waypoint.isChecked = false;
+      }
+    });
+  }
 
   const towns = [];
 
@@ -32,17 +50,13 @@ const createEditTemplate = (waypoint = {}, destination) => {
 
   const listOfTown = createOptionTemplate(towns);
 
-  if (waypoint.offer === undefined) {
-    waypoint.offer =  [];
-  }
-
-  const emptyOffer = [];
+  const emptyOffers = [];
 
   if (waypoint.offer !== null) {
-    emptyOffer.push(waypoint.offer);
+    emptyOffers.push(waypoint.offer);
   }
   if (waypoint.offer === null) {
-    waypoint.offer = emptyOffer;
+    waypoint.offer = emptyOffers;
   }
 
   waypoint.offer.map((item) => {
@@ -79,18 +93,6 @@ const createEditTemplate = (waypoint = {}, destination) => {
 
   const addCheckedOptions = addOption();
 
-  const {waypointType = 'flight',
-    description = '',
-    town = '',
-    upperTime = '',
-    lowerTime = '',
-    price = '',
-  } = waypoint;
-
-  if (waypoint.waypointType === undefined) {
-    waypoint.waypointType = waypointType;
-  }
-
   return `<form class="event event--edit" action="#" method="post">
             <header class="event__header">
               <div class="event__type-wrapper">
@@ -113,7 +115,7 @@ const createEditTemplate = (waypoint = {}, destination) => {
                   ${waypointType}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${town}" list="destination-list-1"
-                ${waypoint.isDisabled === true ? 'disabled' : ''} required>
+                ${waypoint.isDisabled === true ? 'disabled' : ''}>
                 <datalist id="destination-list-1">
                   ${listOfTown}
                 </datalist>
@@ -134,7 +136,7 @@ const createEditTemplate = (waypoint = {}, destination) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''} required>
+                <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}" ${waypoint.isDisabled === true ? 'disabled' : ''}>
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit" ${waypoint.isDeleting === true ? 'disabled' : ''}>${waypoint.isSaving === true ? 'Saving...' : 'Save'}</button>
@@ -193,7 +195,7 @@ export default class Edit extends SmartView {
   }
 
   getTemplate() {
-    return createEditTemplate(this._data, this._destinationModel);
+    return createEditTemplate(this._data, this._destinationModel, this._offerModel);
   }
 
   _setPicker(element, input, change) {
@@ -248,7 +250,7 @@ export default class Edit extends SmartView {
 
   _offersChangeHandler(evt) {
     if (this._checkedOffers === undefined) {
-      this._checkedOffers = this._data.offers;
+      this._checkedOffers = this._data.offer;
     }
 
     this._checkedOffers.map((item) => {
@@ -283,19 +285,19 @@ export default class Edit extends SmartView {
   _destinationChangeHandler(evt) {
     evt.preventDefault();
 
-    let newDestination = [];
+    let newDestinations = [];
 
     const getDestinationByTown = (evt) => {
       this._destinationModel.getDestinations().forEach((destination) => {
         if (destination.name === evt.target.value) {
-          newDestination = destination;
+          newDestinations = destination;
         }
       });
     };
 
     getDestinationByTown(evt);
 
-    this.updateData({town: evt.target.value , description: newDestination.description, picture: newDestination.pictures});
+    this.updateData({town: evt.target.value , description: newDestinations.description, picture: newDestinations.pictures});
   }
 
   _destinationKeydownHandler(evt) {
