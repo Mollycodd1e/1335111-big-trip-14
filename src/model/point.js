@@ -59,7 +59,6 @@ export default class Point extends Observer {
   }
 
   static adaptToClient(point) {
-    console.log(point)
     const adaptedWaypoint = Object.assign(
       {},
       point,

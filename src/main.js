@@ -18,15 +18,15 @@ import {toast} from './utils/toast.js';
 const StorePrefix = {
   WAYPOINT: 'big-trip-waypoints-localstorage',
   DESTINATION: 'big-trip-destinations-localstorage',
-  OFFER: 'big-trip-offers-localstorage'
-}
+  OFFER: 'big-trip-offers-localstorage',
+};
+
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
-const STORE_PREFIX = 'big-trip-localstorage';
 const STORE_VER = 'v14';
 const STORE_NAME = `${StorePrefix.WAYPOINT}-${STORE_VER}`;
-const OFFER_STORE_NAME = `${StorePrefix.OFFER}-${STORE_VER}`
-const DESTINATION_STORE_NAME = `${StorePrefix.DESTINATION}-${STORE_VER}`
+const OFFER_STORE_NAME = `${StorePrefix.OFFER}-${STORE_VER}`;
+const DESTINATION_STORE_NAME = `${StorePrefix.DESTINATION}-${STORE_VER}`;
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
