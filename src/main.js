@@ -14,12 +14,7 @@ import {isOnline} from './utils/common.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
 import {toast} from './utils/toast.js';
-
-const StorePrefix = {
-  WAYPOINT: 'big-trip-waypoints-localstorage',
-  DESTINATION: 'big-trip-destinations-localstorage',
-  OFFER: 'big-trip-offers-localstorage',
-};
+import {StorePrefix} from './const.js';
 
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';

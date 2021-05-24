@@ -26,6 +26,8 @@ export const TYPES = [
 
 export const SHAKE_ANIMATION_TIMEOUT = 600;
 
+export const DESTINATION_POINTS_MOCKS = 3;
+
 export const TOWNS = [
   'Amsterdam',
   'Chamonix',
@@ -120,4 +122,8 @@ export const FilterType = {
   FUTURE: 'future',
 };
 
-export const DESTINATION_POINTS_MOCKS = 3;
+export const StorePrefix = {
+  WAYPOINT: 'big-trip-waypoints-localstorage',
+  DESTINATION: 'big-trip-destinations-localstorage',
+  OFFER: 'big-trip-offers-localstorage',
+};
