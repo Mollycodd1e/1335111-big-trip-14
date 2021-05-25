@@ -10,7 +10,7 @@ const createInfoTemplate = (waypoint) => {
       townList.push(waypoint[i].town);
     }
 
-    if (townList.length < 3) {
+    if (townList.length <= 3) {
       return townList.map((town) => `${town}`).join(' - ');
     } else {
       return townList[0] + ' - ... - ' + townList[townList.length - 1];
