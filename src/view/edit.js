@@ -82,7 +82,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
 
     return waypoint.offer.map((option) => `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}"
-      ${option.isChecked === true ? 'checked' : ''}>
+      ${option.isChecked === true ? 'checked' : ''} ${waypoint.isSaving === true || waypoint.isDeleting === true ? 'disabled' : ''}>
       <label class="event__offer-label" for="event-offer-${option.title}-1">
       <span class="event__offer-title">${option.title}</span>
       &plus;&euro;&nbsp;
@@ -146,7 +146,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
               </button>
             </header>
             <section class="event__details">
-              <section class="event__section  event__section--offers">
+              <section class="${waypoint.offer.length === 0 ? 'visually-hidden' : ''} event__section  event__section--offers">
                 <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                 <div class="event__available-offers">
@@ -155,7 +155,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
               </section>
 
               <section class="event__section  event__section--destination">
-                <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                <h3 class="${waypoint.description === undefined ? 'visually-hidden' : ''} event__section-title  event__section-title--destination">Destination</h3>
                 <p class="event__destination-description">${description}</p>
 
                 <div class="event__photos-container">

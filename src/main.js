@@ -1,7 +1,7 @@
 import MenuView from './view/menu.js';
 import Api from './api/api.js';
 import StatisticsView from './view/statistics.js';
-import {MenuItem, UpdateType} from './const.js';
+import {MenuItem, UpdateType, StorePrefix} from './const.js';
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
 import PointModel from './model/point.js';
@@ -9,12 +9,10 @@ import DestinationModel from './model/destination.js';
 import OfferModel from './model/offer.js';
 import FilterModel from './model/filter.js';
 import {render, renderPosition, remove} from './utils/render.js';
-import {newEventButtonDisableOn} from './utils/common.js';
-import {isOnline} from './utils/common.js';
+import {newEventButtonDisableOn, isOnline} from './utils/common.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
 import {toast} from './utils/toast.js';
-import {StorePrefix} from './const.js';
 
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';

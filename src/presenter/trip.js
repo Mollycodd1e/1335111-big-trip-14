@@ -275,7 +275,7 @@ export default class Trip {
     this._renderInfo(waypoints);
     this._renderSort();
 
-    if (waypoints.length < 0) {
+    if (waypoints.length <= 0) {
       this._renderNoWaypoint();
     }
 

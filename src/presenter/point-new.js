@@ -35,6 +35,7 @@ export default class PointNew {
     const listElement = eventElement.querySelector('.trip-events__list');
 
     render(listElement, this._editComponent, renderPosition.AFTERBEGIN);
+    document.querySelector('.trip-events__list .event__reset-btn').textContent = 'Cancel';
 
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
