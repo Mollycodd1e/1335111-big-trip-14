@@ -47,7 +47,7 @@ export default class Point extends Observer {
     const index = this._waypoints.findIndex((waypoint) => waypoint.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t delete unexisting task');
+      throw new Error('Can\'t delete unexisting waypoint');
     }
 
     this._waypoints = [

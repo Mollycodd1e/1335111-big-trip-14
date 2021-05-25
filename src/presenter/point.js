@@ -85,6 +85,10 @@ export default class Point {
   }
 
   _handleFavoriteClick() {
+    if (!isOnline()) {
+      toast('You can\'t edit waypoint offline');
+      return;
+    }
     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
   }
 
@@ -163,7 +167,7 @@ export default class Point {
 
   _handleDeleteClick(waypoint) {
     if (!isOnline()) {
-      toast('You can\'t edit waypoint offline');
+      toast('You can\'t delete waypoint offline');
       return;
     }
 

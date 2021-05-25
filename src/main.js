@@ -14,17 +14,22 @@ import {isOnline} from './utils/common.js';
 import Store from './api/store.js';
 import Provider from './api/provider.js';
 import {toast} from './utils/toast.js';
+import {StorePrefix} from './const.js';
 
 const AUTHORIZATION = 'Basic y012VANYA890';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
-const STORE_PREFIX = 'big-trip-localstorage';
 const STORE_VER = 'v14';
-const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+const STORE_NAME = `${StorePrefix.WAYPOINT}-${STORE_VER}`;
+const OFFER_STORE_NAME = `${StorePrefix.OFFER}-${STORE_VER}`;
+const DESTINATION_STORE_NAME = `${StorePrefix.DESTINATION}-${STORE_VER}`;
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const store = new Store(STORE_NAME, window.localStorage);
-const apiWithProvider = new Provider(api, store);
+const offerStore = new Store(OFFER_STORE_NAME, window.localStorage);
+const destinationStore = new Store(DESTINATION_STORE_NAME, window.localStorage);
+
+const apiWithProvider = new Provider(api, store, offerStore, destinationStore);
 
 const waypointsModel = new PointModel();
 waypointsModel.setWaypoints();
@@ -82,14 +87,14 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   tripPresenter.createWaypoint();
 });
 
-api.getDestinations().then((destination) => {
+apiWithProvider.getDestinations().then((destination) => {
   destinationModel.setDestinations(destination);
 }).then(() => {
-  api.getOffers().then((offer) => {
+  apiWithProvider.getOffers().then((offer) => {
     offerModel.setOffers(offer);
   });
 }).then(() => {
-  api.getWaypoints().then((waypoints) => {
+  apiWithProvider.getWaypoints().then((waypoints) => {
     waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
     render(navigationElement, menuComponent, renderPosition.BEFOREEND);
     menuComponent.setMenuClickHandler(handleMenuClick);
@@ -111,4 +116,5 @@ window.addEventListener('online', () => {
 
 window.addEventListener('offline', () => {
   document.title += ' [offline]';
+  toast('You are offline');
 });

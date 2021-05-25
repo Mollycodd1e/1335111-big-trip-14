@@ -15,9 +15,11 @@ const createStoreStructure = (items) => {
 };
 
 export default class Provider {
-  constructor(api, store) {
+  constructor(api, store, offersStore, destinationsStore) {
     this._api = api;
     this._store = store;
+    this._offersStore = offersStore;
+    this._destinationsStore = destinationsStore;
   }
 
   getWaypoints() {
@@ -38,17 +40,23 @@ export default class Provider {
   getDestinations() {
     if (isOnline()) {
       return this._api.getDestinations().then((destinations) => {
+        this._destinationsStore.setItems(destinations);
         return destinations;
       });
     }
+
+    return Promise.resolve(this._destinationsStore.getItems());
   }
 
   getOffers() {
     if (isOnline()) {
       return this._api.getOffers().then((offers) => {
+        this._offersStore.setItems(offers);
         return offers;
       });
     }
+
+    return Promise.resolve(this._offersStore.getItems());
   }
 
   updateWaypoint(waypoint) {

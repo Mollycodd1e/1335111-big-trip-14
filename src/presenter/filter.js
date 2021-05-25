@@ -61,17 +61,17 @@ export default class Filter {
       {
         type: FilterType.EVERYTHING,
         name: 'Everything',
-        count: filter[FilterType.EVERYTHING](waypoints).length,
+        length: filter[FilterType.EVERYTHING](waypoints).length,
       },
       {
         type: FilterType.PAST,
         name: 'Past',
-        count: filter[FilterType.PAST](waypoints).length,
+        length: filter[FilterType.PAST](waypoints).length,
       },
       {
         type: FilterType.FUTURE,
         name: 'Future',
-        count: filter[FilterType.FUTURE](waypoints).length,
+        length: filter[FilterType.FUTURE](waypoints).length,
       },
     ];
   }
