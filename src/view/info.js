@@ -7,13 +7,15 @@ const createInfoTemplate = (waypoint) => {
     const townList = [];
 
     for (let i = 0; i < waypoint.length; i++ ) {
-      townList.push(waypoint[i].town);
+      townList.push(waypoint[i]);
     }
 
-    if (townList.length < 3) {
-      return townList.map((town) => `${town}`).join(' - ');
+    townList.sort((a, b) => dayjs(a.lowerTime).isAfter(dayjs(b.lowerTime)) ? 1 : -1);
+
+    if (townList.length <= 3) {
+      return townList.map((item) => `${item.town}`).join(' - ');
     } else {
-      return townList[0] + ' - ... - ' + townList[townList.length - 1];
+      return townList[0].town + ' - ... - ' + townList[townList.length - 1].town;
     }
   };
 
