@@ -7,7 +7,7 @@ import {filterOfType, convertMinutes} from '../utils/common.js';
 
 const BAR_HEIGHT = 55;
 
-const NAMES_OF_CHART = {
+const NameOfChart= {
   MONEY: 'MONEY',
   TYPE: 'TYPE',
   TIMESPEND: 'TIME-SPEND',
@@ -131,7 +131,7 @@ const renderMoneyChart = (moneyCtx, waypoints) => {
 
   listOfPoints.forEach((item) => totalPriceOrder.push(item.price));
 
-  renderChart(moneyCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.MONEY, formatOfTypes.MONEY);
+  renderChart(moneyCtx, typesOrder, totalPriceOrder, NameOfChart.MONEY, formatOfTypes.MONEY);
 };
 
 const renderTypeChart = (typeCtx, waypoints) => {
@@ -164,7 +164,7 @@ const renderTypeChart = (typeCtx, waypoints) => {
 
   listOfPoints.forEach((item) => totalPriceOrder.push(item.count));
 
-  renderChart(typeCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.TYPE, formatOfTypes.TYPE);
+  renderChart(typeCtx, typesOrder, totalPriceOrder, NameOfChart.TYPE, formatOfTypes.TYPE);
 };
 
 const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
@@ -212,7 +212,7 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
 
   listOfPoints.forEach((item) => totalPriceOrder.push(item.time));
 
-  renderChart(timeSpendCtx, typesOrder, totalPriceOrder, NAMES_OF_CHART.TIMESPEND, formatOfTypes.TIMESPEND);
+  renderChart(timeSpendCtx, typesOrder, totalPriceOrder, NameOfChart.TIMESPEND, formatOfTypes.TIMESPEND);
 };
 
 const createStatisticsTemplate = () => {

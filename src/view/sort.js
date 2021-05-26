@@ -4,7 +4,7 @@ import AbstractView from '../view/abstract.js';
 
 const TARGET_TAG_NAME = 'LABEL';
 
-const DISABLED_SORTS = {
+const NotUseSort = {
   EVENT: 'event',
   OFFER: 'offer',
 };
@@ -15,7 +15,7 @@ const createSortTemplate = (currentSortType) => {
 
     return  NAMES_OF_SORTS.map((sort) => `<div class="trip-sort__item  trip-sort__item--${sort}">
                                           <input id="sort-${sort}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort}"
-                                          ${currentSortType === sort ? 'checked' : ''} ${Object.values(DISABLED_SORTS).includes(sort) ? 'disabled' : ''}>
+                                          ${currentSortType === sort ? 'checked' : ''} ${Object.values(NotUseSort).includes(sort) ? 'disabled' : ''}>
                                           <label class="trip-sort__btn" for="sort-${sort}" data-sort-type="${sort}">${sort}</label>
                                           </div>`).join('');
   };
@@ -43,7 +43,7 @@ export default class Sort extends AbstractView {
     }
 
     evt.preventDefault();
-    if (!Object.values(DISABLED_SORTS).includes(evt.target.dataset.sortType)) {
+    if (!Object.values(NotUseSort).includes(evt.target.dataset.sortType)) {
       newEventButtonDisableOff();
       this._callback.sortTypeChange(evt.target.dataset.sortType);
     }

@@ -108,7 +108,7 @@ export const UpdateType = {
   INIT: 'INIT',
 };
 
-export const SORT_TYPE = {
+export const TypeOfSort = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',

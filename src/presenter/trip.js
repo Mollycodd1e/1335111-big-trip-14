@@ -8,7 +8,7 @@ import {filter} from '../utils/filter.js';
 import NoWaypointView from '../view/no-waypoint.js';
 import PointPresenter, {State as PointPresenterViewState} from '../presenter/point.js';
 import PointNewPresenter from '../presenter/point-new.js';
-import {DESTINATION_POINTS_MOCKS, SORT_TYPE, UserAction, UpdateType, FilterType} from '../const.js';
+import {DESTINATION_POINTS_MOCKS, UserAction, UpdateType, FilterType, TypeOfSort} from '../const.js';
 import {sortWaypointPrice, sortWaypointTime, sortWaypointDay} from '../utils/common.js';
 import {render, renderPosition, remove} from '../utils/render.js';
 
@@ -19,7 +19,7 @@ export default class Trip {
     this._filterModel = filterModel;
     this._destinationModel = destinationModel;
     this._offerModel = offerModel;
-    this._currentSortType = SORT_TYPE.DAY;
+    this._currentSortType = TypeOfSort.DAY;
     this._isLoading = true;
     this._api = api;
 
@@ -57,7 +57,7 @@ export default class Trip {
   }
 
   createWaypoint(callback) {
-    this._currentSortType = SORT_TYPE.DAY;
+    this._currentSortType = TypeOfSort.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init(callback);
   }
@@ -68,11 +68,11 @@ export default class Trip {
     const filteredWaypoints = filter[filterType](waypoints);
 
     switch (this._currentSortType) {
-      case SORT_TYPE.DAY:
+      case TypeOfSort.DAY:
         return filteredWaypoints.sort(sortWaypointDay);
-      case SORT_TYPE.PRICE:
+      case TypeOfSort.PRICE:
         return filteredWaypoints.sort(sortWaypointPrice);
-      case SORT_TYPE.TIME:
+      case TypeOfSort.TIME:
         return filteredWaypoints.sort(sortWaypointTime);
     }
 
@@ -219,7 +219,7 @@ export default class Trip {
     }
 
     if (resetSortType) {
-      this._currentSortType = SORT_TYPE.DAY;
+      this._currentSortType = TypeOfSort.DAY;
     }
   }
 
@@ -243,10 +243,10 @@ export default class Trip {
   _renderOffer(waypoints) {
     const mainElement = document.querySelector('.page-body__page-main');
     const eventElement = mainElement.querySelector('.trip-events');
-    const offerList = eventElement.querySelectorAll('.event__selected-offers');
+    const offerLists = eventElement.querySelectorAll('.event__selected-offers');
 
-    for (let i = 0; i < offerList.length; i++) {
-      const orderOfferList = offerList[i];
+    for (let i = 0; i < offerLists.length; i++) {
+      const orderOfferList = offerLists[i];
       const orderOffer = waypoints[i].offer;
 
       if (orderOffer !== undefined) {

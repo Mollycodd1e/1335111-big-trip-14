@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import AbstractView from '../view/abstract.js';
 
+const MAX_NUMBER_OF_CITIES_ON_DISPLAY = 3;
+
 const createInfoTemplate = (waypoint) => {
 
   const sortByTown = () => {
@@ -12,7 +14,7 @@ const createInfoTemplate = (waypoint) => {
 
     townList.sort((a, b) => dayjs(a.lowerTime).isAfter(dayjs(b.lowerTime)) ? 1 : -1);
 
-    if (townList.length <= 3) {
+    if (townList.length <= MAX_NUMBER_OF_CITIES_ON_DISPLAY) {
       return townList.map((item) => `${item.town}`).join(' - ');
     } else {
       return townList[0].town + ' - ... - ' + townList[townList.length - 1].town;
@@ -29,7 +31,7 @@ const createInfoTemplate = (waypoint) => {
     }
 
     result.sort((a, b) => {
-      return dayjs(a).isAfter(dayjs(b)) ? 1 : -1;
+      return dayjs(a.lowerTime).isAfter(dayjs(b.lowerTime)) ? 1 : -1;
     });
 
     return result;

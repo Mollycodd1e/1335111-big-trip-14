@@ -43,7 +43,7 @@ export const convertMinutes = (num) => {
   const rhours = hours - days * 24;
   const minutes = Math.floor(num % 60);
 
-  const dateObj = {
+  const formatExample = {
     D: days < 10 ? '0' + days : days,
     H: rhours < 10 ? '0' + rhours : rhours,
     M: minutes < 10 ? '0' + minutes : minutes,
@@ -53,8 +53,8 @@ export const convertMinutes = (num) => {
     return num;
   }
 
-  return Object.keys(dateObj).map((item) =>
-    dateObj[item] > 0 ? dateObj[item] + item : ' ').join(' ').trim();
+  return Object.keys(formatExample).map((item) =>
+    formatExample[item] > 0 ? formatExample[item] + item : ' ').join(' ').trim();
 };
 
 export const isOnline = () => {
