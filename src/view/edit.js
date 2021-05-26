@@ -82,7 +82,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
 
     return waypoint.offer.map((option) => `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.title}-1" type="checkbox" name="event-offer-${option.title}"
-      ${option.isChecked === true ? 'checked' : ''} ${waypoint.isSaving === true || waypoint.isDeleting === true ? 'disabled' : ''}>
+      ${waypoint.isSaving === true || waypoint.isDeleting === true ? 'disabled' : ''} ${option.isChecked === true ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${option.title}-1">
       <span class="event__offer-title">${option.title}</span>
       &plus;&euro;&nbsp;
@@ -198,6 +198,29 @@ export default class Edit extends SmartView {
     return createEditTemplate(this._data, this._destinationModel, this._offerModel);
   }
 
+  reset(waypointForm) {
+    this._checkedOffers = this._data.offer;
+    this.updateData(Edit.parseWaypointToData(waypointForm));
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this._setDatepicker();
+    this._setEndPicker();
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setEditSubmitHandler(this._callback.editSubmit);
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  removeElement() {
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+
+    super.removeElement();
+  }
+
   _setPicker(element, input, change) {
     if (element) {
       element.destroy();
@@ -207,7 +230,7 @@ export default class Edit extends SmartView {
     element = flatpickr(this.getElement().querySelector(input), {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
-      time_24hr: true,
+      'time_24hr': true,
       onChange: change,
     });
   }
@@ -253,20 +276,12 @@ export default class Edit extends SmartView {
       this._checkedOffers = this._data.offer;
     }
 
-    this._checkedOffers.map((item) => {
+    console.log(this._data)
+    return this._checkedOffers.map((item) => {
       if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
         item.isChecked = evt.target.checked;
       }
     });
-  }
-
-  restoreHandlers() {
-    this._setInnerHandlers();
-    this._setDatepicker();
-    this._setEndPicker();
-    this.setDeleteClickHandler(this._callback.deleteClick);
-    this.setEditSubmitHandler(this._callback.editSubmit);
-    this.setEditClickHandler(this._callback.editClick);
   }
 
   _setInnerHandlers() {
@@ -312,11 +327,6 @@ export default class Edit extends SmartView {
     }
   }
 
-  reset(waypointForm) {
-    this._checkedOffers = this._data.offer;
-    this.updateData(Edit.parseWaypointToData(waypointForm));
-  }
-
   _editSubmitHandler(evt) {
     evt.preventDefault();
     this.updateData({offer: this._checkedOffers});
@@ -328,25 +338,6 @@ export default class Edit extends SmartView {
     this._callback.editClick();
   }
 
-  setEditSubmitHandler(callback) {
-    this._callback.editSubmit = callback;
-    this.getElement().addEventListener('submit', this._editSubmitHandler);
-  }
-
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
-  }
-
-  removeElement() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
-
-    super.removeElement();
-  }
-
   _editDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(Edit.parseDataToWaypoint(this._data));
@@ -355,6 +346,16 @@ export default class Edit extends SmartView {
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editDeleteClickHandler);
+  }
+
+  setEditSubmitHandler(callback) {
+    this._callback.editSubmit = callback;
+    this.getElement().addEventListener('submit', this._editSubmitHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
   static parseWaypointToData(waypointForm) {

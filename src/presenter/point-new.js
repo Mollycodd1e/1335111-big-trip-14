@@ -40,17 +40,6 @@ export default class PointNew {
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
-  destroy() {
-    if (this._editComponent === null) {
-      return;
-    }
-
-    remove(this._editComponent);
-    this._editComponent = null;
-
-    document.removeEventListener('keydown', this._escKeyDownHandler);
-  }
-
   setSaving() {
     this._editComponent.updateData({
       isDisabled: true,
@@ -68,6 +57,17 @@ export default class PointNew {
     };
 
     this._editComponent.shake(resetFormState);
+  }
+
+  destroy() {
+    if (this._editComponent === null) {
+      return;
+    }
+
+    remove(this._editComponent);
+    this._editComponent = null;
+
+    document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
   _handleSubmitClick(waypoint) {

@@ -8,8 +8,9 @@ const createInfoTemplate = (waypoint) => {
   const sortByTown = () => {
     const townList = [];
 
-    for (let i = 0; i < waypoint.length; i++ ) {
-      townList.push(waypoint[i]);
+    // for (let i = 0; i < waypoint.length; i++ ) {
+    for (let point of waypoint) {
+      townList.push(point);
     }
 
     townList.sort((a, b) => dayjs(a.lowerTime).isAfter(dayjs(b.lowerTime)) ? 1 : -1);
@@ -26,12 +27,13 @@ const createInfoTemplate = (waypoint) => {
   const sortByDate = (waypoint) => {
     const result = [];
 
-    for (let i = 0; i < waypoint.length; i++ ) {
-      result.push(waypoint[i].lowerTime);
+    // for (let i = 0; i < waypoint.length; i++ ) {
+    for (let point of waypoint) {
+      result.push(point.lowerTime);
     }
 
     result.sort((a, b) => {
-      return dayjs(a.lowerTime).isAfter(dayjs(b.lowerTime)) ? 1 : -1;
+      return dayjs(a).isAfter(dayjs(b)) ? 1 : -1;
     });
 
     return result;
@@ -46,12 +48,12 @@ const createInfoTemplate = (waypoint) => {
   const getTotalOfPrice = () => {
     let amount = 0;
 
-    for (let i = 0; i < waypoint.length; i ++) {
-      const price = Number(waypoint[i].price);
+    for (let point of waypoint) {
+      const price = Number(point.price);
 
-      for (let j = 0; j < waypoint[i].offer.length; j++) {
-        if (waypoint[i].offer[j].isChecked === true) {
-          amount += waypoint[i].offer[j].price;
+      for (let item of point.offer) {
+        if (item.isChecked === true) {
+          amount += item.price;
         }
       }
 

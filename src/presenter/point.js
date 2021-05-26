@@ -39,6 +39,7 @@ export default class Point {
 
   init(waypoint) {
     this._waypoint = waypoint;
+
     const prevWaypointComponent = this._waypointComponent;
     const prevEditComponent = this._editComponent;
 
@@ -73,25 +74,6 @@ export default class Point {
     remove(prevEditComponent);
   }
 
-  destroy() {
-    remove(this._waypointComponent);
-    remove(this._editComponent);
-  }
-
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceFormToWaypoint();
-    }
-  }
-
-  _handleFavoriteClick() {
-    if (!isOnline()) {
-      toast('You can\'t edit waypoint offline');
-      return;
-    }
-    this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
-  }
-
   setViewState(state) {
     const resetFormState = () => {
       this._editComponent.updateData({
@@ -120,17 +102,24 @@ export default class Point {
     }
   }
 
-  _replaceWaypointToForm() {
-    replace(this._editComponent,this._waypointComponent);
-    document.addEventListener('keydown', this._escKeyDownHandler);
-    this._changeMode();
-    this._mode = Mode.EDITING;
+  destroy() {
+    remove(this._waypointComponent);
+    remove(this._editComponent);
   }
 
-  _replaceFormToWaypoint() {
-    replace(this._waypointComponent,this._editComponent);
-    document.removeEventListener('keydown', this._escKeyDownHandler);
-    this._mode = Mode.DEFAULT;
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToWaypoint();
+    }
+  }
+
+  _handleFavoriteClick() {
+    //if (!isOnline()) {
+    //  toast('You can\'t edit waypoint offline');
+    //  return;
+    //}
+
+    this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
   }
 
   _escKeyDownHandler(evt) {
@@ -152,6 +141,7 @@ export default class Point {
   }
 
   _handleCloseClick() {
+    console.log(this._waypoint)
     this._editComponent.reset(this._waypoint);
     this._replaceFormToWaypoint();
   }
@@ -172,5 +162,18 @@ export default class Point {
     }
 
     this._changeData(UserAction.DELETE_WAYPOINT, UpdateType.MINOR, waypoint);
+  }
+
+  _replaceWaypointToForm() {
+    replace(this._editComponent,this._waypointComponent);
+    document.addEventListener('keydown', this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
+  }
+
+  _replaceFormToWaypoint() {
+    replace(this._waypointComponent,this._editComponent);
+    document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
   }
 }

@@ -10,7 +10,7 @@ const createFilterItem = (filter, currentFilterType) => {
           </div>`;
 };
 
-export const createFilterTemplate = function (filterItems, currentFilterType) {
+export const createFilterTemplate = (filterItems, currentFilterType) => {
 
   const filterItemsTemplate = filterItems.map((filter) => createFilterItem(filter, currentFilterType)).join('');
 

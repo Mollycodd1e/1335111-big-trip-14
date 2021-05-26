@@ -38,22 +38,6 @@ export default class Filter {
     remove(prevFilterComponent);
   }
 
-  _handleModelEvent() {
-    this.init();
-  }
-
-  _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
-      return;
-    }
-
-    if (document.querySelector('.trip-tabs__btn[name="Table"]').classList.contains('trip-tabs__btn--active')) {
-      newEventButtonDisableOff();
-    }
-
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-  }
-
   _getFilters() {
     const waypoints = this._waypointModel.getWaypoints();
 
@@ -74,5 +58,21 @@ export default class Filter {
         length: filter[FilterType.FUTURE](waypoints).length,
       },
     ];
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._filterModel.getFilter() === filterType) {
+      return;
+    }
+
+    if (document.querySelector('.trip-tabs__btn[name="Table"]').classList.contains('trip-tabs__btn--active')) {
+      newEventButtonDisableOff();
+    }
+
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 }

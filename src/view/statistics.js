@@ -177,8 +177,8 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
       return totalTime;
     }
 
-    for (let i = 0; i < elements.length; i++) {
-      const num = dayjs(elements[i].upperTime).diff(dayjs(elements[i].lowerTime), 'minutes');
+    for (let element of elements) {
+      const num = dayjs(element.upperTime).diff(dayjs(element.lowerTime), 'minutes');
       totalTime += num;
     }
 
@@ -246,6 +246,10 @@ export default class Statistics extends SmartView {
     this._setCharts();
   }
 
+  getTemplate() {
+    return createStatisticsTemplate(this._waypoints);
+  }
+
   removeElement() {
     super.removeElement();
 
@@ -254,10 +258,6 @@ export default class Statistics extends SmartView {
       this._timeSpendChart = null;
       this._typeChart = null;
     }
-  }
-
-  getTemplate() {
-    return createStatisticsTemplate(this._waypoints);
   }
 
   _setCharts() {
