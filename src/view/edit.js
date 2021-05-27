@@ -291,26 +291,11 @@ export default class Edit extends SmartView {
       this._checkedOffers = this._data.offer;
     }
 
-    console.log(this._checkedOffers)
-    if (evt.target.checked === true) {
-      this._checkedOffers.map((item) => {
-        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-        item.isChecked = true;
-        evt.target.setAttribute('checked', '')
+     this._checkedOffers.map((item) => {
+      if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+        item.isChecked = evt.target.checked;
       }
-    }) } else {
-      this._checkedOffers.map((item) => {
-        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-        item.isChecked = false;
-        evt.target.removeAttribute('checked', '')
-      }
-    }) }
-    console.log(this._data)
-    // this._checkedOffers.map((item) => {
-    //  if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-    //    item.isChecked = evt.target.checked;
-    //  }
-    //});
+    });
   }
 
   _setInnerHandlers() {
