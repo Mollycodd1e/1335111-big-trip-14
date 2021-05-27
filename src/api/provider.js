@@ -3,7 +3,7 @@ import {isOnline} from '../utils/common.js';
 
 const getSyncedWaypoints = (items) => {
   return items.filter(({success}) => success)
-    .map(({payload}) => payload.point);
+    .map(({payload}) => payload.waypoint);
 };
 
 const createStoreStructure = (items) => {

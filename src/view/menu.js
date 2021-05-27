@@ -22,6 +22,11 @@ export default class Menu extends AbstractView {
     return createMenuTemplate();
   }
 
+  setMenuClickHandler(callback) {
+    this._callback.menuChange = callback;
+    this.getElement().addEventListener('click', this._menuClickHandler);
+  }
+
   _menuClickHandler(evt) {
     if (evt.target.tagName !== TARGET_TAG_NAME) {
       return;
@@ -39,10 +44,5 @@ export default class Menu extends AbstractView {
     }
 
     this._callback.menuChange(evt.target.name);
-  }
-
-  setMenuClickHandler(callback) {
-    this._callback.menuChange = callback;
-    this.getElement().addEventListener('click', this._menuClickHandler);
   }
 }

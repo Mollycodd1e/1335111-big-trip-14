@@ -8,7 +8,6 @@ const createInfoTemplate = (waypoint) => {
   const sortByTown = () => {
     const townList = [];
 
-    // for (let i = 0; i < waypoint.length; i++ ) {
     for (let point of waypoint) {
       townList.push(point);
     }
@@ -27,10 +26,9 @@ const createInfoTemplate = (waypoint) => {
   const sortByDate = (waypoint) => {
     const result = [];
 
-    // for (let i = 0; i < waypoint.length; i++ ) {
-    for (let point of waypoint) {
-      result.push(point.lowerTime);
-    }
+    waypoint.map((point) => {
+      result.push(point.lowerTime)
+    })
 
     result.sort((a, b) => {
       return dayjs(a).isAfter(dayjs(b)) ? 1 : -1;

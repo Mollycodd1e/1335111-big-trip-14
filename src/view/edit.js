@@ -198,6 +198,21 @@ export default class Edit extends SmartView {
     return createEditTemplate(this._data, this._destinationModel, this._offerModel);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editDeleteClickHandler);
+  }
+
+  setEditSubmitHandler(callback) {
+    this._callback.editSubmit = callback;
+    this.getElement().addEventListener('submit', this._editSubmitHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
   reset(waypointForm) {
     this._checkedOffers = this._data.offer;
     this.updateData(Edit.parseWaypointToData(waypointForm));
@@ -276,12 +291,26 @@ export default class Edit extends SmartView {
       this._checkedOffers = this._data.offer;
     }
 
-    console.log(this._data)
-    return this._checkedOffers.map((item) => {
-      if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-        item.isChecked = evt.target.checked;
+    console.log(this._checkedOffers)
+    if (evt.target.checked === true) {
+      this._checkedOffers.map((item) => {
+        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+        item.isChecked = true;
+        evt.target.setAttribute('checked', '')
       }
-    });
+    }) } else {
+      this._checkedOffers.map((item) => {
+        if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+        item.isChecked = false;
+        evt.target.removeAttribute('checked', '')
+      }
+    }) }
+    console.log(this._data)
+    // this._checkedOffers.map((item) => {
+    //  if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
+    //    item.isChecked = evt.target.checked;
+    //  }
+    //});
   }
 
   _setInnerHandlers() {
@@ -335,27 +364,13 @@ export default class Edit extends SmartView {
 
   _editClickHandler(evt) {
     evt.preventDefault();
+    this.updateData({offer: this._data.offer});
     this._callback.editClick();
   }
 
   _editDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(Edit.parseDataToWaypoint(this._data));
-  }
-
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editDeleteClickHandler);
-  }
-
-  setEditSubmitHandler(callback) {
-    this._callback.editSubmit = callback;
-    this.getElement().addEventListener('submit', this._editSubmitHandler);
-  }
-
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
   static parseWaypointToData(waypointForm) {

@@ -114,12 +114,7 @@ export default class Point {
   }
 
   _handleFavoriteClick() {
-    //if (!isOnline()) {
-    //  toast('You can\'t edit waypoint offline');
-    //  return;
-    //}
-
-    this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
+     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
   }
 
   _escKeyDownHandler(evt) {

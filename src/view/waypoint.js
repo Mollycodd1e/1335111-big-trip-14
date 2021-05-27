@@ -72,16 +72,6 @@ export default class Waypoint extends AbstractView {
     return createWaypointTemplate(this._waypoint);
   }
 
-  _waypointClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.waypointClick();
-  }
-
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-  }
-
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
@@ -90,5 +80,15 @@ export default class Waypoint extends AbstractView {
   setWaypointClickHandler(callback) {
     this._callback.waypointClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._waypointClickHandler);
+  }
+
+  _waypointClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.waypointClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 }
