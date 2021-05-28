@@ -179,7 +179,7 @@ export default class Edit extends SmartView {
     this._checkedOffers = this._data.offer;
 
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
-    this._editSubmitHandler = this._editSubmitHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._routeTypeChangeHandler = this._routeTypeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
@@ -203,12 +203,12 @@ export default class Edit extends SmartView {
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editDeleteClickHandler);
   }
 
-  setEditSubmitHandler(callback) {
+  setFormSubmitHandler(callback) {
     this._callback.editSubmit = callback;
-    this.getElement().addEventListener('submit', this._editSubmitHandler);
+    this.getElement().addEventListener('submit', this._submitHandler);
   }
 
-  setEditClickHandler(callback) {
+  setFormClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
@@ -223,8 +223,8 @@ export default class Edit extends SmartView {
     this._setDatepicker();
     this._setEndPicker();
     this.setDeleteClickHandler(this._callback.deleteClick);
-    this.setEditSubmitHandler(this._callback.editSubmit);
-    this.setEditClickHandler(this._callback.editClick);
+    this.setFormSubmitHandler(this._callback.editSubmit);
+    this.setFormClickHandler(this._callback.editClick);
   }
 
   removeElement() {
@@ -341,7 +341,7 @@ export default class Edit extends SmartView {
     }
   }
 
-  _editSubmitHandler(evt) {
+  _submitHandler(evt) {
     evt.preventDefault();
 
     this._checkedOffers.map((item) => {

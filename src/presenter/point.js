@@ -75,8 +75,8 @@ export default class Point {
     this._editComponent = new EditView(waypoint, this._destinationModel, this._offerModel);
 
     this._waypointComponent.setClickHandler(this._handleEditClick);
-    this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
-    this._editComponent.setEditClickHandler(this._handleCloseClick);
+    this._editComponent.setFormSubmitHandler(this._handleSubmitClick);
+    this._editComponent.setFormClickHandler(this._handleCloseClick);
     this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._editComponent.setDeleteClickHandler(this._handleDeleteClick);
 
