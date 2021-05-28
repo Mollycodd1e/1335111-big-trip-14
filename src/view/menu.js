@@ -15,19 +15,19 @@ export default class Menu extends AbstractView {
   constructor() {
     super();
 
-    this._menuClickHandler = this._menuClickHandler.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createMenuTemplate();
   }
 
-  setMenuClickHandler(callback) {
+  setClickHandler(callback) {
     this._callback.menuChange = callback;
-    this.getElement().addEventListener('click', this._menuClickHandler);
+    this.getElement().addEventListener('click', this._clickHandler);
   }
 
-  _menuClickHandler(evt) {
+  _clickHandler(evt) {
     if (evt.target.tagName !== TARGET_TAG_NAME) {
       return;
     }

@@ -39,7 +39,7 @@ export default class Trip {
 
   _getWaypoints() {
     const filterType = this._filterModel.get();
-    const waypoints = this._waypointsModel.getWaypoints();
+    const waypoints = this._waypointsModel.get();
     const filteredWaypoints = filter[filterType](waypoints);
 
     switch (this._currentSortType) {
@@ -68,7 +68,7 @@ export default class Trip {
       remove(this._infoComponent);
     }
 
-    this._renderTrip();
+    this._renderBoard();
   }
 
   hide() {
@@ -80,7 +80,7 @@ export default class Trip {
   }
 
   destroy() {
-    this._clearTrip({resetRenderedTaskCount: true, resetSortType: true});
+    this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
 
     remove(this._listComponent);
     remove(this._sortComponent);
@@ -99,7 +99,7 @@ export default class Trip {
       case UserAction.UPDATE_WAYPOINT:
         this._pointPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updateWaypoint(update).then((response) => {
-          this._waypointsModel.updateWaypoint(updateType, response);
+          this._waypointsModel.update(updateType, response);
         }).catch(() => {
           this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
@@ -107,7 +107,7 @@ export default class Trip {
       case UserAction.ADD_WAYPOINT:
         this._pointNewPresenter.setSaving();
         this._api.addWaypoint(update).then((response) => {
-          this._waypointsModel.addWaypoint(updateType, response);
+          this._waypointsModel.add(updateType, response);
         }).catch(() => {
           this._pointNewPresenter.setAborting();
         });
@@ -115,7 +115,7 @@ export default class Trip {
       case UserAction.DELETE_WAYPOINT:
         this._pointPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
         this._api.deleteWaypoint(update).then(() => {
-          this._waypointsModel.deleteWaypoint(updateType, update);
+          this._waypointsModel.delete(updateType, update);
         }).catch(() => {
           this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
@@ -129,19 +129,19 @@ export default class Trip {
         this._pointPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        this._clearTrip();
+        this._clearBoard();
         remove(this._infoComponent);
-        this._renderTrip();
+        this._renderBoard();
         break;
       case UpdateType.MAJOR:
-        this._clearTrip({resetRenderedWaypoint: true, resetSortType: true});
+        this._clearBoard({resetRenderedWaypoint: true, resetSortType: true});
         remove(this._infoComponent);
-        this._renderTrip();
+        this._renderBoard();
         break;
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
-        this._renderTrip();
+        this._renderBoard();
         break;
     }
   }
@@ -158,8 +158,8 @@ export default class Trip {
     remove(this._infoComponent);
 
     this._currentSortType = sortType;
-    this._clearTrip({resetRenderedWaypoint: true});
-    this._renderTrip(this._waypointsModel._waypoint);
+    this._clearBoard({resetRenderedWaypoint: true});
+    this._renderBoard(this._waypointsModel._waypoint);
   }
 
   _renderLoading() {
@@ -195,12 +195,12 @@ export default class Trip {
     }
 
     this._sortComponent = new SortView(this._currentSortType);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._sortComponent.setTypeChangeHandler(this._handleSortTypeChange);
 
     render(eventElement, this._sortComponent, renderPosition.BEFOREEND);
   }
 
-  _clearTrip({resetRenderedWaypoint = false, resetSortType = false} = {}) {
+  _clearBoard({resetRenderedWaypoint = false, resetSortType = false} = {}) {
     const waypointCount = this._getWaypoints().length;
 
     this._pointNewPresenter.destroy();
@@ -259,7 +259,7 @@ export default class Trip {
     render(eventElement, this._noWaypointComponent, renderPosition.BEFOREEND);
   }
 
-  _renderTrip() {
+  _renderBoard() {
     if (this._isLoading) {
       this._renderLoading();
       return;

@@ -74,7 +74,7 @@ export default class Point {
     this._waypointComponent = new WaypointView(waypoint);
     this._editComponent = new EditView(waypoint, this._destinationModel, this._offerModel);
 
-    this._waypointComponent.setWaypointClickHandler(this._handleEditClick);
+    this._waypointComponent.setClickHandler(this._handleEditClick);
     this._editComponent.setEditSubmitHandler(this._handleSubmitClick);
     this._editComponent.setEditClickHandler(this._handleCloseClick);
     this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -109,7 +109,7 @@ export default class Point {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._replaceFormToWaypoint();
+      this._replaceFormToCard();
     }
   }
 
@@ -121,7 +121,7 @@ export default class Point {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._editComponent.reset(this._waypoint);
-      this._replaceFormToWaypoint();
+      this._replaceFormToCard();
     }
   }
 
@@ -132,12 +132,12 @@ export default class Point {
     }
 
     newEventButtonDisableOff();
-    this._replaceWaypointToForm();
+    this._replaceCardToForm();
   }
 
   _handleCloseClick() {
     this._editComponent.reset(this._waypoint);
-    this._replaceFormToWaypoint();
+    this._replaceFormToCard();
   }
 
   _handleSubmitClick(waypoint) {
@@ -158,14 +158,14 @@ export default class Point {
     this._changeData(UserAction.DELETE_WAYPOINT, UpdateType.MINOR, waypoint);
   }
 
-  _replaceWaypointToForm() {
+  _replaceCardToForm() {
     replace(this._editComponent,this._waypointComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
-  _replaceFormToWaypoint() {
+  _replaceFormToCard() {
     replace(this._waypointComponent,this._editComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;

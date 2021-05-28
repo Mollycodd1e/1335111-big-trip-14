@@ -6,7 +6,7 @@ export default class Point extends Observer {
     this._waypoints = [];
   }
 
-  setWaypoints(updateType, waypoints) {
+  set(updateType, waypoints) {
     if (waypoints !== undefined) {
       this._waypoints = waypoints.slice();
     }
@@ -14,11 +14,11 @@ export default class Point extends Observer {
     this._notify(updateType);
   }
 
-  getWaypoints() {
+  get() {
     return this._waypoints;
   }
 
-  updateWaypoint(updateType, update) {
+  update(updateType, update) {
     const index = this._waypoints.findIndex((waypoint) => waypoint.id === update.id);
 
     if (index === -1) {
@@ -34,7 +34,7 @@ export default class Point extends Observer {
     this._notify(updateType, update);
   }
 
-  addWaypoint(updateType, update) {
+  add(updateType, update) {
     this._waypoints = [
       update,
       ...this._waypoints,
@@ -43,7 +43,7 @@ export default class Point extends Observer {
     this._notify(updateType, update);
   }
 
-  deleteWaypoint(updateType, update) {
+  delete(updateType, update) {
     const index = this._waypoints.findIndex((waypoint) => waypoint.id === update.id);
 
     if (index === -1) {

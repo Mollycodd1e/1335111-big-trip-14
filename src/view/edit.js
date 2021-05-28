@@ -44,7 +44,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
 
   const towns = [];
 
-  destination.getDestinations().map((item) => towns.push(item.name));
+  destination.get().map((item) => towns.push(item.name));
 
   const typesTemplate = createEditTypeTemplate(waypoint.waypointType);
 

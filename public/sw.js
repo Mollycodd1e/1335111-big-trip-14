@@ -87,4 +87,3 @@ const fetchHandler = (evt) => {
 };
 
 self.addEventListener('fetch', fetchHandler);
-

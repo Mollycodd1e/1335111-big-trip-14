@@ -30,7 +30,7 @@ const destinationStore = new Store(DESTINATION_STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store, offerStore, destinationStore);
 
 const waypointsModel = new PointModel();
-waypointsModel.setWaypoints();
+waypointsModel.set();
 
 const destinationModel = new DestinationModel();
 destinationModel.set();
@@ -63,7 +63,7 @@ const handleMenuClick = (menuItem) => {
       tripPresenter.hide();
       remove(statisticsComponent);
       tripPresenter.destroy();
-      statisticsComponent = new StatisticsView(waypointsModel.getWaypoints());
+      statisticsComponent = new StatisticsView(waypointsModel.get());
       render(statisticsElement, statisticsComponent, renderPosition.BEFOREEND);
       break;
   }
@@ -93,14 +93,14 @@ apiWithProvider.getDestinations().then((destination) => {
   });
 }).then(() => {
   apiWithProvider.getWaypoints().then((waypoints) => {
-    waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
+    waypointsModel.set(UpdateType.INIT, waypoints);
     render(navigationElement, menuComponent, renderPosition.BEFOREEND);
-    menuComponent.setMenuClickHandler(handleMenuClick);
+    menuComponent.setClickHandler(handleMenuClick);
   });
 }).catch(() => {
-  waypointsModel.setWaypoints(UpdateType.INIT, []);
+  waypointsModel.set(UpdateType.INIT, []);
   render(navigationElement, menuComponent, renderPosition.BEFOREEND);
-  menuComponent.setMenuClickHandler(handleMenuClick);
+  menuComponent.setClickHandler(handleMenuClick);
 });
 
 window.addEventListener('load', () => {

@@ -13,14 +13,14 @@ export default class Filter {
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._handleTypeChange = this._handleTypeChange.bind(this);
 
     this._waypointModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  _getFilters() {
-    const waypoints = this._waypointModel.getWaypoints();
+  _get() {
+    const waypoints = this._waypointModel.get();
 
     return [
       {
@@ -42,12 +42,12 @@ export default class Filter {
   }
 
   init() {
-    const filters = this._getFilters();
+    const filters = this._get();
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._filterModel.get());
 
-    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setTypeChangeHandler(this._handleTypeChange);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, renderPosition.BEFOREEND);
@@ -64,7 +64,7 @@ export default class Filter {
     this.init();
   }
 
-  _handleFilterTypeChange(filterType) {
+  _handleTypeChange(filterType) {
     if (this._filterModel.get() === filterType) {
       return;
     }
