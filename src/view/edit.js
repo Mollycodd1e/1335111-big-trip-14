@@ -344,6 +344,10 @@ export default class Edit extends SmartView {
   _submitHandler(evt) {
     evt.preventDefault();
 
+    if (this._checkedOffers === undefined) {
+      this._checkedOffers = this._data.offer;
+    }
+
     this._checkedOffers.map((item) => {
       item.isChecked = (document.querySelector('[id="event-offer-' + item.title + '-1"]').checked);
     });
