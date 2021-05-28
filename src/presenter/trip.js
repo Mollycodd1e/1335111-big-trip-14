@@ -37,6 +37,29 @@ export default class Trip {
     this._pointNewPresenter = new PointNewPresenter(this._listComponent, this._handleViewAction, this._destinationModel, this._offerModel);
   }
 
+  _getWaypoints() {
+    const filterType = this._filterModel.get();
+    const waypoints = this._waypointsModel.getWaypoints();
+    const filteredWaypoints = filter[filterType](waypoints);
+
+    switch (this._currentSortType) {
+      case TypeOfSort.DAY:
+        return filteredWaypoints.sort(sortWaypointDay);
+      case TypeOfSort.PRICE:
+        return filteredWaypoints.sort(sortWaypointPrice);
+      case TypeOfSort.TIME:
+        return filteredWaypoints.sort(sortWaypointTime);
+    }
+
+    return filteredWaypoints;
+  }
+
+  createWaypoint(callback) {
+    this._currentSortType = TypeOfSort.DAY;
+    this._filterModel.set(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init(callback);
+  }
+
   init() {
     this._waypointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -46,12 +69,6 @@ export default class Trip {
     }
 
     this._renderTrip();
-  }
-
-  createWaypoint(callback) {
-    this._currentSortType = TypeOfSort.DAY;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.init(callback);
   }
 
   hide() {
@@ -70,23 +87,6 @@ export default class Trip {
 
     this._waypointsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
-  }
-
-  _getWaypoints() {
-    const filterType = this._filterModel.getFilter();
-    const waypoints = this._waypointsModel.getWaypoints();
-    const filteredWaypoints = filter[filterType](waypoints);
-
-    switch (this._currentSortType) {
-      case TypeOfSort.DAY:
-        return filteredWaypoints.sort(sortWaypointDay);
-      case TypeOfSort.PRICE:
-        return filteredWaypoints.sort(sortWaypointPrice);
-      case TypeOfSort.TIME:
-        return filteredWaypoints.sort(sortWaypointTime);
-    }
-
-    return filteredWaypoints;
   }
 
   _handleModeChange() {
@@ -241,7 +241,7 @@ export default class Trip {
     const eventElement = mainElement.querySelector('.trip-events');
     const offerLists = eventElement.querySelectorAll('.event__selected-offers');
 
-    for (let [index,list] of offerLists.entries()) {
+    for (const [index,list] of offerLists.entries()) {
       const orderOffer = waypoints[index].offer;
 
       if (orderOffer !== undefined) {

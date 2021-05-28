@@ -70,8 +70,7 @@ export default class Api {
     url,
     method = Method.GET,
     body = null,
-    headers = new Headers(),
-  }) {
+    headers = new Headers() }) {
     headers.append('Authorization', this._authorization);
 
     return fetch(

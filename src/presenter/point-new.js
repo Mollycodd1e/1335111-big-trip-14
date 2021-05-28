@@ -18,6 +18,25 @@ export default class PointNew {
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
+  setSaving() {
+    this._editComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._editComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._editComponent.shake(resetFormState);
+  }
+
   init(callback) {
     this._destroyCallback = callback;
 
@@ -38,25 +57,6 @@ export default class PointNew {
     document.querySelector('.trip-events__list .event__reset-btn').textContent = 'Cancel';
 
     document.addEventListener('keydown', this._escKeyDownHandler);
-  }
-
-  setSaving() {
-    this._editComponent.updateData({
-      isDisabled: true,
-      isSaving: true,
-    });
-  }
-
-  setAborting() {
-    const resetFormState = () => {
-      this._editComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this._editComponent.shake(resetFormState);
   }
 
   destroy() {

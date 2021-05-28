@@ -37,6 +37,34 @@ export default class Point {
     this._handleCloseClick = this._handleCloseClick.bind(this);
   }
 
+  setViewState(state) {
+    const resetFormState = () => {
+      this._editComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._editComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._editComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._waypointComponent.shake(resetFormState);
+        this._editComponent.shake(resetFormState);
+    }
+  }
+
   init(waypoint) {
     this._waypoint = waypoint;
 
@@ -74,34 +102,6 @@ export default class Point {
     remove(prevEditComponent);
   }
 
-  setViewState(state) {
-    const resetFormState = () => {
-      this._editComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    switch (state) {
-      case State.SAVING:
-        this._editComponent.updateData({
-          isDisabled: true,
-          isSaving: true,
-        });
-        break;
-      case State.DELETING:
-        this._editComponent.updateData({
-          isDisabled: true,
-          isDeleting: true,
-        });
-        break;
-      case State.ABORTING:
-        this._waypointComponent.shake(resetFormState);
-        this._editComponent.shake(resetFormState);
-    }
-  }
-
   destroy() {
     remove(this._waypointComponent);
     remove(this._editComponent);
@@ -114,7 +114,7 @@ export default class Point {
   }
 
   _handleFavoriteClick() {
-     this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
+    this._changeData(UserAction.UPDATE_WAYPOINT, UpdateType.MINOR, Object.assign({}, this._waypoint, {isFavorite: !this._waypoint.isFavorite}));
   }
 
   _escKeyDownHandler(evt) {
@@ -142,7 +142,7 @@ export default class Point {
 
   _handleSubmitClick(waypoint) {
     if (!isOnline()) {
-      toast('You can\'t edit waypoint offline');
+      toast('You can\'t save waypoint offline');
       return;
     }
 

@@ -34,7 +34,7 @@ const createEditTemplate = (waypoint = {}, destination, offer) => {
 
   if (waypoint.offer === undefined || waypoint.waypointType === undefined) {
     waypoint.waypointType = waypointType;
-    offer.getOffers().map((item) => {
+    offer.get().map((item) => {
       if(item.type === waypointType) {
         waypoint.offer = item.offers;
         waypoint.isChecked = false;
@@ -272,7 +272,7 @@ export default class Edit extends SmartView {
     let newOffers = [];
 
     const getOffersByType = (evt) => {
-      this._offerModel.getOffers().forEach((offer) => {
+      this._offerModel.get().forEach((offer) => {
         if (offer.type === evt.target.value) {
           newOffers = offer.offers;
         }
@@ -291,11 +291,11 @@ export default class Edit extends SmartView {
       this._checkedOffers = this._data.offer;
     }
 
-     this._checkedOffers.map((item) => {
-      if (item.title === document.querySelector('[for="' + evt.target.id + '"] .event__offer-title').textContent) {
-        item.isChecked = evt.target.checked;
-      }
-    });
+    if (evt.target.checked) {
+      evt.target.setAttribute('checked', '');
+    } else {
+      evt.target.removeAttribute('checked', '');
+    }
   }
 
   _setInnerHandlers() {
@@ -317,7 +317,7 @@ export default class Edit extends SmartView {
     let newDestinations = [];
 
     const getDestinationByTown = (evt) => {
-      this._destinationModel.getDestinations().forEach((destination) => {
+      this._destinationModel.get().forEach((destination) => {
         if (destination.name === evt.target.value) {
           newDestinations = destination;
         }
@@ -343,6 +343,11 @@ export default class Edit extends SmartView {
 
   _editSubmitHandler(evt) {
     evt.preventDefault();
+
+    this._checkedOffers.map((item) => {
+      item.isChecked = (document.querySelector('[id="event-offer-' + item.title + '-1"]').checked);
+    });
+
     this.updateData({offer: this._checkedOffers});
     this._callback.editSubmit(Edit.parseDataToWaypoint(this._data));
   }

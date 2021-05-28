@@ -8,7 +8,7 @@ const createInfoTemplate = (waypoint) => {
   const sortByTown = () => {
     const townList = [];
 
-    for (let point of waypoint) {
+    for (const point of waypoint) {
       townList.push(point);
     }
 
@@ -27,8 +27,8 @@ const createInfoTemplate = (waypoint) => {
     const result = [];
 
     waypoint.map((point) => {
-      result.push(point.lowerTime)
-    })
+      result.push(point.lowerTime);
+    });
 
     result.sort((a, b) => {
       return dayjs(a).isAfter(dayjs(b)) ? 1 : -1;
@@ -46,10 +46,10 @@ const createInfoTemplate = (waypoint) => {
   const getTotalOfPrice = () => {
     let amount = 0;
 
-    for (let point of waypoint) {
+    for (const point of waypoint) {
       const price = Number(point.price);
 
-      for (let item of point.offer) {
+      for (const item of point.offer) {
         if (item.isChecked === true) {
           amount += item.price;
         }

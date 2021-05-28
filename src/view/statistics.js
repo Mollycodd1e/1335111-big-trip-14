@@ -177,7 +177,7 @@ const renderTimeSpendChart = (timeSpendCtx, waypoints) => {
       return totalTime;
     }
 
-    for (let element of elements) {
+    for (const element of elements) {
       const num = dayjs(element.upperTime).diff(dayjs(element.lowerTime), 'minutes');
       totalTime += num;
     }

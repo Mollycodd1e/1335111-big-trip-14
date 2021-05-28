@@ -33,10 +33,10 @@ const waypointsModel = new PointModel();
 waypointsModel.setWaypoints();
 
 const destinationModel = new DestinationModel();
-destinationModel.setDestinations();
+destinationModel.set();
 
 const offerModel = new OfferModel();
-offerModel.setOffers();
+offerModel.set();
 
 const filterModel = new FilterModel();
 
@@ -86,10 +86,10 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
 });
 
 apiWithProvider.getDestinations().then((destination) => {
-  destinationModel.setDestinations(destination);
+  destinationModel.set(destination);
 }).then(() => {
   apiWithProvider.getOffers().then((offer) => {
-    offerModel.setOffers(offer);
+    offerModel.set(offer);
   });
 }).then(() => {
   apiWithProvider.getWaypoints().then((waypoints) => {
